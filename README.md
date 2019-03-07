@@ -20,10 +20,18 @@ Prebuild versions are:
 ### Installing
 Download or build and copy the binary to a location in your path.
 
+* [cmd/aem/build/osx/aem]()
+* [cmd/aem/build/linux/aem]()
+* [cmd/aem/build/windows/aem.exe]()
+
 Example install locations.
 
 ### OSX & Linux
 execute `echo ${PATH}` and validate that */usr/local/bin* is in your current path. If in path use `cp aem /usr/local/bin` to place the executable ont he correct spot. If not in path add the following line `export PATH="${PATH}:/usr/local/bin"` to your ~/.bash_profile, ~/.profile or ~/.zprofile with your favorite editor.
+
+Dont forget to set the executable permision. `chmod a+x aem`
+
+
 
 ### Windows
 Place the executable in for example `"C:\Program files\aem"` and follow the [tutorials](https://www.google.com/search?q=windows+change+path) on the internet how to add them to add this directory to your path.
