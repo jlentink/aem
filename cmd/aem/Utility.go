@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
-	"path"
 	"regexp"
 	"sort"
 	"strconv"
@@ -36,7 +35,6 @@ func (u *Utility) pkgsFromString(instance AEMInstanceConfig, pkgString string) [
 
 	return selectedPkgs
 }
-
 
 func (u *Utility) readCmdLineInput() string {
 	reader := bufio.NewReader(os.Stdin)
@@ -106,8 +104,6 @@ func (u *Utility) pkgPicker(instance AEMInstanceConfig) []PackageDescription {
 	return pkgs
 }
 
-
-
 func (u *Utility) inSliceInt64(slice []int64, needle int64) bool {
 	for _, v := range slice {
 		if v == needle {
@@ -126,37 +122,26 @@ func (u *Utility) inSliceString(slice []string, needle string) bool {
 	return false
 }
 
-
 func (u *Utility) zipToPackage(filepath string) PackageDescription {
-	projectStructure := new(projectStructure)
-	name, version := "", ""
-	filename := path.Base(filepath)
+	projectStructure := NewProjectStructure()
+	manifest := newManifestPackage()
+	manifestValues := manifest.fromZip(filepath)
+	description := PackageDescription{}
+	name := manifestValues[ManifestLabelPackageName]
+	version := manifestValues[ManifestLabelPackageVersion]
+	
+	if len(name) > 0 {
+		description = PackageDescription{Name: name, Version: version, DownloadName: name + "-" + version + ".zip"}
 
-	r, _ := regexp.Compile(REGEX_PACKAGE_VERSIONED)
-	rv, _ := regexp.Compile(REGEX_PACKAGE_VERSIONED_SNAPSHOT)
-	ruv, _ := regexp.Compile(REGEX_PACKAGE_UNVERSIONED)
+		projectStructure.createDirForPackage(description)
+		projectStructure.copy(filepath, projectStructure.getLocationForPackage(description))
 
-	if r.MatchString(filename) {
-		matches := r.FindStringSubmatch(filename);
-		name = matches[1]
-		version = matches[2]
-	} else if rv.MatchString(filename) {
-		matches := rv.FindStringSubmatch(filename);
-		name = matches[1]
-		version = matches[2] + "-SNAPSHOT" + matches[3]
 	} else {
-		matches := ruv.FindStringSubmatch(filename)
-		name = matches[1]
-		version = "unknown"
+		exitProgram("Could not find name for package")
 	}
-
-	description := PackageDescription{Name: name, Version: version, DownloadName: name + "-" + version + ".zip"}
-	projectStructure.createDirForPackage(description)
-	projectStructure.copy(filepath, projectStructure.getLocationForPackage(description))
 
 	return description
 }
-
 
 func (u *Utility) Exists(filename string) bool {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
@@ -180,8 +165,6 @@ func (u *Utility) returnUrlString(url *url.URL) string {
 
 	return url.Scheme + "://" + url.Host + url.Path + query + fragment
 }
-
-
 
 func (u *Utility) getInstanceByName(instanceName string) AEMInstanceConfig {
 	for _, instance := range config.Instances {
