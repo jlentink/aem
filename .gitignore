@@ -1,0 +1,11 @@
+.DS_Store
+/cmd/aemcli/instance
+.idea
+/cmd/aemcli/aemcli
+/cmd/aemcli/.scannerwork
+/cmd/aemcli/test-report.out
+/cmd/aemcli/coverage.out
+/cmd/aem/.scannerwork
+/cmd/aem/test-report.out
+/cmd/aem/sonar-project.properties
+/cmd/aem/coverage.out
