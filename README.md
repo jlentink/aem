@@ -1,10 +1,13 @@
 # AEMcli (command line interface)
 
+![](https://travis-ci.org/jlentink/aem.svg?branch=master)
+
 **This tool is work in progress**<br />
 *If you find any bugs or miss any feature feel free to pitch in or create a ticket so the issue can be resolved quickly or the new feature can be added.*
 
 
 When using AEM in projects there are a couple of things that happen quite often. This tool is like a swiss army knife that tries to help you on everyday tasks for developer and dev-ops.
+So you don't need to search for all the common cURL commands they are included.
 
 Let me know what you think. happy AEM-ing.
 
@@ -20,9 +23,9 @@ Prebuild versions are:
 ### Installing
 Download or build and copy the binary to a location in your path.
 
-* [OSX](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/osx/aem)
-* [Linux](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/linux/aem)
-* [Windows](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/windows/aem.exe)
+* [OSX](https://github.com/jlentink/aem/raw/develop/build/osx/aem)
+* [Linux](https://github.com/jlentink/aem/raw/develop/build/linux/aem)
+* [Windows](https://github.com/jlentink/aem/raw/develop/build/windows/aem.exe)
 
 Example install locations.
 
@@ -266,9 +269,11 @@ Available options:
 
 - Code cleanup
 - Features
- - pull/copy content over vlt
- - thread dumps
- - sling tracer
+- pull/copy content over vlt
+- thread dumps
+- sling tracer
+- more tests
+- fix all golint issues
 
 
 ## Built With
