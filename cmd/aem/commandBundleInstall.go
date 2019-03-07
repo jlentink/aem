@@ -12,6 +12,7 @@ func NewBundleInstallCommand() bundleInstallCommand {
 		utility:          new(Utility),
 		projectStructure: NewProjectStructure(),
 		bundle:           "",
+		bundleStartLevel: bundleStartLevel,
 	}
 }
 
@@ -21,30 +22,27 @@ type bundleInstallCommand struct {
 	utility          *Utility
 	projectStructure projectStructure
 	bundle           string
+	bundleStartLevel int
 }
 
 func (c *bundleInstallCommand) Execute(args []string) {
 	c.getOpt(args)
 	instance := c.utility.getInstanceByName(c.name)
+	fmt.Printf("%+v", instance)
 	if c.projectStructure.exists(c.bundle) {
-		if c.http.bundleInstall(instance, c.bundle) {
+		if c.http.bundleInstall(instance, c.bundle, bundleInstall, bundleStartLevel) {
 			fmt.Printf("Bundle installed.")
 		} else {
 			fmt.Printf("Bundle response was unexprected")
 		}
-
 	} else {
 		exitProgram("Could not find bundle. (%s)\n", c.bundle)
 	}
-
-	//
-	//bundlePicker := NewBundlePicker()
-	//bundles := make([]Bundle, 0)
-
 }
 
 func (c *bundleInstallCommand) getOpt(args []string) {
 	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+CONFIG_DEFAULT_INSTANCE+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "Path to bundle (.jar)")
+	getopt.FlagLong(&c.bundleStartLevel, "startlevel", 's', "Bundle start level (default: "+string(bundleStartLevel)+")")
 	getopt.CommandLine.Parse(args)
 }

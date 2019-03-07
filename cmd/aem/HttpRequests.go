@@ -31,6 +31,9 @@ const (
 	ServiceName = "aem-cli"
 
 	JarContentType = "application/java-archive"
+
+	bundleStartLevel = 20
+	bundleInstall    = "install"
 )
 
 type HttpRequests struct {
@@ -447,13 +450,13 @@ func (a *HttpRequests) createFilePart(w *multipart.Writer, path string, fieldnam
 	return w, err
 }
 
-func (a *HttpRequests) bundleInstall(instance AEMInstanceConfig, bundleFile string) bool {
+func (a *HttpRequests) bundleInstall(instance AEMInstanceConfig, bundleFile string, command string, bundleStartLevel int) bool {
 
 	body := &bytes.Buffer{}
 
 	writer := multipart.NewWriter(body)
-	writer.WriteField("action", "install")
-	writer.WriteField("bundlestartlevel", "20")
+	writer.WriteField("action", command)
+	writer.WriteField("bundlestartlevel", string(bundleStartLevel))
 	_, err := a.createFilePart(writer, bundleFile, "bundlefile", JarContentType)
 	exitFatal(err, "Could not read package for upload")
 	writer.Close()
