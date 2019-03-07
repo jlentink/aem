@@ -20,9 +20,9 @@ Prebuild versions are:
 ### Installing
 Download or build and copy the binary to a location in your path.
 
-* [cmd/aem/build/osx/aem]()
-* [cmd/aem/build/linux/aem]()
-* [cmd/aem/build/windows/aem.exe]()
+* [OSX](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/osx/aem)
+* [Linux](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/linux/aem)
+* [Windows](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/windows/aem.exe)
 
 Example install locations.
 
