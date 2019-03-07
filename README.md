@@ -23,10 +23,7 @@ Prebuild versions are:
 
 ### Installing
 Download or build and copy the binary to a location in your path.
-
-* [OSX](https://github.com/jlentink/aem/raw/develop/build/osx/aem)
-* [Linux](https://github.com/jlentink/aem/raw/develop/build/linux/aem)
-* [Windows](https://github.com/jlentink/aem/raw/develop/build/windows/aem.exe)
+Latest prebuild version can be found [here](https://github.com/jlentink/aem/releases/tag/1.0.0).
 
 Example install locations.
 
