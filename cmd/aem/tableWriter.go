@@ -5,16 +5,16 @@ import (
 	"strings"
 )
 
-type TableWriter struct {
+type tableWriter struct {
 	tableRaw string
 }
 
-func (w *TableWriter) Write(p []byte) (int, error) {
+func (w *tableWriter) Write(p []byte) (int, error) {
 	w.tableRaw = w.tableRaw + string(p)
 	return len(p), nil
 }
 
-func (w *TableWriter) getTables() []string {
+func (w *tableWriter) getTables() []string {
 	tables := make([]string, 0)
 
 	lines := strings.Split(w.tableRaw, "\n")

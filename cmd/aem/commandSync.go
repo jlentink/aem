@@ -9,11 +9,11 @@ import (
 	"time"
 )
 
-func NewSyncCommand() commandSync {
+func newSyncCommand() commandSync {
 	return commandSync{
-		instanceName:     CONFIG_DEFAULT_INSTANCE,
+		instanceName:     configDefaultInstance,
 		instanceGroup:    "",
-		utility:          new(Utility),
+		utility:          new(utility),
 		projectStructure: new(projectStructure),
 		disableLog:       false,
 		bin:              "aemsync",
@@ -23,7 +23,7 @@ func NewSyncCommand() commandSync {
 type commandSync struct {
 	instanceName     string
 	instanceGroup    string
-	utility          *Utility
+	utility          *utility
 	disableLog       bool
 	bin              string
 	projectStructure *projectStructure
@@ -45,7 +45,7 @@ func (p *commandSync) Execute(args []string) {
 	}
 }
 
-func (p *commandSync) getTargetsString(instances []AEMInstanceConfig) string {
+func (p *commandSync) getTargetsString(instances []aemInstanceConfig) string {
 	instancesStr := make([]string, 0)
 	for _, instance := range instances {
 		instancesStr = append(instancesStr, instance.PasswordURL())
@@ -69,7 +69,7 @@ func (p *commandSync) sync(instance string, path string) {
 }
 
 func (p *commandSync) getOpt(args []string) {
-	getopt.FlagLong(&p.instanceName, "instance-name", 'i', "Instance to sync to. (default: "+CONFIG_DEFAULT_INSTANCE+")")
+	getopt.FlagLong(&p.instanceName, "instance-name", 'i', "Instance to sync to. (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&p.instanceGroup, "instance-group", 'g', "Instance group to sync to.")
 	getopt.FlagLong(&p.disableLog, "disable-log", 'l', "Disable AEM log output")
 	getopt.FlagLong(&p.bin, "aemsync", 's', "Path to AEM sync")

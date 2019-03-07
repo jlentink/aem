@@ -4,38 +4,36 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
-type Instance struct {
+type instance struct {
 }
 
-func (i *Instance) getPasswordForInstance(instance AEMInstanceConfig) string {
+func (i *instance) getPasswordForInstance(instance aemInstanceConfig) string {
 	if config.KeyRing {
 		pw, err := keyring.Get(i.serviceName(instance), instance.Username)
 		exitFatal(err, "Error retrieving password")
 		return pw
-	} else {
-		return instance.Password
 	}
+	return instance.Password
 }
 
-func (i *Instance) getByName(instanceName string) AEMInstanceConfig {
+func (i *instance) getByName(instanceName string) aemInstanceConfig {
 	for _, instance := range config.Instances {
 		if instanceName == instance.Name {
 			return instance
 		}
 	}
 	exitProgram("Instance %s is not defined.\n", instanceName)
-	return AEMInstanceConfig{}
+	return aemInstanceConfig{}
 }
 
-
-func (i *Instance) serviceName(instance AEMInstanceConfig) string {
+func (i *instance) serviceName(instance aemInstanceConfig) string {
 	return ServiceName + "-" + instance.Name
 }
 
-func (i *Instance) keyRingSetPassword(instance AEMInstanceConfig, password string) error {
+func (i *instance) keyRingSetPassword(instance aemInstanceConfig, password string) error {
 	return keyring.Set(i.serviceName(instance), instance.Username, password)
 }
 
-func (i *Instance) keyRingGetPassword(instance AEMInstanceConfig) (string, error) {
+func (i *instance) keyRingGetPassword(instance aemInstanceConfig) (string, error) {
 	return keyring.Get(i.serviceName(instance), instance.Username)
 }

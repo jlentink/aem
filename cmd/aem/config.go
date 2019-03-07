@@ -2,13 +2,13 @@ package main
 
 import "fmt"
 
-type Config struct {
+type configStruct struct {
 	ConfigFile         string
 	Verbose            bool                `toml:"verbose"`
 	Packages           []string            `toml:"commandPullContent"`
 	Command            string              `toml:"command,omitempty"`
 	CommandArgs        []string            `toml:"command,omitempty"`
-	Instances          []AEMInstanceConfig `toml:"instance"`
+	Instances          []aemInstanceConfig `toml:"instance"`
 	JVMOptions         []string            `toml:"jvm-options"`
 	JVMDebugOptions    []string            `toml:"jvm-debug-options"`
 	AemJar             string              `toml:"jar"`
@@ -22,7 +22,7 @@ type Config struct {
 	ContentPackages    []string            `toml:"contentPackages"`
 }
 
-type AEMInstanceConfig struct {
+type aemInstanceConfig struct {
 	Name            string   `toml:"name"`
 	Group           string   `toml:"group"`
 	Debug           bool     `toml:"debug"`
@@ -36,12 +36,12 @@ type AEMInstanceConfig struct {
 	JVMDebugOptions []string `toml:"jvm-debug-options"`
 }
 
-func (i *AEMInstanceConfig) URL() string {
+func (i *aemInstanceConfig) URL() string {
 	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.Hostname, i.Port)
 }
 
-func (i *AEMInstanceConfig) PasswordURL() string {
-	instance := new(Instance)
+func (i *aemInstanceConfig) PasswordURL() string {
+	instance := new(instance)
 	return fmt.Sprintf("%s://%s:%s@%s:%d", i.Protocol, i.Username, instance.getPasswordForInstance(*i), i.Hostname, i.Port)
 }
 

@@ -6,20 +6,20 @@ import (
 	"strings"
 )
 
-func NewCopyPackageCommand() commandCopyPackage {
-	return commandCopyPackage{
+func newPackageCopyCommand() commandPackageCopy {
+	return commandPackageCopy{
 		From:             "",
 		ToGroup:          "",
 		ToName:           "",
-		utility:          new(Utility),
+		utility:          new(utility),
 		projectStructure: new(projectStructure),
 		showLog:          false,
 		forceDownload:    false,
-		http:             new(HttpRequests),
+		http:             new(httpRequests),
 	}
 }
 
-type commandCopyPackage struct {
+type commandPackageCopy struct {
 	From             string
 	ToName           string
 	ToGroup          string
@@ -27,17 +27,17 @@ type commandCopyPackage struct {
 	Role             string
 	Name             string
 	Packages         string
-	utility          *Utility
+	utility          *utility
 	showLog          bool
 	projectStructure *projectStructure
-	http             *HttpRequests
+	http             *httpRequests
 	forceDownload    bool
 }
 
-func (p *commandCopyPackage) Execute(args []string) {
-	u := Utility{}
+func (p *commandPackageCopy) Execute(args []string) {
+	u := utility{}
 	p.getOpt(args)
-	toInstances := make([]AEMInstanceConfig, 0)
+	toInstances := make([]aemInstanceConfig, 0)
 
 	fromInstance := u.getInstanceByName(p.From)
 	if len(p.ToName) > 0 {
@@ -55,7 +55,7 @@ func (p *commandCopyPackage) Execute(args []string) {
 			if packageName == currentPackage.Name && packageVersion == currentPackage.Version {
 				fmt.Printf("\n%s (%s)\n", packageName, packageVersion)
 				fmt.Println("downloading...")
-				err, _ := p.http.downloadPackage(fromInstance, currentPackage, p.forceDownload)
+				_, err := p.http.downloadPackage(fromInstance, currentPackage, p.forceDownload)
 				if nil == err {
 					for _, toInstance := range toInstances {
 						fmt.Printf("\nuploading to %s...\n", toInstance.Name)
@@ -71,7 +71,7 @@ func (p *commandCopyPackage) Execute(args []string) {
 	}
 }
 
-func (p *commandCopyPackage) getOpt(args []string) {
+func (p *commandPackageCopy) getOpt(args []string) {
 	getopt.FlagLong(&p.From, "from-name", 'f', "Pull content from")
 	getopt.FlagLong(&p.ToName, "to-name", 't', "Push package to instance")
 	getopt.FlagLong(&p.ToGroup, "to-group", 'g', "Push package to group")

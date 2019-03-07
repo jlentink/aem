@@ -44,7 +44,7 @@ func Test_projectStructure_getConfigFileLocation(t *testing.T) {
 	}{
 		{
 			name: "Find config file",
-			want: dir + "/" + CONFIG_FILENAME,
+			want: dir + "/" + configFilename,
 		},
 	}
 	for _, tt := range tests {
@@ -66,7 +66,7 @@ func Test_projectStructure_getInstanceDirLocation(t *testing.T) {
 	}{
 		{
 			name: "Find config file",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/",
+			want: dir + "/" + configAemInstanceDir + "/",
 		},
 	}
 	for _, tt := range tests {
@@ -160,7 +160,7 @@ func Test_projectStructure_getIgnoreFileLocation(t *testing.T) {
 	}{
 		{
 			name: "Find ignore file",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_INSTANCE_GIT_IGNORE,
+			want: dir + "/" + configAemInstanceDir + "/" + configInstanceGitIgnore,
 		},
 	}
 	for _, tt := range tests {
@@ -178,18 +178,18 @@ func Test_projectStructure_getRunDirLocation(t *testing.T) {
 	tests := []struct {
 		name string
 		p    *projectStructure
-		i    *AEMInstanceConfig
+		i    *aemInstanceConfig
 		want string
 	}{
 		{
 			name: "Find run dir",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/some-name",
+			want: dir + "/" + configAemInstanceDir + "/some-name",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &projectStructure{}
-			i := &AEMInstanceConfig{Name: "some-name"}
+			i := &aemInstanceConfig{Name: "some-name"}
 			if got := p.getRunDirLocation(*i); got != tt.want {
 				t.Errorf("projectStructure.getRunDirLocation() = %v, want %v", got, tt.want)
 			}
@@ -202,18 +202,18 @@ func Test_projectStructure_getPidFileLocation(t *testing.T) {
 	tests := []struct {
 		name string
 		p    *projectStructure
-		i    *AEMInstanceConfig
+		i    *aemInstanceConfig
 		want string
 	}{
 		{
 			name: "Find pid file",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/some-name/" + CONFIG_AEM_PID,
+			want: dir + "/" + configAemInstanceDir + "/some-name/" + configAemPidFile,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &projectStructure{}
-			i := &AEMInstanceConfig{Name: "some-name"}
+			i := &aemInstanceConfig{Name: "some-name"}
 			if got := p.getPidFileLocation(*i); got != tt.want {
 				t.Errorf("projectStructure.getPidFileLocation() = %v, want %v", got, tt.want)
 			}
@@ -226,18 +226,18 @@ func Test_projectStructure_getAppDirLocation(t *testing.T) {
 	tests := []struct {
 		name string
 		p    *projectStructure
-		i    *AEMInstanceConfig
+		i    *aemInstanceConfig
 		want string
 	}{
 		{
 			name: "Find app dir",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/some-name/" + CONFIG_APP_DIR,
+			want: dir + "/" + configAemInstanceDir + "/some-name/" + configAppDir,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &projectStructure{}
-			i := &AEMInstanceConfig{Name: "some-name"}
+			i := &aemInstanceConfig{Name: "some-name"}
 			if got := p.getAppDirLocation(*i); got != tt.want {
 				t.Errorf("projectStructure.getAppDirLocation() = %v, want %v", got, tt.want)
 			}
@@ -250,18 +250,18 @@ func Test_projectStructure_getAemInstallDirLocation(t *testing.T) {
 	tests := []struct {
 		name string
 		p    *projectStructure
-		i    *AEMInstanceConfig
+		i    *aemInstanceConfig
 		want string
 	}{
 		{
 			name: "Find aem install dir",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/some-name/" + CONFIG_AEM_INSTALL_DIR,
+			want: dir + "/" + configAemInstanceDir + "/some-name/" + configAemInstallDir,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &projectStructure{}
-			i := &AEMInstanceConfig{Name: "some-name"}
+			i := &aemInstanceConfig{Name: "some-name"}
 			if got := p.getAemInstallDirLocation(*i); got != tt.want {
 				t.Errorf("projectStructure.getAemInstallDirLocation() = %v, want %v", got, tt.want)
 			}
@@ -278,7 +278,7 @@ func Test_projectStructure_getJarFileLocation(t *testing.T) {
 	}{
 		{
 			name: "Find jar location",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_AEM_JAR_NAME,
+			want: dir + "/" + configAemInstanceDir + "/" + configAemJar,
 		},
 	}
 	for _, tt := range tests {
@@ -296,18 +296,18 @@ func Test_projectStructure_getLogFileLocation(t *testing.T) {
 	tests := []struct {
 		name string
 		p    *projectStructure
-		i    *AEMInstanceConfig
+		i    *aemInstanceConfig
 		want string
 	}{
 		{
 			name: "Find log file location",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/some-name/" + CONFIG_AEM_LOG,
+			want: dir + "/" + configAemInstanceDir + "/some-name/" + configAemLogFile,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &projectStructure{}
-			i := &AEMInstanceConfig{Name: "some-name"}
+			i := &aemInstanceConfig{Name: "some-name"}
 			if got := p.getLogFileLocation(*i); got != tt.want {
 				t.Errorf("projectStructure.getLogFileLocation() = %v, want %v", got, tt.want)
 			}
@@ -324,7 +324,7 @@ func Test_projectStructure_getPackagesDirLocation(t *testing.T) {
 	}{
 		{
 			name: "Find log file location",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_PACKAGES_DIR,
+			want: dir + "/" + configAemInstanceDir + "/" + configPackageDir,
 		},
 	}
 	for _, tt := range tests {
@@ -340,7 +340,7 @@ func Test_projectStructure_getPackagesDirLocation(t *testing.T) {
 func Test_projectStructure_getDirForPackage(t *testing.T) {
 	dir, _ := os.Getwd()
 	type args struct {
-		aemPackage PackageDescription
+		aemPackage packageDescription
 	}
 	tests := []struct {
 		name string
@@ -350,8 +350,8 @@ func Test_projectStructure_getDirForPackage(t *testing.T) {
 	}{
 		{
 			name: "Find package location.",
-			args: args{aemPackage: PackageDescription{Name: "foo-bar", Version: "1.0.0"}},
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_PACKAGES_DIR + "/" + "foo-bar/1.0.0",
+			args: args{aemPackage: packageDescription{Name: "foo-bar", Version: "1.0.0"}},
+			want: dir + "/" + configAemInstanceDir + "/" + configPackageDir + "/" + "foo-bar/1.0.0",
 		},
 	}
 	for _, tt := range tests {
@@ -367,7 +367,7 @@ func Test_projectStructure_getDirForPackage(t *testing.T) {
 func Test_projectStructure_getLocationForPackage(t *testing.T) {
 	dir, _ := os.Getwd()
 	type args struct {
-		aemPackage PackageDescription
+		aemPackage packageDescription
 	}
 	tests := []struct {
 		name string
@@ -377,8 +377,8 @@ func Test_projectStructure_getLocationForPackage(t *testing.T) {
 	}{
 		{
 			name: "Find package file location.",
-			args: args{aemPackage:PackageDescription{Name: "foo-bar", Version: "1.0.0", DownloadName: "foo-bar-1.0.0.zip"}},
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_PACKAGES_DIR + "/" + "foo-bar/1.0.0/foo-bar-1.0.0.zip",
+			args: args{aemPackage: packageDescription{Name: "foo-bar", Version: "1.0.0", DownloadName: "foo-bar-1.0.0.zip"}},
+			want: dir + "/" + configAemInstanceDir + "/" + configPackageDir + "/" + "foo-bar/1.0.0/foo-bar-1.0.0.zip",
 		},
 	}
 	for _, tt := range tests {
@@ -396,18 +396,18 @@ func Test_projectStructure_createAemInstallDir(t *testing.T) {
 	tests := []struct {
 		name string
 		p    *projectStructure
-		i    *AEMInstanceConfig
+		i    *aemInstanceConfig
 		want string
 	}{
 		{
 			name: "test create install dir",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_AEM_RUN_DIR + "/" + CONFIG_AEM_INSTALL_DIR,
+			want: dir + "/" + configAemInstanceDir + "/" + configAemRunDir + "/" + configAemInstallDir,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &projectStructure{}
-			i := &AEMInstanceConfig{Name: "some-name"}
+			i := &aemInstanceConfig{Name: "some-name"}
 			p.mock()
 			//fix
 			if got := p.createAemInstallDir(*i); got != tt.want {
@@ -439,7 +439,7 @@ func Test_projectStructure_createInstanceDir(t *testing.T) {
 
 func Test_projectStructure_createDirForPackage(t *testing.T) {
 	type args struct {
-		aemPackage PackageDescription
+		aemPackage packageDescription
 	}
 	tests := []struct {
 		name string
@@ -564,7 +564,7 @@ func Test_projectStructure_getUnpackDirLocation(t *testing.T) {
 	}{
 		{
 			name: "Test default unpack folder",
-			want: dir + "/" + CONFIG_INSTANCE_DIR + "/" + CONFIG_AEM_RUN_DIR,
+			want: dir + "/" + configAemInstanceDir + "/" + configAemRunDir,
 		},
 	}
 	for _, tt := range tests {
@@ -592,8 +592,8 @@ func TestNewProjectStructure(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			if got := NewProjectStructure(); reflect.TypeOf(got).Kind() != reflect.TypeOf(tt.want).Kind() {
-				t.Errorf("NewProjectStructure() = %v, want %v", got, tt.want)
+			if got := newProjectStructure(); reflect.TypeOf(got).Kind() != reflect.TypeOf(tt.want).Kind() {
+				t.Errorf("newProjectStructure() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -7,6 +7,9 @@ import (
 	"io"
 )
 
+//
+// ProgressReporter is used to display download progress
+//
 type ProgressReporter struct {
 	r         io.Reader
 	w         io.Writer
@@ -20,7 +23,7 @@ func (pr *ProgressReporter) initProgressBar() {
 	pr.bar = progressbar.NewOptions64(int64(pr.totalSize),
 		progressbar.OptionSetTheme(progressbar.Theme{Saucer: "=", SaucerPadding: "-", BarStart: "[", BarEnd: "]"}),
 		progressbar.OptionSetWidth(45),
-		)
+	)
 }
 
 func (pr *ProgressReporter) Read(p []byte) (int, error) {

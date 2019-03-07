@@ -11,9 +11,13 @@ import (
 )
 
 var (
-	config       = Config{}
+	config = configStruct{}
+
+	// BuiltVersion Holds the build version
 	BuiltVersion = ""
-	BuiltHash    = ""
+
+	// BuiltHash Holds the git hash of the build
+	BuiltHash = ""
 )
 
 func parseParameters() {
@@ -63,27 +67,25 @@ func confirm(format string, force bool, args ...interface{}) bool {
 	input, _ := reader.ReadString('\n')
 	if strings.ToLower(input) == "y\n" {
 		return true
-	} else {
-		fmt.Printf(strings.ToLower(input))
-		return false
 	}
-
+	fmt.Printf(strings.ToLower(input))
+	return false
 }
 
 func readConfig() {
 	dir, err := os.Getwd()
 	exitFatal(err, "Could not get current working directory.")
 
-	if _, err := os.Stat(dir + "/" + CONFIG_FILENAME); err == nil {
+	if _, err := os.Stat(dir + "/" + configFilename); err == nil {
 		log.Debug("Found config file.")
-		_, err := toml.DecodeFile(dir+"/"+CONFIG_FILENAME, &config)
+		_, err := toml.DecodeFile(dir+"/"+configFilename, &config)
 
 		exitFatal(err, "Config file error: ")
 	}
 }
 
 func setupLog() {
-	if (config.Verbose) {
+	if config.Verbose {
 		log.SetLevel(log.DebugLevel)
 	}
 }
@@ -95,85 +97,85 @@ func main() {
 	switch config.Command {
 	case "package-list":
 		readConfig()
-		command := NewListPackagesCommand()
+		command := newPackageListCommand()
 		command.Execute(config.CommandArgs)
 	case "package-copy":
 		readConfig()
-		command := NewCopyPackageCommand()
+		command := newPackageCopyCommand()
 		command.Execute(config.CommandArgs)
 	case "package-install":
 		readConfig()
-		command := NewInstallPackageCommand()
+		command := newPackageInstallCommand()
 		command.Execute(config.CommandArgs)
 	case "package-rebuild":
 		readConfig()
-		command := NewRebuildPackageCommand()
+		command := newPackageRebuildCommand()
 		command.Execute(config.CommandArgs)
 	case "package-download":
 		readConfig()
-		command := NewDownloadPackageCommand()
+		command := newPackageDownloadCommand()
 		command.Execute(config.CommandArgs)
 	case "pull-content":
 		readConfig()
-		command := NewPullContentCommand()
+		command := newPullContentCommand()
 		command.Execute(config.CommandArgs)
 	case "start":
 		readConfig()
-		command := NewStartCommand()
+		command := newStartCommand()
 		command.Execute(config.CommandArgs)
 	case "stop":
 		readConfig()
-		command := NewStopCommand()
+		command := newStopCommand()
 		command.Execute(config.CommandArgs)
 	case "open":
 		readConfig()
-		command := NewOpenCommand()
+		command := newOpenCommand()
 		command.Execute(config.CommandArgs)
 	case "sync":
 		readConfig()
-		command := NewSyncCommand()
+		command := newSyncCommand()
 		command.Execute(config.CommandArgs)
 	case "log":
 		readConfig()
-		command := NewLogCommand()
+		command := newLogCommand()
 		command.Execute(config.CommandArgs)
 	case "system-information", "sysinfo":
 		readConfig()
-		command := NewSystemInformationCommand()
+		command := newSystemInformationCommand()
 		command.Execute(config.CommandArgs)
 	case "password", "passwords":
 		readConfig()
-		command := NewPasswordCommand()
+		command := newPasswordCommand()
 		command.Execute(config.CommandArgs)
 	case "init":
-		command := NewInitCommand()
+		command := newInitCommand()
 		command.Execute(config.CommandArgs)
 	case "version":
-		command := NewVersionCommand()
+		command := newVersionCommand()
 		command.Execute(config.CommandArgs)
 	case "page-replicate":
 		readConfig()
-		command := NewActivatePageCommand()
+		command := newPageActivateCommand()
 		command.Execute(config.CommandArgs)
 	case "activate-tree":
 		readConfig()
-		command := NewActivateTreeCommand()
+		command := newActivateTreeCommand()
 		command.Execute(config.CommandArgs)
 	case "bundle-list", "bundles-list":
 		readConfig()
-		command := NewListBundlesCommand()
+		command := newBundleListCommand()
 		command.Execute(config.CommandArgs)
 	case "bundle-stop":
 		readConfig()
-		command := NewBundleStopCommand()
+		command := newBundleStopCommand()
 		command.Execute(config.CommandArgs)
 	case "bundle-start":
 		readConfig()
-		command := NewBundleStartCommand()
+		command := newBundleStartCommand()
 		command.Execute(config.CommandArgs)
 	case "bundle-install":
 		readConfig()
-		command := NewBundleInstallCommand()
+		command := newBundleInstallCommand()
 		command.Execute(config.CommandArgs)
 	default:
 		showHelp()

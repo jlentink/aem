@@ -15,14 +15,14 @@ import (
 	"time"
 )
 
-type Utility struct {
+type utility struct {
 }
 
-func (u *Utility) pkgsFromString(instance AEMInstanceConfig, pkgString string) []PackageDescription {
-	http := new(HttpRequests)
+func (u *utility) pkgsFromString(instance aemInstanceConfig, pkgString string) []packageDescription {
+	http := new(httpRequests)
 	pkgs := http.getListForInstance(instance)
 	wPkgs := strings.Split(pkgString, ",")
-	selectedPkgs := make([]PackageDescription, 0)
+	selectedPkgs := make([]packageDescription, 0)
 
 	for _, pkg := range pkgs {
 		for _, wPkg := range wPkgs {
@@ -36,20 +36,20 @@ func (u *Utility) pkgsFromString(instance AEMInstanceConfig, pkgString string) [
 	return selectedPkgs
 }
 
-func (u *Utility) readCmdLineInput() string {
+func (u *utility) readCmdLineInput() string {
 	reader := bufio.NewReader(os.Stdin)
 	input, _ := reader.ReadString('\n')
 	return input[0 : len(input)-1]
 
 }
 
-func (u *Utility) pkgPicker(instance AEMInstanceConfig) []PackageDescription {
-	http := new(HttpRequests)
+func (u *utility) pkgPicker(instance aemInstanceConfig) []packageDescription {
+	http := new(httpRequests)
 	pkgs := http.getListForInstance(instance)
 	pageSize := 20
 	selected := make([]int64, 0)
-	selectedPkgs := make([]PackageDescription, 0)
-	writer := new(TableWriter)
+	selectedPkgs := make([]packageDescription, 0)
+	writer := new(tableWriter)
 
 	t := table.NewWriter()
 	t.AppendHeader(table.Row{"#", "Package", "Version"})
@@ -76,7 +76,7 @@ func (u *Utility) pkgPicker(instance AEMInstanceConfig) []PackageDescription {
 		case "c":
 			continue
 		case "q":
-			return make([]PackageDescription, 0)
+			return make([]packageDescription, 0)
 		case "d":
 			for _, selectedPkg := range selected {
 				selectedPkgs = append(selectedPkgs, pkgs[selectedPkg])
@@ -95,7 +95,7 @@ func (u *Utility) pkgPicker(instance AEMInstanceConfig) []PackageDescription {
 					goto choose
 				}
 			} else {
-				fmt.Printf("Unkown option: %s\n", input)
+				fmt.Printf("Unknown option: %s\n", input)
 				goto choose
 			}
 			i = i - 1
@@ -104,7 +104,7 @@ func (u *Utility) pkgPicker(instance AEMInstanceConfig) []PackageDescription {
 	return pkgs
 }
 
-func (u *Utility) inSliceInt64(slice []int64, needle int64) bool {
+func (u *utility) inSliceInt64(slice []int64, needle int64) bool {
 	for _, v := range slice {
 		if v == needle {
 			return true
@@ -113,7 +113,7 @@ func (u *Utility) inSliceInt64(slice []int64, needle int64) bool {
 	return false
 }
 
-func (u *Utility) inSliceString(slice []string, needle string) bool {
+func (u *utility) inSliceString(slice []string, needle string) bool {
 	for _, v := range slice {
 		if v == needle {
 			return true
@@ -122,16 +122,16 @@ func (u *Utility) inSliceString(slice []string, needle string) bool {
 	return false
 }
 
-func (u *Utility) zipToPackage(filepath string) PackageDescription {
-	projectStructure := NewProjectStructure()
+func (u *utility) zipToPackage(filepath string) packageDescription {
+	projectStructure := newProjectStructure()
 	manifest := newManifestPackage()
 	manifestValues := manifest.fromZip(filepath)
-	description := PackageDescription{}
+	description := packageDescription{}
 	name := manifestValues[ManifestLabelPackageName]
 	version := manifestValues[ManifestLabelPackageVersion]
-	
+
 	if len(name) > 0 {
-		description = PackageDescription{Name: name, Version: version, DownloadName: name + "-" + version + ".zip"}
+		description = packageDescription{Name: name, Version: version, DownloadName: name + "-" + version + ".zip"}
 
 		projectStructure.createDirForPackage(description)
 		projectStructure.copy(filepath, projectStructure.getLocationForPackage(description))
@@ -143,7 +143,7 @@ func (u *Utility) zipToPackage(filepath string) PackageDescription {
 	return description
 }
 
-func (u *Utility) Exists(filename string) bool {
+func (u *utility) Exists(filename string) bool {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		return false
 	}
@@ -151,7 +151,7 @@ func (u *Utility) Exists(filename string) bool {
 	return true
 }
 
-func (u *Utility) returnUrlString(url *url.URL) string {
+func (u *utility) returnURLString(url *url.URL) string {
 	query := url.RawQuery
 	fragment := url.Fragment
 
@@ -166,7 +166,7 @@ func (u *Utility) returnUrlString(url *url.URL) string {
 	return url.Scheme + "://" + url.Host + url.Path + query + fragment
 }
 
-func (u *Utility) getInstanceByName(instanceName string) AEMInstanceConfig {
+func (u *utility) getInstanceByName(instanceName string) aemInstanceConfig {
 	for _, instance := range config.Instances {
 		if instanceName == instance.Name {
 			return instance
@@ -174,11 +174,11 @@ func (u *Utility) getInstanceByName(instanceName string) AEMInstanceConfig {
 	}
 	fmt.Printf("Instance %s is not defined.\n", instanceName)
 	os.Exit(1)
-	return AEMInstanceConfig{}
+	return aemInstanceConfig{}
 }
 
-func (u *Utility) getInstanceByGroup(groupName string) []AEMInstanceConfig {
-	instances := make([]AEMInstanceConfig, 0)
+func (u *utility) getInstanceByGroup(groupName string) []aemInstanceConfig {
+	instances := make([]aemInstanceConfig, 0)
 	for _, instance := range config.Instances {
 		if groupName == instance.Group {
 			instances = append(instances, instance)
@@ -191,7 +191,7 @@ func (u *Utility) getInstanceByGroup(groupName string) []AEMInstanceConfig {
 	return instances
 }
 
-func (u *Utility) copy(sourceFile string, destinationFile string) {
+func (u *utility) copy(sourceFile string, destinationFile string) {
 	input, err := ioutil.ReadFile(sourceFile)
 	exitFatal(err, "Could not read file at %s", sourceFile)
 
@@ -199,8 +199,8 @@ func (u *Utility) copy(sourceFile string, destinationFile string) {
 	exitFatal(err, "Could not write file to %s", destinationFile)
 }
 
-func (u *Utility) filterPackages(packages []PackageDescription, filter string) []PackageDescription {
-	filteredList := make([]PackageDescription, 0)
+func (u *utility) filterPackages(packages []packageDescription, filter string) []packageDescription {
+	filteredList := make([]packageDescription, 0)
 
 	for _, currentPackage := range packages {
 		if currentPackage.Name == filter {
@@ -211,7 +211,7 @@ func (u *Utility) filterPackages(packages []PackageDescription, filter string) [
 	return filteredList
 }
 
-func (u *Utility) sortPackages(packages []PackageDescription, ascending bool, additionalSearchFields []string) []PackageDescription {
+func (u *utility) sortPackages(packages []packageDescription, ascending bool, additionalSearchFields []string) []packageDescription {
 	sort.Slice(packages, func(i, j int) bool {
 		from := ""
 		to := ""
@@ -237,28 +237,24 @@ func (u *Utility) sortPackages(packages []PackageDescription, ascending bool, ad
 		if ascending {
 			if compare > 0 {
 				return true
-			} else {
-				return false
 			}
-		} else {
-			if compare <= 0 {
-				return true
-			} else {
-				return false
-			}
-
+			return false
 		}
+		if compare <= 0 {
+			return true
+		}
+		return false
 	})
 
 	return packages
 }
 
-func (u *Utility) unixTime(timestamp int64) time.Time {
+func (u *utility) unixTime(timestamp int64) time.Time {
 	tm := time.Unix(timestamp/1000, 0)
 	return tm.UTC()
 }
 
-func (u *Utility) packageNameVersion(packageName string) (string, string) {
+func (u *utility) packageNameVersion(packageName string) (string, string) {
 	packageVersion := ""
 
 	packageName = strings.TrimSpace(packageName)
@@ -271,8 +267,8 @@ func (u *Utility) packageNameVersion(packageName string) (string, string) {
 	return packageName, packageVersion
 }
 
-func (u *Utility) getInstance(name, group string) []AEMInstanceConfig {
-	instances := make([]AEMInstanceConfig, 0)
+func (u *utility) getInstance(name, group string) []aemInstanceConfig {
+	instances := make([]aemInstanceConfig, 0)
 
 	if len(group) > 0 {
 		instances = u.getInstanceByGroup(group)

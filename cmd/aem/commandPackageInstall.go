@@ -6,22 +6,22 @@ import (
 	"regexp"
 )
 
-func NewInstallPackageCommand() commandInstallPackage {
-	return commandInstallPackage{
+func newPackageInstallCommand() commandPackageInstall {
+	return commandPackageInstall{
 		From:             "",
 		ToGroup:          "",
-		ToName:           CONFIG_DEFAULT_INSTANCE,
-		u:                new(Utility),
-		projectStructure: NewProjectStructure(),
+		ToName:           configDefaultInstance,
+		u:                new(utility),
+		projectStructure: newProjectStructure(),
 		showLog:          false,
 		forceDownload:    false,
 		yes:              false,
 		noInstall:        false,
-		http:             new(HttpRequests),
+		http:             new(httpRequests),
 	}
 }
 
-type commandInstallPackage struct {
+type commandPackageInstall struct {
 	From             string
 	ToName           string
 	ToGroup          string
@@ -31,17 +31,17 @@ type commandInstallPackage struct {
 	Package          string
 	yes              bool
 	noInstall        bool
-	u                *Utility
+	u                *utility
 	showLog          bool
 	projectStructure projectStructure
 	forceDownload    bool
-	http             *HttpRequests
+	http             *httpRequests
 }
 
-func (p *commandInstallPackage) Execute(args []string) {
+func (p *commandPackageInstall) Execute(args []string) {
 
 	p.getOpt(args)
-	toInstances := make([]AEMInstanceConfig, 0)
+	toInstances := make([]aemInstanceConfig, 0)
 
 	if len(p.ToName) > 0 {
 		toInstances = append(toInstances, p.u.getInstanceByName(p.ToName))
@@ -50,7 +50,7 @@ func (p *commandInstallPackage) Execute(args []string) {
 	}
 
 	if p.u.Exists(p.Package) {
-		r, _ := regexp.Compile(REGEX_ZIP)
+		r, _ := regexp.Compile(regexZipFile)
 		if r.MatchString(p.Package) {
 			description := p.u.zipToPackage(p.Package)
 			if confirm("Do you want to install %s (%s)\n", p.yes, description.Name, description.Version) {
@@ -67,8 +67,8 @@ func (p *commandInstallPackage) Execute(args []string) {
 	}
 }
 
-func (p *commandInstallPackage) getOpt(args []string) {
-	getopt.FlagLong(&p.ToName, "to-name", 't', "Push package to instance (default: "+CONFIG_DEFAULT_INSTANCE+")")
+func (p *commandPackageInstall) getOpt(args []string) {
+	getopt.FlagLong(&p.ToName, "to-name", 't', "Push package to instance (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&p.ToGroup, "to-group", 'g', "Push package to group")
 	getopt.FlagLong(&p.Package, "package", 'p', "Package to install (path to file)")
 	getopt.FlagLong(&p.yes, "yes", 'y', "Skip confirmation")

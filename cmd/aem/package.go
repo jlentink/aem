@@ -2,12 +2,12 @@ package main
 
 import "encoding/xml"
 
-type PackagesFeed struct {
-	Package []PackageDescription `json:"results"`
+type packagesFeed struct {
+	Package []packageDescription `json:"results"`
 	Total   int                  `json:"total"`
 }
 
-type PackageDescription struct {
+type packageDescription struct {
 	Pid             string        `json:"pid"`
 	Path            string        `json:"path"`
 	Name            string        `json:"name"`
@@ -52,7 +52,7 @@ type PackageDescription struct {
 	ProviderLink    string        `json:"providerLink,omitempty"`
 }
 
-type CrxResponse struct {
+type crxResponse struct {
 	XMLName   xml.Name `xml:"crx"`
 	Text      string   `xml:",chardata"`
 	Version   string   `xml:"version,attr"`

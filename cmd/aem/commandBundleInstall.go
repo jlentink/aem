@@ -5,12 +5,12 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewBundleInstallCommand() bundleInstallCommand {
+func newBundleInstallCommand() bundleInstallCommand {
 	return bundleInstallCommand{
-		name:             CONFIG_DEFAULT_INSTANCE,
-		http:             new(HttpRequests),
-		utility:          new(Utility),
-		projectStructure: NewProjectStructure(),
+		name:             configDefaultInstance,
+		http:             new(httpRequests),
+		utility:          new(utility),
+		projectStructure: newProjectStructure(),
 		bundle:           "",
 		bundleStartLevel: bundleStartLevel,
 	}
@@ -18,8 +18,8 @@ func NewBundleInstallCommand() bundleInstallCommand {
 
 type bundleInstallCommand struct {
 	name             string
-	http             *HttpRequests
-	utility          *Utility
+	http             *httpRequests
+	utility          *utility
 	projectStructure projectStructure
 	bundle           string
 	bundleStartLevel int
@@ -31,9 +31,9 @@ func (c *bundleInstallCommand) Execute(args []string) {
 	fmt.Printf("%+v", instance)
 	if c.projectStructure.exists(c.bundle) {
 		if c.http.bundleInstall(instance, c.bundle, bundleInstall, bundleStartLevel) {
-			fmt.Printf("Bundle installed.")
+			fmt.Printf("bundle installed.")
 		} else {
-			fmt.Printf("Bundle response was unexprected")
+			fmt.Printf("bundle response was unexprected")
 		}
 	} else {
 		exitProgram("Could not find bundle. (%s)\n", c.bundle)
@@ -41,8 +41,8 @@ func (c *bundleInstallCommand) Execute(args []string) {
 }
 
 func (c *bundleInstallCommand) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+CONFIG_DEFAULT_INSTANCE+")")
+	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "Path to bundle (.jar)")
-	getopt.FlagLong(&c.bundleStartLevel, "startlevel", 's', "Bundle start level (default: "+string(bundleStartLevel)+")")
+	getopt.FlagLong(&c.bundleStartLevel, "startlevel", 's', "bundle start level (default: "+string(bundleStartLevel)+")")
 	getopt.CommandLine.Parse(args)
 }

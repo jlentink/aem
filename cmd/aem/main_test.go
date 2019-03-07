@@ -44,35 +44,35 @@ func Test_exitFatal(t *testing.T) {
 		args    []interface{}
 	}
 	tests := []struct {
-		name string
-		args args
+		name      string
+		args      args
 		wantPanic bool
-		want string
+		want      string
 	}{
 		{
 			name: "No Err",
 			args: args{
-				err: nil,
+				err:     nil,
 				message: "no Error",
-				args: []interface{}{1, 2, 3},
+				args:    []interface{}{1, 2, 3},
 			},
 			wantPanic: false,
 		},
 		{
 			name: "Err",
 			args: args{
-				err: errors.New("Some Error"),
+				err:     errors.New("Some Error"),
 				message: "Error",
-				args: []interface{}{1, 2, 3},
+				args:    []interface{}{1, 2, 3},
 			},
 			wantPanic: true,
 		},
 		{
 			name: "Err",
 			args: args{
-				err: errors.New("Some Error"),
+				err:     errors.New("Some Error"),
 				message: "Error",
-				args: []interface{}{},
+				args:    []interface{}{},
 			},
 			wantPanic: true,
 		},

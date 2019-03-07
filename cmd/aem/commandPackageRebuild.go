@@ -5,32 +5,32 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewRebuildPackageCommand() commandRebuildPackage {
-	return commandRebuildPackage{
-		From:             CONFIG_DEFAULT_INSTANCE,
-		utility:          new(Utility),
+func newPackageRebuildCommand() commandPackageRebuild {
+	return commandPackageRebuild{
+		From:             configDefaultInstance,
+		utility:          new(utility),
 		projectStructure: new(projectStructure),
 		forceDownload:    false,
 		Package:          "",
-		http:             new(HttpRequests),
+		http:             new(httpRequests),
 	}
 }
 
-type commandRebuildPackage struct {
+type commandPackageRebuild struct {
 	From             string
 	Package          string
-	utility          *Utility
+	utility          *utility
 	projectStructure *projectStructure
-	http             *HttpRequests
+	http             *httpRequests
 	forceDownload    bool
 }
 
-func (p *commandRebuildPackage) Execute(args []string) {
+func (p *commandPackageRebuild) Execute(args []string) {
 	p.getOpt(args)
 
 	fromInstance := p.utility.getInstanceByName(p.From)
 
-	pkgs := make([]PackageDescription, 0)
+	pkgs := make([]packageDescription, 0)
 	if len(p.Package) > 0 {
 		pkgs = p.utility.pkgsFromString(fromInstance, p.Package)
 	} else {
@@ -43,8 +43,8 @@ func (p *commandRebuildPackage) Execute(args []string) {
 	}
 }
 
-func (p *commandRebuildPackage) getOpt(args []string) {
-	getopt.FlagLong(&p.From, "from-name", 'f', "Rebuild package on instance (Default: "+CONFIG_DEFAULT_INSTANCE+")")
+func (p *commandPackageRebuild) getOpt(args []string) {
+	getopt.FlagLong(&p.From, "from-name", 'f', "Rebuild package on instance (Default: "+configDefaultInstance+")")
 	getopt.FlagLong(&p.Package, "package", 'p', "Define package package:version (no interactive mode)")
 	getopt.CommandLine.Parse(args)
 }

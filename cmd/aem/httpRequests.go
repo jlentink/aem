@@ -17,16 +17,19 @@ import (
 	"strconv"
 )
 
+//
+// AEM URLs
+//
 const (
-	UrlSystemInformation = "/libs/granite/operations/content/systemoverview/export.json"
-	UrlActivateTree      = "/etc/replication/treeactivation.html"
-	UrlBundles           = "/system/console/bundles"
-	UrlRebuildPackage    = "/crx/packmgr/service/.json%s?cmd=build"
-	UrlBundleInstall     = "/system/console/bundles/%s"
-	UrlBundlePage        = "/system/console/bundles/%s"
-	UrlReplication       = "/bin/replicate.json"
-	UrlPackageList       = "/crx/packmgr/list.jsp"
-	UrlPackageEndpoint   = "/crx/packmgr/service.jsp"
+	URLSystemInformation = "/libs/granite/operations/content/systemoverview/export.json"
+	URLActivateTree      = "/etc/replication/treeactivation.html"
+	URLBundles           = "/system/console/bundles"
+	URLRebuildPackage    = "/crx/packmgr/service/.json%s?cmd=build"
+	URLBundleInstall     = "/system/console/bundles/%s"
+	URLBundlePage        = "/system/console/bundles/%s"
+	URLReplication       = "/bin/replicate.json"
+	URLPackageList       = "/crx/packmgr/list.jsp"
+	URLPackageEndpoint   = "/crx/packmgr/service.jsp"
 
 	ServiceName = "aem-cli"
 
@@ -36,21 +39,21 @@ const (
 	bundleInstall    = "install"
 )
 
-type HttpRequests struct {
+type httpRequests struct {
 }
 
-func (a *HttpRequests) getPassword(instance AEMInstanceConfig) string {
-	i := new(Instance)
-	return i.getPasswordForInstance(instance)
+func (a *httpRequests) getPassword(aeminstance aemInstanceConfig) string {
+	i := new(instance)
+	return i.getPasswordForInstance(aeminstance)
 }
 
-func (a *HttpRequests) buildPackage(instance AEMInstanceConfig, pkg PackageDescription) {
+func (a *httpRequests) buildPackage(instance aemInstanceConfig, pkg packageDescription) {
 
 	// Create client
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s"+UrlRebuildPackage, instance.URL(), pkg.Path), nil)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s"+URLRebuildPackage, instance.URL(), pkg.Path), nil)
 
 	a.addAuthentication(instance, req)
 
@@ -74,20 +77,20 @@ func (a *HttpRequests) buildPackage(instance AEMInstanceConfig, pkg PackageDescr
 	fmt.Println("response Body : ", string(respBody))
 }
 
-func (a *HttpRequests) downloadPackage(instance AEMInstanceConfig, aemPackage PackageDescription, forceDownload bool) (error, string) {
-	projectStructure := NewProjectStructure()
+func (a *httpRequests) downloadPackage(instance aemInstanceConfig, aemPackage packageDescription, forceDownload bool) (string, error) {
+	projectStructure := newProjectStructure()
 	projectStructure.createDirForPackage(aemPackage)
 	destination := projectStructure.getLocationForPackage(aemPackage)
 	url := instance.URL() + aemPackage.Path
 
-	err := a.DownloadFile(destination, url, instance.Username, a.getPassword(instance), forceDownload)
+	err := a.downloadFile(destination, url, instance.Username, a.getPassword(instance), forceDownload)
 	exitFatal(err, "Download issue")
 
-	return nil, destination
+	return destination, err
 }
 
-func (a *HttpRequests) uploadPackage(instance AEMInstanceConfig, aemPackage PackageDescription, force bool, install bool) (*CrxResponse, error) {
-	projectStructure := NewProjectStructure()
+func (a *httpRequests) uploadPackage(instance aemInstanceConfig, aemPackage packageDescription, force bool, install bool) (*crxResponse, error) {
+	projectStructure := newProjectStructure()
 
 	fileLocation := projectStructure.getLocationForPackage(aemPackage)
 	body := &bytes.Buffer{}
@@ -106,7 +109,7 @@ func (a *HttpRequests) uploadPackage(instance AEMInstanceConfig, aemPackage Pack
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlPackageEndpoint, &ProgressReporter{r: body, totalSize: uint64(body.Len()), label: "Uploading"})
+	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLPackageEndpoint, &ProgressReporter{r: body, totalSize: uint64(body.Len()), label: "Uploading"})
 
 	// Headers
 	// Set Authentication
@@ -123,22 +126,22 @@ func (a *HttpRequests) uploadPackage(instance AEMInstanceConfig, aemPackage Pack
 	// Read Response Body
 	respBody, _ := ioutil.ReadAll(resp.Body)
 	fmt.Print("\n")
-	crxResponse := new(CrxResponse)
+	crxResponse := new(crxResponse)
 
 	err = xml.Unmarshal(respBody, crxResponse)
 
 	return crxResponse, err
 }
 
-func (a *HttpRequests) getSystemInformation(instance AEMInstanceConfig) (*SystemInformation, error) {
+func (a *httpRequests) getSystemInformation(instance aemInstanceConfig) (*systemInformation, error) {
 
-	systemInformation := &SystemInformation{}
+	systemInformation := &systemInformation{}
 
 	// Create client
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", instance.URL(), UrlSystemInformation), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", instance.URL(), URLSystemInformation), nil)
 
 	a.addAuthentication(instance, req)
 
@@ -157,14 +160,15 @@ func (a *HttpRequests) getSystemInformation(instance AEMInstanceConfig) (*System
 	return systemInformation, err
 
 }
-func (a *HttpRequests) activatePage(instance AEMInstanceConfig, path string) int {
+func (a *httpRequests) activatePage(instance aemInstanceConfig, path string) int {
 	return a.activateDeactivePage(instance, PageStatusActivate, path)
 }
-func (a *HttpRequests) DeactivatePage(instance AEMInstanceConfig, path string) int {
+
+func (a *httpRequests) deactivatePage(instance aemInstanceConfig, path string) int {
 	return a.activateDeactivePage(instance, PageStatusDeactivate, path)
 }
 
-func (a *HttpRequests) activateDeactivePage(instance AEMInstanceConfig, mode string, path string) int {
+func (a *httpRequests) activateDeactivePage(instance aemInstanceConfig, mode string, path string) int {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -176,7 +180,7 @@ func (a *HttpRequests) activateDeactivePage(instance AEMInstanceConfig, mode str
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", instance.URL(), UrlReplication), body)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", instance.URL(), URLReplication), body)
 	req.Header.Add(headers.ContentType, writer.FormDataContentType())
 
 	a.addAuthentication(instance, req)
@@ -189,16 +193,16 @@ func (a *HttpRequests) activateDeactivePage(instance AEMInstanceConfig, mode str
 	return resp.StatusCode
 }
 
-func (a *HttpRequests) getListForInstance(instance AEMInstanceConfig) []PackageDescription {
+func (a *httpRequests) getListForInstance(instance aemInstanceConfig) []packageDescription {
 
 	// Create client
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodGet, instance.URL()+UrlPackageList, nil)
+	req, err := http.NewRequest(http.MethodGet, instance.URL()+URLPackageList, nil)
 
 	// Headers
-	req.Header.Add(headers.CacheControl, CONFIG_HTTP_NO_CACHE)
+	req.Header.Add(headers.CacheControl, configNoCache)
 
 	a.addAuthentication(instance, req)
 
@@ -209,7 +213,7 @@ func (a *HttpRequests) getListForInstance(instance AEMInstanceConfig) []PackageD
 	// Read Response Body
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
-	packageFeed := new(PackagesFeed)
+	packageFeed := new(packagesFeed)
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, packageFeed)
@@ -218,8 +222,8 @@ func (a *HttpRequests) getListForInstance(instance AEMInstanceConfig) []PackageD
 	return packageFeed.Package
 }
 
-func (a *HttpRequests) DownloadFile(filepath string, url string, username string, password string, forceDownload bool) error {
-	u := new(Utility)
+func (a *httpRequests) downloadFile(filepath string, url string, username string, password string, forceDownload bool) error {
+	u := new(utility)
 	if u.Exists(filepath) && !forceDownload {
 		fmt.Printf("Found \"%s\" file skipping...\n", filepath)
 		return nil
@@ -230,13 +234,13 @@ func (a *HttpRequests) DownloadFile(filepath string, url string, username string
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 
 	// Headers
-	req.Header.Add(headers.CacheControl, CONFIG_HTTP_NO_CACHE)
+	req.Header.Add(headers.CacheControl, configNoCache)
 
 	if len(username) > 0 || len(password) > 0 {
 		req.SetBasicAuth(username, password)
 	}
 
-	filesize := a.DownloadSize(req)
+	filesize := a.downloadSize(req)
 
 	// Fetch Request
 	resp, err := client.Do(req)
@@ -275,7 +279,7 @@ func (a *HttpRequests) DownloadFile(filepath string, url string, username string
 	return nil
 }
 
-func (a *HttpRequests) DownloadSize(req *http.Request) uint64 {
+func (a *httpRequests) downloadSize(req *http.Request) uint64 {
 	oldMethod := req.Method
 	req.Method = http.MethodHead
 
@@ -298,7 +302,7 @@ func (a *HttpRequests) DownloadSize(req *http.Request) uint64 {
 	return uint64(size)
 }
 
-func (a *HttpRequests) ActivateTree(instance AEMInstanceConfig, path string) bool {
+func (a *httpRequests) activateTree(instance aemInstanceConfig, path string) bool {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -312,7 +316,7 @@ func (a *HttpRequests) ActivateTree(instance AEMInstanceConfig, path string) boo
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlActivateTree, body)
+	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLActivateTree, body)
 
 	a.addAuthentication(instance, req)
 
@@ -329,7 +333,7 @@ func (a *HttpRequests) ActivateTree(instance AEMInstanceConfig, path string) boo
 	return false
 }
 
-func (a *HttpRequests) listBundles(instance AEMInstanceConfig) *BundlesFeed {
+func (a *httpRequests) listBundles(instance aemInstanceConfig) *bundlesFeed {
 
 	params := url.Values{}
 	params.Set("action", "refreshPackages")
@@ -339,13 +343,13 @@ func (a *HttpRequests) listBundles(instance AEMInstanceConfig) *BundlesFeed {
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlBundles, body)
+	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
 
 	a.addAuthentication(instance, req)
 
 	// Headers
 	req.Header.Add(headers.ContentType, "application/x-www-form-urlencoded; charset=UTF-8")
-	req.Header.Add(headers.CacheControl, CONFIG_HTTP_NO_CACHE)
+	req.Header.Add(headers.CacheControl, configNoCache)
 
 	// Fetch Request
 	resp, err := client.Do(req)
@@ -354,7 +358,7 @@ func (a *HttpRequests) listBundles(instance AEMInstanceConfig) *BundlesFeed {
 	// Read Response Body
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
-	bundleFeed := new(BundlesFeed)
+	bundleFeed := new(bundlesFeed)
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, bundleFeed)
@@ -363,7 +367,7 @@ func (a *HttpRequests) listBundles(instance AEMInstanceConfig) *BundlesFeed {
 	return bundleFeed
 }
 
-func (a *HttpRequests) bundleStopStart(instance AEMInstanceConfig, bundle Bundle, status string) *BundleResponse {
+func (a *httpRequests) bundleStopStart(instance aemInstanceConfig, bundle bundle, status string) *bundleResponse {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -374,7 +378,7 @@ func (a *HttpRequests) bundleStopStart(instance AEMInstanceConfig, bundle Bundle
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+fmt.Sprintf(UrlBundlePage, bundle.SymbolicName), body)
+	req, err := http.NewRequest(http.MethodPost, instance.URL()+fmt.Sprintf(URLBundlePage, bundle.SymbolicName), body)
 
 	a.addAuthentication(instance, req)
 
@@ -387,7 +391,7 @@ func (a *HttpRequests) bundleStopStart(instance AEMInstanceConfig, bundle Bundle
 	// Read Response Body
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
-	bundleResp := new(BundleResponse)
+	bundleResp := new(bundleResponse)
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, bundleResp)
@@ -396,7 +400,7 @@ func (a *HttpRequests) bundleStopStart(instance AEMInstanceConfig, bundle Bundle
 	return bundleResp
 }
 
-func (a *HttpRequests) bundleUninstall(instance AEMInstanceConfig, bundle Bundle) *BundleResponse {
+func (a *httpRequests) bundleUninstall(instance aemInstanceConfig, bundle bundle) *bundleResponse {
 	// cURL (POST http://localhost:4505/system/console/bundles/name%20of%20bundle)
 
 	params := url.Values{}
@@ -426,7 +430,7 @@ func (a *HttpRequests) bundleUninstall(instance AEMInstanceConfig, bundle Bundle
 	fmt.Println("response Headers : ", resp.Header)
 	fmt.Println("response Body : ", string(respBody))
 
-	bundleResp := new(BundleResponse)
+	bundleResp := new(bundleResponse)
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, bundleResp)
@@ -435,7 +439,7 @@ func (a *HttpRequests) bundleUninstall(instance AEMInstanceConfig, bundle Bundle
 	return bundleResp
 }
 
-func (a *HttpRequests) createFilePart(w *multipart.Writer, path string, fieldname, mimeType string) (*multipart.Writer, error) {
+func (a *httpRequests) createFilePart(w *multipart.Writer, path string, fieldname, mimeType string) (*multipart.Writer, error) {
 	h := make(textproto.MIMEHeader)
 	h.Set(headers.ContentDisposition, fmt.Sprintf(`form-data; name="%s"; filename="%s"`, fieldname, filepath.Base(path)))
 	h.Set(headers.ContentType, mimeType)
@@ -450,7 +454,7 @@ func (a *HttpRequests) createFilePart(w *multipart.Writer, path string, fieldnam
 	return w, err
 }
 
-func (a *HttpRequests) bundleInstall(instance AEMInstanceConfig, bundleFile string, command string, bundleStartLevel int) bool {
+func (a *httpRequests) bundleInstall(instance aemInstanceConfig, bundleFile string, command string, bundleStartLevel int) bool {
 
 	body := &bytes.Buffer{}
 
@@ -465,8 +469,8 @@ func (a *HttpRequests) bundleInstall(instance AEMInstanceConfig, bundleFile stri
 	client := &http.Client{}
 
 	// Create request
-	//req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlBundles, body)
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlBundles, body)
+	//req, err := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
+	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
 
 	a.addAuthentication(instance, req)
 
@@ -486,7 +490,7 @@ func (a *HttpRequests) bundleInstall(instance AEMInstanceConfig, bundleFile stri
 	return false
 }
 
-func (a *HttpRequests) addAuthentication(instance AEMInstanceConfig, req *http.Request) {
+func (a *httpRequests) addAuthentication(instance aemInstanceConfig, req *http.Request) {
 	if len(instance.Username) > 0 || len(a.getPassword(instance)) > 0 {
 		req.SetBasicAuth(instance.Username, a.getPassword(instance))
 	}

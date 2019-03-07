@@ -9,19 +9,19 @@ import (
 	"os/exec"
 )
 
-func NewStopCommand() commandStop {
+func newStopCommand() commandStop {
 	return commandStop{
 		p:       new(projectStructure),
-		utility: new(Utility),
-		name:    CONFIG_DEFAULT_INSTANCE,
+		utility: new(utility),
+		name:    configDefaultInstance,
 	}
 }
 
 type commandStop struct {
-	p       *projectStructure
-	utility *Utility
-	name    string
-	instance AEMInstanceConfig
+	p        *projectStructure
+	utility  *utility
+	name     string
+	instance aemInstanceConfig
 }
 
 func (s *commandStop) Execute(args []string) {
@@ -49,6 +49,6 @@ func (s *commandStop) Execute(args []string) {
 }
 
 func (s *commandStop) getOpt(args []string) {
-	getopt.FlagLong(&s.name, "name", 'n', "Instance to stop. (default: "+CONFIG_DEFAULT_INSTANCE+")")
+	getopt.FlagLong(&s.name, "name", 'n', "Instance to stop. (default: "+configDefaultInstance+")")
 	getopt.CommandLine.Parse(args)
 }
