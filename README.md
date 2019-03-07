@@ -1,6 +1,7 @@
 # AEMcli (command line interface)
 
-![](https://travis-ci.org/jlentink/aem.svg?branch=master)
+[![](https://travis-ci.org/jlentink/aem.svg?branch=master)](https://travis-ci.org/jlentink/aem)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 **This tool is work in progress**<br />
 *If you find any bugs or miss any feature feel free to pitch in or create a ticket so the issue can be resolved quickly or the new feature can be added.*
