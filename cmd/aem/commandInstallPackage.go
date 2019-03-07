@@ -10,9 +10,9 @@ func NewInstallPackageCommand() commandInstallPackage {
 	return commandInstallPackage{
 		From:             "",
 		ToGroup:          "",
-		ToName:           "",
+		ToName:           CONFIG_DEFAULT_INSTANCE,
 		u:                new(Utility),
-		projectStructure: new(projectStructure),
+		projectStructure: NewProjectStructure(),
 		showLog:          false,
 		forceDownload:    false,
 		yes:              false,
@@ -33,12 +33,13 @@ type commandInstallPackage struct {
 	noInstall        bool
 	u                *Utility
 	showLog          bool
-	projectStructure *projectStructure
+	projectStructure projectStructure
 	forceDownload    bool
 	http             *HttpRequests
 }
 
 func (p *commandInstallPackage) Execute(args []string) {
+
 	p.getOpt(args)
 	toInstances := make([]AEMInstanceConfig, 0)
 
@@ -67,9 +68,9 @@ func (p *commandInstallPackage) Execute(args []string) {
 }
 
 func (p *commandInstallPackage) getOpt(args []string) {
-	getopt.FlagLong(&p.ToName, "to-name", 't', "Push package to instance")
+	getopt.FlagLong(&p.ToName, "to-name", 't', "Push package to instance (default: "+CONFIG_DEFAULT_INSTANCE+")")
 	getopt.FlagLong(&p.ToGroup, "to-group", 'g', "Push package to group")
-	getopt.FlagLong(&p.Package, "package", 'p', "Package to install")
+	getopt.FlagLong(&p.Package, "package", 'p', "Package to install (path to file)")
 	getopt.FlagLong(&p.yes, "yes", 'y', "Skip confirmation")
 	getopt.FlagLong(&p.noInstall, "no-install", 'n', "Do not install package")
 	getopt.CommandLine.Parse(args)

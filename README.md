@@ -169,12 +169,13 @@ Available options:
       
 ### package-install
 Install a package you have locally to one instance or to a complete group.
+The name of the package will be extracted from the manifest in the package
 
 Available options:
 
     -g, --to-group=value  Push package to group
     -n, --no-install      Do not install package
-    -p, --package=value   Package to install
+    -p, --package=value   Package to install (path to file)
     -t, --to-name=value   Push package to instance
     -v, --verbose         Enable verbose
     -y, --yes             Skip confirmation

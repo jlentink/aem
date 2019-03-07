@@ -9,3 +9,6 @@
 /cmd/aem/test-report.out
 /cmd/aem/sonar-project.properties
 /cmd/aem/coverage.out
+/cmd/aem/instance
+/cmd/aem/.aem
+/cmd/aem/aem
