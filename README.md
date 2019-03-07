@@ -20,9 +20,9 @@ Prebuild versions are:
 ### Installing
 Download or build and copy the binary to a location in your path.
 
-* [OSX](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/osx/aem)
-* [Linux](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/linux/aem)
-* [Windows](https://github.com/jlentink/aem/raw/develop/cmd/aem/build/windows/aem.exe)
+* [OSX](https://github.com/jlentink/aem/raw/develop/build/osx/aem)
+* [Linux](https://github.com/jlentink/aem/raw/develop/build/linux/aem)
+* [Windows](https://github.com/jlentink/aem/raw/develop/build/windows/aem.exe)
 
 Example install locations.
 
@@ -265,9 +265,11 @@ Available options:
 
 - Code cleanup
 - Features
- - pull/copy content over vlt
- - thread dumps
- - sling tracer
+- pull/copy content over vlt
+- thread dumps
+- sling tracer
+- more tests
+- fix all go lint issues
 
 
 ## Built With
