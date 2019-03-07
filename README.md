@@ -211,6 +211,7 @@ Available options:
 
     -b, --bundle=value  Path to bundle (.jar)
     -n, --name=value    Name of instance to list bundles from from (default: local-author)
+    -s --startlevel     Bundle start level (default: 20)
     -v, --verbose       Enable verbose
 
 
