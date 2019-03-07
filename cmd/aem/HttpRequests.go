@@ -466,7 +466,7 @@ func (a *HttpRequests) bundleInstall(instance AEMInstanceConfig, bundleFile stri
 
 	// Create request
 	//req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlBundles, body)
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+"/system/console/bundles", body)
+	req, err := http.NewRequest(http.MethodPost, instance.URL()+UrlBundles	, body)
 
 	a.addAuthentication(instance, req)
 
