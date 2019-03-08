@@ -35,8 +35,12 @@ const (
 
 	JarContentType = "application/java-archive"
 
-	bundleStartLevel = 20
-	bundleInstall    = "install"
+	bundleResponseErrorMsg = "Could not parse bundle response from Adobe Experience manager. (%s)"
+	bundleStartLevel       = 20
+	bundleFormActionField  = "action"
+	bundleInstall          = "install"
+	bundleRefresh          = "refreshPackages"
+	bundleUninstall        = "uninstall"
 )
 
 type httpRequests struct {
@@ -336,7 +340,7 @@ func (a *httpRequests) activateTree(instance aemInstanceConfig, path string) boo
 func (a *httpRequests) listBundles(instance aemInstanceConfig) *bundlesFeed {
 
 	params := url.Values{}
-	params.Set("action", "refreshPackages")
+	params.Set(bundleFormActionField, bundleRefresh)
 	body := bytes.NewBufferString(params.Encode())
 
 	// Create client
@@ -362,7 +366,7 @@ func (a *httpRequests) listBundles(instance aemInstanceConfig) *bundlesFeed {
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, bundleFeed)
-	exitFatal(err, "Could not parse bundle feed from Adobe Experience manager. (%s)", instance.URL())
+	exitFatal(err, bundleResponseErrorMsg, instance.URL())
 
 	return bundleFeed
 }
@@ -371,7 +375,7 @@ func (a *httpRequests) bundleStopStart(instance aemInstanceConfig, bundle bundle
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writer.WriteField("action", status)
+	writer.WriteField(bundleFormActionField, status)
 	writer.Close()
 
 	// Create client
@@ -395,7 +399,7 @@ func (a *httpRequests) bundleStopStart(instance aemInstanceConfig, bundle bundle
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, bundleResp)
-	exitFatal(err, "Could not parse bundle response from Adobe Experience manager. (%s)", instance.URL())
+	exitFatal(err, bundleResponseErrorMsg, instance.URL())
 
 	return bundleResp
 }
@@ -404,7 +408,7 @@ func (a *httpRequests) bundleUninstall(instance aemInstanceConfig, bundle bundle
 	// cURL (POST http://localhost:4505/system/console/bundles/name%20of%20bundle)
 
 	params := url.Values{}
-	params.Set("action", "uninstall")
+	params.Set(bundleFormActionField, bundleUninstall)
 	body := bytes.NewBufferString(params.Encode())
 
 	// Create client
@@ -420,7 +424,7 @@ func (a *httpRequests) bundleUninstall(instance aemInstanceConfig, bundle bundle
 	// Fetch Request
 	resp, err := client.Do(req)
 
-	exitFatal(err, "Could not parse bundle response from Adobe Experience manager. (%s)", instance.URL())
+	exitFatal(err, bundleResponseErrorMsg, instance.URL())
 
 	// Read Response Body
 	respBody, _ := ioutil.ReadAll(resp.Body)
@@ -434,7 +438,7 @@ func (a *httpRequests) bundleUninstall(instance aemInstanceConfig, bundle bundle
 
 	// Parse JSON feed
 	err = json.Unmarshal(respBody, bundleResp)
-	exitFatal(err, "Could not parse bundle response from Adobe Experience manager. (%s)", instance.URL())
+	exitFatal(err, bundleResponseErrorMsg, instance.URL())
 
 	return bundleResp
 }
@@ -459,7 +463,7 @@ func (a *httpRequests) bundleInstall(instance aemInstanceConfig, bundleFile stri
 	body := &bytes.Buffer{}
 
 	writer := multipart.NewWriter(body)
-	writer.WriteField("action", command)
+	writer.WriteField(bundleFormActionField, command)
 	writer.WriteField("bundlestartlevel", string(bundleStartLevel))
 	_, err := a.createFilePart(writer, bundleFile, "bundlefile", JarContentType)
 	exitFatal(err, "Could not read package for upload")
@@ -481,7 +485,7 @@ func (a *httpRequests) bundleInstall(instance aemInstanceConfig, bundleFile stri
 
 	// Fetch Request
 	resp, err := client.Do(req)
-	exitFatal(err, "Could not parse bundle response from Adobe Experience manager. (%s)", instance.URL())
+	exitFatal(err, bundleResponseErrorMsg, instance.URL())
 
 	if resp.StatusCode == 200 {
 		return true

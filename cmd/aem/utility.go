@@ -3,14 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/jedib0t/go-pretty/table"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/url"
 	"os"
-	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -41,85 +38,6 @@ func (u *utility) readCmdLineInput() string {
 	input, _ := reader.ReadString('\n')
 	return input[0 : len(input)-1]
 
-}
-
-func (u *utility) pkgPicker(instance aemInstanceConfig) []packageDescription {
-	http := new(httpRequests)
-	pkgs := http.getListForInstance(instance)
-	pageSize := 20
-	selected := make([]int64, 0)
-	selectedPkgs := make([]packageDescription, 0)
-	writer := new(tableWriter)
-
-	t := table.NewWriter()
-	t.AppendHeader(table.Row{"#", "Package", "Version"})
-	t.SetPageSize(pageSize)
-	t.SetOutputMirror(writer)
-
-	for i, pkg := range pkgs {
-		t.AppendRow(table.Row{i + 1, pkg.Name, pkg.Version})
-	}
-
-	t.Render()
-	tables := writer.getTables()
-
-	for i := 0; i < len(tables); i++ {
-		fmt.Print(tables[i])
-
-	choose:
-		fmt.Printf("Selected %d\n", selected)
-		fmt.Print("d: done selecting, q: quit, c: continue, package id ")
-		reader := bufio.NewReader(os.Stdin)
-		input, _ := reader.ReadString('\n')
-		input = input[0 : len(input)-1]
-		switch input {
-		case "c":
-			continue
-		case "q":
-			return make([]packageDescription, 0)
-		case "d":
-			for _, selectedPkg := range selected {
-				selectedPkgs = append(selectedPkgs, pkgs[selectedPkg])
-			}
-			return selectedPkgs
-		default:
-			r, _ := regexp.Compile("\\d")
-			if r.MatchString(input) {
-				id, _ := strconv.ParseInt(input, 10, 32)
-				if int(id) < len(pkgs)-1 && id > 0 {
-					if !u.inSliceInt64(selected, id) {
-						selected = append(selected, id)
-					}
-				} else {
-					fmt.Printf("Invalid id: %s\n", input)
-					goto choose
-				}
-			} else {
-				fmt.Printf("Unknown option: %s\n", input)
-				goto choose
-			}
-			i = i - 1
-		}
-	}
-	return pkgs
-}
-
-func (u *utility) inSliceInt64(slice []int64, needle int64) bool {
-	for _, v := range slice {
-		if v == needle {
-			return true
-		}
-	}
-	return false
-}
-
-func (u *utility) inSliceString(slice []string, needle string) bool {
-	for _, v := range slice {
-		if v == needle {
-			return true
-		}
-	}
-	return false
 }
 
 func (u *utility) zipToPackage(filepath string) packageDescription {

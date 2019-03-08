@@ -182,6 +182,7 @@ func (s *commandStart) getAdditionPackages() {
 
 func (s *commandStart) cleanupDeprecated() {
 	files, err := ioutil.ReadDir(s.projectStructure.getAemInstallDirLocation(s.instance))
+	sutil := new(sliceUtil)
 	packages := make([]string, 0)
 	exitFatal(err, "Could not find install dir")
 
@@ -189,7 +190,7 @@ func (s *commandStart) cleanupDeprecated() {
 		packages = append(packages, path.Base(pkg))
 	}
 	for _, file := range files {
-		if !s.utility.inSliceString(packages, file.Name()) {
+		if !sutil.inSliceString(packages, file.Name()) {
 			fmt.Printf("Removing package not in config anymore %s\n", file.Name())
 			os.Remove(s.projectStructure.appendSlash(s.projectStructure.getAemInstallDirLocation(s.instance)) + file.Name())
 		}

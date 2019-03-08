@@ -38,7 +38,8 @@ func (p *commandPackageDownload) Execute(args []string) {
 	if len(p.Package) > 0 {
 		pkgs = p.utility.pkgsFromString(fromInstance, p.Package)
 	} else {
-		pkgs = p.utility.pkgPicker(fromInstance)
+		pkgPicker := newPackagePicker()
+		pkgs = pkgPicker.picker(fromInstance)
 	}
 
 	for _, pkg := range pkgs {
