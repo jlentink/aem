@@ -160,7 +160,7 @@ Copy a package from one instance to another. The destination can be a group to e
 Available options:
 
       -d, --force-download  Force new download
-      -f, --from-name=value Pull content from
+      -f, --from-name=value Pull package from (default: local-author)
       -g, --to-group=value  Push package to group
       -l, --log             Show AEM log output
       -p, --package=value   Packages (multiple use comma separated list.)
@@ -268,12 +268,11 @@ Available options:
 ## Todo
 
 - Code cleanup
+- more code testing and coverage
 - Features
-- pull/copy content over vlt
-- thread dumps
-- sling tracer
-- more tests
-- fix all golint issues
+  - pull/copy content over vlt
+  - thread dumps
+  - sling tracer
 
 
 ## Built With
