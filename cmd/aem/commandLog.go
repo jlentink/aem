@@ -6,19 +6,19 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewLogCommand() logCommand {
+func newLogCommand() logCommand {
 	return logCommand{
 		follow:           false,
 		projectStructure: new(projectStructure),
-		utility:          new(Utility),
-		name:             CONFIG_DEFAULT_INSTANCE,
+		utility:          new(utility),
+		name:             configDefaultInstance,
 	}
 }
 
 type logCommand struct {
 	follow           bool
 	projectStructure *projectStructure
-	utility          *Utility
+	utility          *utility
 	name             string
 }
 
@@ -35,6 +35,6 @@ func (s *logCommand) Execute(args []string) {
 
 func (s *logCommand) getOpt(args []string) {
 	getopt.FlagLong(&s.follow, "follow", 'f', "Follow log file. Show new lines if they come in.")
-	getopt.FlagLong(&s.name, "name", 'n', "Instance to start. (default: "+CONFIG_DEFAULT_INSTANCE+")")
+	getopt.FlagLong(&s.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
 	getopt.CommandLine.Parse(args)
 }

@@ -1,12 +1,12 @@
 package main
 
-type BundlesFeed struct {
+type bundlesFeed struct {
 	Status string   `json:"status"`
 	S      []int    `json:"s"`
-	Data   []Bundle `json:"data"`
+	Data   []bundle `json:"data"`
 }
 
-type Bundle struct {
+type bundle struct {
 	ID           int    `json:"id"`
 	Name         string `json:"name"`
 	Fragment     bool   `json:"fragment"`
@@ -17,13 +17,12 @@ type Bundle struct {
 	Category     string `json:"category"`
 }
 
-
-type BundleResponse struct {
+type bundleResponse struct {
 	Fragment bool `json:"fragment"`
 	StateRaw int  `json:"stateRaw"`
 }
 
-var BundleRawState = map[int]string{
+var bundleRawState = map[int]string{
 	1:  "Uninstalled",
 	2:  "Installed",
 	4:  "Resolved",

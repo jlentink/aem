@@ -9,14 +9,14 @@ func TestSliceUtil_InSliceInt64(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		s    *SliceUtil
+		s    *sliceUtil
 		args args
 		want bool
 	}{
 		{
 			name: "Find 1 in slice",
 			args: args{
-				slice: []int64{1, 2, 3, 4, 5, 6, 7, 8},
+				slice:  []int64{1, 2, 3, 4, 5, 6, 7, 8},
 				needle: 1,
 			},
 			want: true,
@@ -24,7 +24,7 @@ func TestSliceUtil_InSliceInt64(t *testing.T) {
 		{
 			name: "Find 11 in slice",
 			args: args{
-				slice: []int64{1, 2, 3, 4, 5, 6, 7, 8},
+				slice:  []int64{1, 2, 3, 4, 5, 6, 7, 8},
 				needle: 11,
 			},
 			want: false,
@@ -32,7 +32,7 @@ func TestSliceUtil_InSliceInt64(t *testing.T) {
 		{
 			name: "Find 9 in slice",
 			args: args{
-				slice: []int64{1, 2, 3, 4, 5, 6, 7, 8},
+				slice:  []int64{1, 2, 3, 4, 5, 6, 7, 8},
 				needle: 9,
 			},
 			want: false,
@@ -40,9 +40,9 @@ func TestSliceUtil_InSliceInt64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &SliceUtil{}
-			if got := s.InSliceInt64(tt.args.slice, tt.args.needle); got != tt.want {
-				t.Errorf("SliceUtil.InSliceInt64() = %v, want %v", got, tt.want)
+			s := &sliceUtil{}
+			if got := s.inSliceInt64(tt.args.slice, tt.args.needle); got != tt.want {
+				t.Errorf("sliceUtil.inSliceInt64() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -55,14 +55,14 @@ func TestSliceUtil_InSliceString(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		s    *SliceUtil
+		s    *sliceUtil
 		args args
 		want bool
 	}{
 		{
 			name: "Find a in slice",
 			args: args{
-				slice: []string{"a", "aa", "bbb", "ccc"},
+				slice:  []string{"a", "aa", "bbb", "ccc"},
 				needle: "a",
 			},
 			want: true,
@@ -70,7 +70,7 @@ func TestSliceUtil_InSliceString(t *testing.T) {
 		{
 			name: "Find aa in slice",
 			args: args{
-				slice: []string{"a", "aa", "bbb", "ccc"},
+				slice:  []string{"a", "aa", "bbb", "ccc"},
 				needle: "aa",
 			},
 			want: true,
@@ -78,7 +78,7 @@ func TestSliceUtil_InSliceString(t *testing.T) {
 		{
 			name: "Find aaa in slice",
 			args: args{
-				slice: []string{"a", "aa", "bbb", "ccc"},
+				slice:  []string{"a", "aa", "bbb", "ccc"},
 				needle: "aaa",
 			},
 			want: false,
@@ -86,9 +86,9 @@ func TestSliceUtil_InSliceString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &SliceUtil{}
-			if got := s.InSliceString(tt.args.slice, tt.args.needle); got != tt.want {
-				t.Errorf("SliceUtil.InSliceString() = %v, want %v", got, tt.want)
+			s := &sliceUtil{}
+			if got := s.inSliceString(tt.args.slice, tt.args.needle); got != tt.want {
+				t.Errorf("sliceUtil.inSliceString() = %v, want %v", got, tt.want)
 			}
 		})
 	}

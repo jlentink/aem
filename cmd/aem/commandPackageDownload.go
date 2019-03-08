@@ -5,36 +5,36 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewDownloadPackageCommand() commandDownloadPackage {
-	return commandDownloadPackage{
-		From:             CONFIG_DEFAULT_INSTANCE,
-		utility:          new(Utility),
-		projectStructure: NewProjectStructure(),
+func newPackageDownloadCommand() commandPackageDownload {
+	return commandPackageDownload{
+		From:             configDefaultInstance,
+		utility:          new(utility),
+		projectStructure: newProjectStructure(),
 		forceDownload:    false,
 		Package:          "",
-		http:             new(HttpRequests),
+		http:             new(httpRequests),
 	}
 }
 
-type commandDownloadPackage struct {
+type commandPackageDownload struct {
 	From             string
 	To               string
 	Type             string
 	Role             string
 	Name             string
 	Package          string
-	utility          *Utility
+	utility          *utility
 	projectStructure projectStructure
-	http             *HttpRequests
+	http             *httpRequests
 	forceDownload    bool
 }
 
-func (p *commandDownloadPackage) Execute(args []string) {
+func (p *commandPackageDownload) Execute(args []string) {
 	p.getOpt(args)
 
 	fromInstance := p.utility.getInstanceByName(p.From)
 
-	pkgs := make([]PackageDescription, 0)
+	pkgs := make([]packageDescription, 0)
 	if len(p.Package) > 0 {
 		pkgs = p.utility.pkgsFromString(fromInstance, p.Package)
 	} else {
@@ -47,8 +47,8 @@ func (p *commandDownloadPackage) Execute(args []string) {
 	}
 }
 
-func (p *commandDownloadPackage) getOpt(args []string) {
-	getopt.FlagLong(&p.From, "from", 'f', "Pull content from (default: "+CONFIG_DEFAULT_INSTANCE + ")")
+func (p *commandPackageDownload) getOpt(args []string) {
+	getopt.FlagLong(&p.From, "from", 'f', "Pull content from (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&p.Package, "package", 'p', "Define package package:version (no interactive mode)")
 	getopt.FlagLong(&p.forceDownload, "force-download", 'd', "Force new download")
 	getopt.CommandLine.Parse(args)

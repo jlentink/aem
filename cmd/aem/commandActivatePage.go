@@ -5,32 +5,32 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewActivatePageCommand() commandReplicatePage {
-	return commandReplicatePage{
+func newPageActivateCommand() commandPageActivate {
+	return commandPageActivate{
 		Group:            "",
-		Name:             CONFIG_DEFAULT_INSTANCE,
+		Name:             configDefaultInstance,
 		Page:             "",
 		activate:         false,
 		deactivate:       false,
-		u:                new(Utility),
+		u:                new(utility),
 		projectStructure: new(projectStructure),
-		http:             new(HttpRequests),
+		http:             new(httpRequests),
 	}
 }
 
-type commandReplicatePage struct {
+type commandPageActivate struct {
 	Group            string
 	Type             string
 	Name             string
 	Page             string
 	activate         bool
 	deactivate       bool
-	u                *Utility
+	u                *utility
 	projectStructure *projectStructure
-	http             *HttpRequests
+	http             *httpRequests
 }
 
-func (c *commandReplicatePage) Execute(args []string) {
+func (c *commandPageActivate) Execute(args []string) {
 	c.getOpt(args)
 	instances := c.u.getInstance(c.Name, c.Group)
 
@@ -39,7 +39,7 @@ func (c *commandReplicatePage) Execute(args []string) {
 			status := c.http.activatePage(instance, c.Page)
 			fmt.Printf("Send action status received: %d\n", status)
 		} else if c.deactivate {
-			status := c.http.DeactivatePage(instance, c.Page)
+			status := c.http.deactivatePage(instance, c.Page)
 			fmt.Printf("Send action status received: %d\n", status)
 		} else {
 			exitProgram("Use --activate or --deactivate")
@@ -48,7 +48,7 @@ func (c *commandReplicatePage) Execute(args []string) {
 	fmt.Printf("Action(s) performed..")
 }
 
-func (c *commandReplicatePage) getOpt(args []string) {
+func (c *commandPageActivate) getOpt(args []string) {
 	getopt.FlagLong(&c.Name, "name", 'n', "Instance to target based on name")
 	getopt.FlagLong(&c.Group, "group", 'g', "Instances to target based on group")
 	getopt.FlagLong(&c.Page, "page", 'p', "Page to activate")

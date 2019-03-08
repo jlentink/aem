@@ -6,16 +6,16 @@ import (
 	"github.com/spf13/afero"
 )
 
-func NewInitCommand() commandInit {
+func newInitCommand() commandInit {
 	return commandInit{
-		u:  new(Utility),
+		u:  new(utility),
 		p:  new(projectStructure),
 		fs: afero.NewOsFs(),
 	}
 }
 
 type commandInit struct {
-	u  *Utility
+	u  *utility
 	p  *projectStructure
 	fs afero.Fs
 }

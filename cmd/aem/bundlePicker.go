@@ -9,47 +9,47 @@ import (
 	"strconv"
 )
 
-func NewBundlePicker() bundlePicker {
+func newBundlePicker() bundlePicker {
 	return bundlePicker{
-		sliceUtil: new(SliceUtil),
+		sliceUtil: new(sliceUtil),
 	}
 }
 
 type bundlePicker struct {
-	sliceUtil *SliceUtil
+	sliceUtil *sliceUtil
 }
 
-func (b *bundlePicker) addBundlesToTable(t table.Writer, bundles []Bundle) {
+func (b *bundlePicker) addBundlesToTable(t table.Writer, bundles []bundle) {
 	for i, bundle := range bundles {
 		t.AppendRow(table.Row{i + 1, bundle.ID, bundle.Name, bundle.SymbolicName, bundle.Version, bundle.State})
 	}
 }
 
 func (b *bundlePicker) appendSelected(list []int64, selected int64) []int64 {
-	if !b.sliceUtil.InSliceInt64(list, selected) {
+	if !b.sliceUtil.inSliceInt64(list, selected) {
 		list = append(list, selected)
 	}
 	return list
 }
 
-func (b *bundlePicker) getSelectedBundles(selected []int64, bundles []Bundle) []Bundle {
-	selectedBundles := make([]Bundle, 0)
+func (b *bundlePicker) getSelectedBundles(selected []int64, bundles []bundle) []bundle {
+	selectedBundles := make([]bundle, 0)
 	for _, bundle := range selected {
 		selectedBundles = append(selectedBundles, bundles[bundle-1])
 	}
 	return selectedBundles
 }
 
-func (b *bundlePicker) picker(instance AEMInstanceConfig) []Bundle {
-	http := new(HttpRequests)
+func (b *bundlePicker) picker(instance aemInstanceConfig) []bundle {
+	http := new(httpRequests)
 	bundles := http.listBundles(instance)
 	pageSize := 20
 	selected := make([]int64, 0)
-	selectedBundles := make([]Bundle, 0)
-	writer := new(TableWriter)
+	selectedBundles := make([]bundle, 0)
+	writer := new(tableWriter)
 
 	t := table.NewWriter()
-	t.AppendHeader(table.Row{"#", "Id", "Bundle", "Symbolic name", "Version", "Status"})
+	t.AppendHeader(table.Row{"#", "Id", "bundle", "Symbolic name", "Version", "Status"})
 	t.SetPageSize(pageSize)
 	t.SetOutputMirror(writer)
 	b.addBundlesToTable(t, bundles.Data)
@@ -69,7 +69,7 @@ func (b *bundlePicker) picker(instance AEMInstanceConfig) []Bundle {
 		case "c":
 			continue
 		case "q":
-			return make([]Bundle, 0)
+			return make([]bundle, 0)
 		case "d":
 			return b.getSelectedBundles(selected, bundles.Data)
 		default:
@@ -83,7 +83,7 @@ func (b *bundlePicker) picker(instance AEMInstanceConfig) []Bundle {
 					goto choose
 				}
 			} else {
-				fmt.Printf("Unkown option: %s\n", input)
+				fmt.Printf("Unknown option: %s\n", input)
 				goto choose
 			}
 			i = i - 1

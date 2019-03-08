@@ -7,19 +7,19 @@ import (
 	"runtime"
 )
 
-func NewOpenCommand() commandOpen {
+func newOpenCommand() commandOpen {
 	return commandOpen{
 		p:       new(projectStructure),
-		utility: new(Utility),
-		name:    CONFIG_DEFAULT_INSTANCE,
+		utility: new(utility),
+		name:    configDefaultInstance,
 	}
 }
 
 type commandOpen struct {
-	p       *projectStructure
-	utility *Utility
-	name    string
-	instance AEMInstanceConfig
+	p        *projectStructure
+	utility  *utility
+	name     string
+	instance aemInstanceConfig
 }
 
 func (o *commandOpen) Execute(args []string) {
@@ -43,6 +43,6 @@ func (o *commandOpen) Execute(args []string) {
 }
 
 func (o *commandOpen) getOpt(args []string) {
-	getopt.FlagLong(&o.name, "name", 'n', "Instance to open. (default: "+CONFIG_DEFAULT_INSTANCE+")")
+	getopt.FlagLong(&o.name, "name", 'n', "Instance to open. (default: "+configDefaultInstance+")")
 	getopt.CommandLine.Parse(args)
 }

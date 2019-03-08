@@ -4,9 +4,8 @@ import (
 	"fmt"
 )
 
-func NewVersionCommand() commandVersion {
-	return commandVersion{
-	}
+func newVersionCommand() commandVersion {
+	return commandVersion{}
 }
 
 type commandVersion struct {

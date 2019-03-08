@@ -1,6 +1,6 @@
 package main
 
-type SystemInformation struct {
+type systemInformation struct {
 	HealthChecks interface{} `json:"Health Checks"`
 	Instance     struct {
 		AdobeExperienceManager string `json:"Adobe Experience Manager"`
@@ -16,8 +16,8 @@ type SystemInformation struct {
 	MaintenanceTasks  interface{} `json:"Maintenance Tasks"`
 	SystemInformation struct {
 		MacOSX            string `json:"Mac OS X"`
-		Linux             string `json:Linux"`
-		Windows           string `json:Windows"`
+		Linux             string `json:"Linux"`
+		Windows           string `json:"Windows"`
 		SystemLoadAverage string `json:"System Load Average"`
 		UsableDiskSpace   string `json:"Usable Disk Space"`
 		MaximumHeap       string `json:"Maximum Heap"`

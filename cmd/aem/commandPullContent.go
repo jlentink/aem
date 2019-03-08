@@ -5,14 +5,14 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewPullContentCommand() commandPullContent {
+func newPullContentCommand() commandPullContent {
 	return commandPullContent{
 		From:             "",
-		To:               CONFIG_DEFAULT_INSTANCE,
-		utility:          new(Utility),
-		projectStructure: NewProjectStructure(),
+		To:               configDefaultInstance,
+		utility:          new(utility),
+		projectStructure: newProjectStructure(),
 		forceDownload:    false,
-		http:             new(HttpRequests),
+		http:             new(httpRequests),
 	}
 }
 
@@ -22,14 +22,14 @@ type commandPullContent struct {
 	Type             string
 	Role             string
 	Name             string
-	utility          *Utility
+	utility          *utility
 	projectStructure projectStructure
 	forceDownload    bool
-	http             *HttpRequests
+	http             *httpRequests
 }
 
 func (p *commandPullContent) Execute(args []string) {
-	u := Utility{}
+	u := utility{}
 	p.getOpt(args)
 
 	fromInstance := u.getInstanceByName(p.From)
@@ -43,7 +43,7 @@ func (p *commandPullContent) Execute(args []string) {
 
 		for _, contentPackage := range contentPackages {
 			if packageVersion == contentPackage.Version {
-				err, _ := p.http.downloadPackage(fromInstance, contentPackage, p.forceDownload)
+				_, err := p.http.downloadPackage(fromInstance, contentPackage, p.forceDownload)
 				if nil == err {
 					fmt.Printf("Uploading package...")
 					crx, err := p.http.uploadPackage(toInstance, contentPackage, true, true)

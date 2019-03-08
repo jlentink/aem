@@ -17,27 +17,27 @@ import (
 	"strings"
 )
 
-func NewStartCommand() commandStart {
+func newStartCommand() commandStart {
 	return commandStart{
-		projectStructure: NewProjectStructure(),
-		utility:          new(Utility),
-		httpClient:       new(HttpRequests),
+		projectStructure: newProjectStructure(),
+		utility:          new(utility),
+		httpClient:       new(httpRequests),
 		forceDownload:    false,
 		forGround:        false,
 		root:             false,
-		name:             CONFIG_DEFAULT_INSTANCE,
+		name:             configDefaultInstance,
 	}
 }
 
 type commandStart struct {
 	projectStructure projectStructure
-	utility          *Utility
-	httpClient       *HttpRequests
+	utility          *utility
+	httpClient       *httpRequests
 	forceDownload    bool
 	forGround        bool
 	root             bool
 	name             string
-	instance         AEMInstanceConfig
+	instance         aemInstanceConfig
 }
 
 func (s *commandStart) Execute(args []string) {
@@ -83,7 +83,7 @@ func (s *commandStart) getJarFile() {
 			password, _ := url.User.Password()
 
 			fmt.Printf("Downloading AEM jar...\n")
-			err = s.httpClient.DownloadFile(s.projectStructure.getJarFileLocation(), s.utility.returnUrlString(url), url.User.Username(), password, s.forceDownload)
+			err = s.httpClient.downloadFile(s.projectStructure.getJarFileLocation(), s.utility.returnURLString(url), url.User.Username(), password, s.forceDownload)
 			exitFatal(err, "Error occurred during downloading aem jar.")
 		} else {
 			if _, err := os.Stat(config.AemJar); os.IsNotExist(err) {
@@ -124,7 +124,7 @@ func (s *commandStart) findJar() string {
 	return ""
 }
 
-func (s *commandStart) executeStart(instance AEMInstanceConfig) {
+func (s *commandStart) executeStart(instance aemInstanceConfig) {
 	javaOptions := config.JVMOpts
 	javaOptions = append(javaOptions, instance.JVMOptions...)
 	if instance.Debug {
@@ -167,13 +167,13 @@ func (s *commandStart) getAdditionPackages() {
 
 	for _, additional := range config.AdditionalPackages {
 		packagename := path.Base(additional)
-		if !s.utility.Exists(installDir + "/" + packagename) || s.forceDownload {
+		if !s.utility.Exists(installDir+"/"+packagename) || s.forceDownload {
 			url, err := url.Parse(additional)
 			exitFatal(err, "Could not parse url (%s). Please check url format.", additional)
 
 			password, _ := url.User.Password()
-			fmt.Printf("Downloading additonal (%s)\n", additional)
-			s.httpClient.DownloadFile(installDir+"/"+packagename, s.utility.returnUrlString(url), url.User.Username(), password, s.forceDownload)
+			fmt.Printf("Downloading additional (%s)\n", additional)
+			s.httpClient.downloadFile(installDir+"/"+packagename, s.utility.returnURLString(url), url.User.Username(), password, s.forceDownload)
 		} else {
 			logrus.Debugf("Found package %s. Skipping download...", packagename)
 		}
@@ -199,7 +199,7 @@ func (s *commandStart) cleanupDeprecated() {
 func (s *commandStart) getOpt(args []string) {
 	getopt.FlagLong(&s.forceDownload, "download", 'd', "Force new download")
 	getopt.FlagLong(&s.forGround, "for-ground", 'f', "Don't detach aem")
-	getopt.FlagLong(&s.name, "name", 'n', "Instance to start. (default: "+CONFIG_DEFAULT_INSTANCE+")")
+	getopt.FlagLong(&s.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&s.root, "root", 'r', "Allow root")
 	getopt.CommandLine.Parse(args)
 }

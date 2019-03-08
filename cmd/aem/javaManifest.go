@@ -10,39 +10,41 @@ import (
 	"strings"
 )
 
+// Labels to retrieve data from the manifest
 const (
-	manifestPath                           = "META-INF/MANIFEST.MF"
 	ManifestLabelManifestVersion           = "Manifest-Version"
 	ManifestLabelImplementationTitle       = "Implementation-Title"
 	ManifestLabelImplementationVersion     = "Implementation-Version"
 	ManifestLabelArchiverVersion           = "Archiver-Version"
 	ManifestLabelBuiltBy                   = "Built-By"
-	ManifestLabelImplementationVendorId    = "Implementation-Vendor-Id"
+	ManifestLabelImplementationVendorID    = "Implementation-Vendor-Id"
 	ManifestLabelImportPackage             = "Import-Package"
 	ManifestLabelContentPackageType        = "Content-Package-Type"
 	ManifestLabelContentPackageDescription = "Content-Package-Description"
 	ManifestLabelContentPackageRoots       = "Content-Package-Roots"
 	ManifestLabelCreatedBy                 = "Created-By"
 	ManifestLabelBuildJdk                  = "Build-Jdk"
-	ManifestLabelContentPackageId          = "Content-Package-Id"
-	ManifestLabelContentPackageIdSeperator = ":"
+	ManifestLabelContentPackageID          = "Content-Package-Id"
 	ManifestLabelPackageGroup              = "Package-Group"
 	ManifestLabelPackageName               = "Package-Name"
 	ManifestLabelPackageVersion            = "Package-Version"
-	ManifestReturn                         = "\r"
+
+	manifestKeySeperator = ":"
+	manifestReturn       = "\r"
+	manifestPath         = "META-INF/MANIFEST.MF"
 )
 
 func newManifestPackage() manifestPackage {
 	return manifestPackage{
 		fs:        afero.NewOsFs(),
-		u:         new(Utility),
+		u:         new(utility),
 		keyValues: make(map[string]string, 0),
 	}
 }
 
 type manifestPackage struct {
 	fs         afero.Fs
-	u          *Utility
+	u          *utility
 	currentKey string
 	keyValues  map[string]string
 }
@@ -60,13 +62,13 @@ func (m *manifestPackage) labelValue(line string) (string, string) {
 	regValue, _ := regexp.Compile("^ (.*)$")
 
 	if regLabel.MatchString(line) {
-		line = strings.TrimSuffix(line, ManifestReturn)
+		line = strings.TrimSuffix(line, manifestReturn)
 		matches := regLabel.FindAllStringSubmatch(line, -1)
 		return fmt.Sprintf("%s%s", matches[0][1], matches[0][2]), fmt.Sprintf("%s", matches[0][3])
 	}
 
 	if regValue.MatchString(line) {
-		line = strings.TrimSuffix(line, ManifestReturn)
+		line = strings.TrimSuffix(line, manifestReturn)
 
 		return "", line[1:]
 
@@ -84,8 +86,8 @@ func (m *manifestPackage) store(label, value string) {
 	}
 }
 
-func (m *manifestPackage) explodeContentPackageId() {
-	splits := strings.Split(m.keyValues[ManifestLabelContentPackageId], ManifestLabelContentPackageIdSeperator)
+func (m *manifestPackage) explodeContentPackageID() {
+	splits := strings.Split(m.keyValues[ManifestLabelContentPackageID], manifestKeySeperator)
 	m.keyValues[ManifestLabelPackageGroup] = splits[0]
 	m.keyValues[ManifestLabelPackageName] = splits[1]
 	m.keyValues[ManifestLabelPackageVersion] = splits[2]
@@ -100,8 +102,8 @@ func (m *manifestPackage) parse(manifest string) map[string]string {
 		m.store(tLabel, tValue)
 	}
 
-	if len(m.keyValues[ManifestLabelContentPackageId]) > 0 {
-		m.explodeContentPackageId()
+	if len(m.keyValues[ManifestLabelContentPackageID]) > 0 {
+		m.explodeContentPackageID()
 	}
 	return m.keyValues
 }
@@ -129,9 +131,7 @@ func (m *manifestPackage) fromZip(path string) map[string]string {
 		exitFatal(err, "Could not find manifest.")
 
 		return m.parse(manifest)
-	} else {
-		exitProgram("Could not find package at %s", path)
 	}
-
+	exitProgram("Could not find package at %s", path)
 	return m.keyValues
 }

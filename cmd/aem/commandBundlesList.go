@@ -7,20 +7,20 @@ import (
 	"os"
 )
 
-func NewListBundlesCommand() bundlesListCommand {
-	return bundlesListCommand{
-		name: CONFIG_DEFAULT_INSTANCE,
-		http: new(HttpRequests),
+func newBundleListCommand() bundleListCommand {
+	return bundleListCommand{
+		name: configDefaultInstance,
+		http: new(httpRequests),
 	}
 }
 
-type bundlesListCommand struct {
-	name   string
-	http   *HttpRequests
+type bundleListCommand struct {
+	name string
+	http *httpRequests
 }
 
-func (c *bundlesListCommand) Execute(args []string) {
-	u := Utility{}
+func (c *bundleListCommand) Execute(args []string) {
+	u := utility{}
 	c.getOpt(args)
 
 	instance := u.getInstanceByName(c.name)
@@ -37,7 +37,7 @@ func (c *bundlesListCommand) Execute(args []string) {
 	t.Render()
 }
 
-func (c *bundlesListCommand) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+CONFIG_DEFAULT_INSTANCE+")")
+func (c *bundleListCommand) getOpt(args []string) {
+	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
 	getopt.CommandLine.Parse(args)
 }

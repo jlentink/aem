@@ -8,20 +8,20 @@ import (
 	"strings"
 )
 
-func NewListPackagesCommand() listPackagesCommand {
-	return listPackagesCommand{
+func newPackageListCommand() packagesListCommand {
+	return packagesListCommand{
 		Download:   false,
 		Type:       "author",
 		Role:       "development",
-		Name:       CONFIG_DEFAULT_INSTANCE,
+		Name:       configDefaultInstance,
 		Ascending:  true,
 		Descending: false,
 		SortBy:     "Package",
-		http:       new(HttpRequests),
+		http:       new(httpRequests),
 	}
 }
 
-type listPackagesCommand struct {
+type packagesListCommand struct {
 	Download   bool
 	Verbose    bool
 	Type       string
@@ -30,11 +30,11 @@ type listPackagesCommand struct {
 	Ascending  bool
 	Descending bool
 	SortBy     string
-	http       *HttpRequests
+	http       *httpRequests
 }
 
-func (p *listPackagesCommand) Execute(args []string) {
-	u := Utility{}
+func (p *packagesListCommand) Execute(args []string) {
+	u := utility{}
 	p.getOpt(args)
 
 	instance := u.getInstanceByName(p.Name)
@@ -58,8 +58,8 @@ func (p *listPackagesCommand) Execute(args []string) {
 	t.Render()
 }
 
-func (p *listPackagesCommand) getOpt(args []string) {
-	getopt.FlagLong(&p.Name, "name", 'n', "Name of instance to download from (default: "+CONFIG_DEFAULT_INSTANCE+")")
+func (p *packagesListCommand) getOpt(args []string) {
+	getopt.FlagLong(&p.Name, "name", 'n', "Name of instance to download from (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&p.Descending, "descending", 'd', "Sort Descending")
 	getopt.FlagLong(&p.SortBy, "sort", 's', "Sort comma separated list")
 	getopt.CommandLine.Parse(args)
@@ -69,7 +69,6 @@ func (p *listPackagesCommand) getOpt(args []string) {
 	}
 }
 
-
-func (p *listPackagesCommand) help() string {
+func (p *packagesListCommand) help() string {
 	return "ssadsad"
 }

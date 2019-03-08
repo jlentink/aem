@@ -5,11 +5,11 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func NewPasswordCommand() commandPassword {
+func newPasswordCommand() commandPassword {
 	return commandPassword{
 		p:       new(projectStructure),
-		utility: new(Utility),
-		i:       new(Instance),
+		utility: new(utility),
+		i:       new(instance),
 		all:     false,
 		yes:     false,
 	}
@@ -17,13 +17,13 @@ func NewPasswordCommand() commandPassword {
 
 type commandPassword struct {
 	p        *projectStructure
-	utility  *Utility
+	utility  *utility
 	name     string
 	group    string
 	all      bool
 	yes      bool
-	instance AEMInstanceConfig
-	i        *Instance
+	instance aemInstanceConfig
+	i        *instance
 }
 
 func (c *commandPassword) Execute(args []string) {
@@ -48,14 +48,14 @@ func (c *commandPassword) Execute(args []string) {
 
 }
 
-func (c *commandPassword) getInstances() []AEMInstanceConfig {
+func (c *commandPassword) getInstances() []aemInstanceConfig {
 	if c.all {
 		return config.Instances
 	}
 	return c.utility.getInstance(c.name, c.group)
 }
 
-func (c *commandPassword) setPassword(instance AEMInstanceConfig) {
+func (c *commandPassword) setPassword(instance aemInstanceConfig) {
 	fmt.Printf("Provide password for: %s\nPassword: ", instance.Name)
 	pw := c.utility.readCmdLineInput()
 	c.i.keyRingSetPassword(instance, pw)

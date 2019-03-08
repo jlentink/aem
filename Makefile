@@ -1,11 +1,20 @@
-.PHONY: all test coverage scan build linux osx windows
+.PHONY: all golint vet fmt test coverage scan build linux osx windows
 BUILT_HASH=$(shell git rev-parse HEAD)
-BUILT_VERSION=1.0
+BUILT_VERSION=1.0.0
 
-all: get test coverage build
+all: get test golint coverage build
 
 get:
 	cd cmd/aem && go get -t -v
+
+golint:
+	cd cmd/aem && golint -set_exit_status
+
+vet:
+	cd cmd/aem && go vet
+
+fmt:
+	cd cmd/aem && gofmt -s -l .
 
 test:
 	cd cmd/aem && export UNIT_TEST=1; go test -json > test-report.out
