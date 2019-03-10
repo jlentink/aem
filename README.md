@@ -56,7 +56,10 @@ Creates a config file. The config file allows you to define the instances used d
 
 Available options:
 
-    -v, --verbose  Enable verbose
+     -d, --dump              Write default config file without setup questions
+     -f, --force-overwrite   Overwrite current configuration
+     -v, --verbose           Enable verbose
+
 
 
 In the config, you can also define the packages you want to install at boot as for the location of the AEM jar to download for the project.
