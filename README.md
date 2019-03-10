@@ -10,7 +10,15 @@
 
 
 When using AEM in projects there are a couple of things that happen quite often. This tool is like a swiss army knife that tries to help you on everyday tasks for developer and dev-ops.
-So you don't need to search for all the common cURL commands they are included.
+
+Use cases:
+
+* Stop searching for the cURL commands use them through this tool. It will help you to do the tasks quicker.
+* Need to work on multiple projects create one configuration file for that project and pull in the requirements by typing aem start.
+* Update dependencies every time you start aem based on the configuration file.
+* Copy bundles from one instance to the other with absolute ease.
+
+
 
 Let me know what you think. happy AEM-ing.
 
@@ -19,9 +27,9 @@ Build the project from scratch (needs go >= v1.11.4) or download the prebuild bi
 
 Prebuild versions are:
 
-* osx (64bit) 
-* linux (64bit)
-* windows (64bit)
+* OSX (64bit) 
+* Linux (64bit)
+* Windows (64bit)
 
 ### Installing
 Download or build and copy the binary to a location in your path.
@@ -32,7 +40,7 @@ Example install locations.
 ### OSX & Linux
 execute `echo ${PATH}` and validate that */usr/local/bin* is in your current path. If in path use `cp aem /usr/local/bin` to place the executable ont he correct spot. If not in path add the following line `export PATH="${PATH}:/usr/local/bin"` to your ~/.bash_profile, ~/.profile or ~/.zprofile with your favorite editor.
 
-Dont forget to set the executable permision. `chmod a+x aem`
+Don't forget to set the executable permission. `chmod a+x aem`
 
 
 
@@ -71,7 +79,7 @@ start is compatible with the start and stop scripts provided by Adobe.
 Available options:
 
      -d, --download    Force new download
-     -f, --for-ground  Don't detach aem from current tty.
+     -f, --foreground  Don't detach aem from current tty.
      -n, --name=value  Instance to start. (default: local-author)
      -r, --root        Allow root
      -v, --verbose     Enable verbose
@@ -213,10 +221,10 @@ Install a bundle based on it's symbolic name
 
 Available options:
 
-    -b, --bundle=value  Path to bundle (.jar)
-    -n, --name=value    Name of instance to list bundles from from (default: local-author)
-    -s --startlevel     Bundle start level (default: 20)
-    -v, --verbose       Enable verbose
+    -b, --bundle=value      Path to bundle (.jar)
+    -n, --name=value        Name of instance to list bundles from from (default: local-author)
+    -s --startlevel=value   Bundle start level (default: 20)
+    -v, --verbose           Enable verbose
 
 
 ### log
@@ -286,6 +294,7 @@ Available options:
 * [Go-keyring](https://github.com/zalando/go-keyring) - Store password in operating systems own keyring
 * [TOML](https://github.com/BurntSushi/toml) - TOML parser for Golang with reflection.
 * [Tail](https://github.com/hpcloud/tail) - For tailing files
+* [Aemsync](https://github.com/gavoja/aemsync) - Syncing files to the JCR
 
 Thank all authors and contributors of these libraries. For publishing such great software.
 
