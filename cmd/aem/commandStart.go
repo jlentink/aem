@@ -194,7 +194,7 @@ func (s *commandStart) cleanupDeprecated() {
 
 func (s *commandStart) getOpt(args []string) {
 	getopt.FlagLong(&s.forceDownload, "download", 'd', "Force new download")
-	getopt.FlagLong(&s.forGround, "for-ground", 'f', "Don't detach aem")
+	getopt.FlagLong(&s.forGround, "foreground", 'f', "Don't detach aem")
 	getopt.FlagLong(&s.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&s.root, "root", 'r', "Allow root")
 	getopt.CommandLine.Parse(args)
