@@ -1,6 +1,6 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows
 BUILT_HASH=$(shell git rev-parse HEAD)
-BUILT_VERSION=1.1.0
+BUILT_VERSION=1.2.0
 
 all: get test golint coverage build
 
@@ -30,10 +30,13 @@ build: linux osx windows
 LDFLAGS=-ldflags "-w -s -X main.BuiltHash=${BUILT_HASH} -X main.BuiltVersion=${BUILT_VERSION}"
 linux:
 	cd cmd/aem && env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ../../build/linux/aem
+	zip linux-${BUILT_VERSION}.zip build/linux/aem
 
 osx:
 	cd cmd/aem && env GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ../../build/osx/aem
+	zip osx-${BUILT_VERSION}.zip build/osx/aem
 
 windows:
 	cd cmd/aem && env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ../../build/windows/aem.exe
+	zip windows-${BUILT_VERSION}.zip build/windows/aem.exe
 
