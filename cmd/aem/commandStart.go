@@ -77,14 +77,9 @@ func (s *commandStart) getJarFile() {
 	jarFile := s.projectStructure.getJarFileLocation()
 	if !s.utility.Exists(jarFile) || s.forceDownload {
 		if len(config.AemJar) > 8 && ("https://" == config.AemJar[0:8] || "http://" == config.AemJar[0:7]) {
-
-			url, err := url.Parse(config.AemJar)
-			exitFatal(err, "Could not parse url (%s). Please check url format.", config.AemJar)
-			password, _ := url.User.Password()
-
 			fmt.Printf("Downloading AEM jar...\n")
-			err = s.httpClient.downloadFile(s.projectStructure.getJarFileLocation(), s.utility.returnURLString(url), url.User.Username(), password, s.forceDownload)
-			exitFatal(err, "Error occurred during downloading aem jar.")
+			err := s.httpClient.downloadFile(s.projectStructure.getJarFileLocation(), config.AemJar, config.AemJarUsername, config.AemJarPassword, s.forceDownload)
+			exitFatal(err, "Error occurred during downloading aem jar\n.")
 		} else {
 			if _, err := os.Stat(config.AemJar); os.IsNotExist(err) {
 				fmt.Printf("Could not find file at %s\n", config.AemJar)
@@ -204,3 +199,4 @@ func (s *commandStart) getOpt(args []string) {
 	getopt.FlagLong(&s.root, "root", 'r', "Allow root")
 	getopt.CommandLine.Parse(args)
 }
+
