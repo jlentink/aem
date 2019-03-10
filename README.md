@@ -64,7 +64,10 @@ Creates a config file. The config file allows you to define the instances used d
 
 Available options:
 
-    -v, --verbose  Enable verbose
+     -d, --dump              Write default config file without setup questions
+     -f, --force-overwrite   Overwrite current configuration
+     -v, --verbose           Enable verbose
+
 
 
 In the config, you can also define the packages you want to install at boot as for the location of the AEM jar to download for the project.
@@ -295,9 +298,25 @@ Available options:
 * [TOML](https://github.com/BurntSushi/toml) - TOML parser for Golang with reflection.
 * [Tail](https://github.com/hpcloud/tail) - For tailing files
 * [Aemsync](https://github.com/gavoja/aemsync) - Syncing files to the JCR
+* [Survey](https://github.com/AlecAivazis/survey) - For console survey
 
 Thank all authors and contributors of these libraries. For publishing such great software.
 
+## Bash Completion
+
+Terminals are fun. Completion in the terminal is even more fun. Add `aem-completion.bash` to you completion folder.
+or execute the following commands
+ 
+
+    mkdir ~/.bash-completion
+    cp aem-completion.bash ~/.bash-completion/aem-completion.bash
+    
+    echo "source ~/.bash-completion/aem-completion.bash" >> ~/.bashrc
+
+
+Or replace the last line with the following if you use [zshell](https://sourceforge.net/p/zsh/code/ci/master/tree/)
+
+    echo "source ~/.bash-completion/aem-completion.bash" >> ~/.zshrc
 
 ## Contributing
 
