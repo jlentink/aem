@@ -11,6 +11,8 @@ __aem_completions()
 {
     case ${COMP_WORDS[1]} in
         init)
+            COMPREPLY+=("--dump")
+            COMPREPLY+=("--force-overwrite")
             COMPREPLY+=("--verbose")
             ;;
         package-list)
