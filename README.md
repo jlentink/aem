@@ -16,7 +16,7 @@ Use cases:
 * Stop searching for the cURL commands use them through this tool. It will help you to do the tasks quicker.
 * Need to work on multiple projects create one configuration file for that project and pull in the requirements by typing aem start.
 * Update dependencies every time you start aem based on the configuration file.
-* Copy bundles from one instance to the other with absolute ease.
+* Copy packages from one instance to the other with absolute ease.
 
 
 
