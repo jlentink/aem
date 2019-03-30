@@ -22,6 +22,8 @@ type configStruct struct {
 	JVMOpts            []string            `toml:"jvmOptions"`
 	AdditionalPackages []string            `toml:"additionalPackages"`
 	ContentPackages    []string            `toml:"contentPackages"`
+	OakOptions         []string            `toml:"oakOptions"`
+	OakVersion         string              `toml:"oakDefaultVersion"`
 }
 
 type aemInstanceConfig struct {

@@ -249,8 +249,9 @@ func (a *httpRequests) downloadFile(filepath string, url string, username string
 	// Fetch Request
 	resp, err := client.Do(req)
 	exitFatal(err, "Could not retrieve list from Adobe Experience manager.")
-
 	defer resp.Body.Close()
+
+	fmt.Printf("%d", resp.StatusCode)
 
 	// Create our progress reporter and pass it to be used alongside our writer
 	counter := &ProgressReporter{r: resp.Body, totalSize: filesize, label: "Downloading"}

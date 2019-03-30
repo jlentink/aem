@@ -195,6 +195,16 @@ additionalPackages = [
 ]
 
 #
+# Which extra arguments to use for oak-run
+#
+oakOptions = [
+    "-mx8G",
+    "-Dtar.memoryMapped=true",
+]
+
+oakDefaultVersion = "1.8.12"
+
+#
 # General JVM options to use when starting AEM
 #
 jvm-options = [

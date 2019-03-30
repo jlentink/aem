@@ -17,6 +17,7 @@ const (
 	configAemInstanceDir           = "instance"
 	configPackageDir               = "packages"
 	configAppDir                   = "app"
+	configBinDir                   = "bin"
 	configInstanceGitIgnore        = ".gitignore"
 	configInstanceGitIgnoreContent = "# Ignore everything in this directory\n*\n# Except this file\n!.gitignore"
 	configAemLogFile               = "logs/error.log"
@@ -41,6 +42,21 @@ func (p *projectStructure) getWorkDir() string {
 	dir, err := os.Getwd()
 	exitFatal(err, "Could not get current working directory.")
 	return dir
+}
+
+func (p *projectStructure) createBinDir() string {
+
+	binDir := p.getBinDir()
+
+	if exists, _ := afero.Exists(p.fs, binDir); !exists {
+		err := p.fs.MkdirAll(p.getBinDir(), 0755)
+		exitFatal(err, "Could not create install dir (%s)", binDir)
+	}
+	return binDir
+}
+
+func (p *projectStructure) getBinDir() string {
+	return p.appendSlash(p.getInstanceDirLocation()) + p.appendSlash(configBinDir)
 }
 
 func (p *projectStructure) getConfigFileLocation() string {
@@ -137,7 +153,6 @@ func (p *projectStructure) rename(source, destination string) {
 
 func (p *projectStructure) createInstanceDir() string {
 	instanceDir := p.getInstanceDirLocation()
-	fmt.Printf(instanceDir)
 	if exists, _ := afero.Exists(p.fs, instanceDir); !exists {
 		err := p.fs.MkdirAll(instanceDir, 0755)
 		exitFatal(err, "Could not create instance dir (%s)", instanceDir)
