@@ -268,6 +268,81 @@ Available options:
     -n, --name=value  Instance to open. (default: local-author)
     -v, --verbose     Enable verbose
 
+### oak-check
+Run oak-run check on instance. Check the FileStore for inconsistencies. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+Available options:
+
+    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -o, --oak=value   Define version of oak-run to use
+    -v, --verbose     Enable verbose
+
+
+### oak-checkpoints
+Run oak-run checkpoints on instance. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+
+Available options:
+
+    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+    -d, --rm          Define version of oak-run to use
+    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -o, --oak=value   Define version of oak-run to use
+    -v, --verbose     Enable verbose
+
+
+### oak-compact
+Run oak-run offline compaction on instance. Manage checkpoints. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+Available options:
+
+    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -o, --oak=value   Define version of oak-run to use
+    -v, --verbose     Enable verbose
+
+
+### oak-console
+Run oak-run console on instance. Start an interactive console. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+Available options:
+
+    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -o, --oak=value   Define version of oak-run to use
+    -v, --verbose     Enable verbose
+    -w, --write       Enable write mode
+
+### oak-explore
+Run oak-run explore on instance. Starts a GUI browser based on java swing. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+Available options:
+
+    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -o, --oak=value   Define version of oak-run to use
+    -v, --verbose     Enable verbose
 
 ### version
 Output the current version of the aem command line interface you are using.

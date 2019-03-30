@@ -177,6 +177,26 @@ func main() {
 		readConfig()
 		command := newBundleInstallCommand()
 		command.Execute(config.CommandArgs)
+	case "oak-checkpoints":
+		readConfig()
+		command := newcommandOakCheckpoints()
+		command.Execute(config.CommandArgs)
+	case "oak-explore":
+		readConfig()
+		command := newCommandOakExplore()
+		command.Execute(config.CommandArgs)
+	case "oak-check":
+		readConfig()
+		command := newCommandOakCheck()
+		command.Execute(config.CommandArgs)
+	case "oak-console":
+		readConfig()
+		command := newCommandOakConsole()
+		command.Execute(config.CommandArgs)
+	case "oak-compact":
+		readConfig()
+		command := newCommandOakCompact()
+		command.Execute(config.CommandArgs)
 	default:
 		showHelp()
 	}
@@ -221,6 +241,16 @@ func showHelp() {
 	fmt.Printf("  Show aemcli version.\n")
 	fmt.Printf("- sync\n")
 	fmt.Printf("  Watch file changes and sync to server. (needs aemsync installed)\n")
+	fmt.Printf("- oak-check\n")
+	fmt.Printf("  Check the FileStore for inconsistencies\n")
+	fmt.Printf("- oak-checkpoints\n")
+	fmt.Printf("  Manage checkpoints\n")
+	fmt.Printf("- oak-compact\n")
+	fmt.Printf("  Segment compaction on a TarMK repository.\n")
+	fmt.Printf("- oak-console\n")
+	fmt.Printf("  Start an interactive console.\n")
+	fmt.Printf("- oak-explorer\n")
+	fmt.Printf("  \n")
 	fmt.Printf("  to install: npm install aemsync -g\n")
 	fmt.Printf("- help\n")
 	fmt.Printf("  Show this help section.\n")
