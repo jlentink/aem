@@ -32,9 +32,7 @@ func (p *commandInit) survey() string {
 
 	err := survey.Ask(surveyInitialQuestionsQuestions, &answers)
 
-	if nil != err && err.Error() == "interrupt" {
-		exitProgram("Interrupted config creation.\n")
-	}
+	validateSurveyInput(err)
 
 	if answers.JarLocationType == "filesystem" {
 		err = survey.Ask(surveyJarFileQuestions, &answers)
@@ -42,18 +40,14 @@ func (p *commandInit) survey() string {
 		err = survey.Ask(surveyJarHTTPQuestions, &answers)
 	}
 
-	if nil != err && err.Error() == "interrupt" {
-		exitProgram("Interrupted config creation.\n")
-	}
+	validateSurveyInput(err)
 
 	for {
-		survErr := survey.Ask(surveyAdditionalPackagesQuestions, &answers)
+		err = survey.Ask(surveyAdditionalPackagesQuestions, &answers)
 		answers.AdditionalPackages = append(answers.AdditionalPackages, answers.AdditionalPackage)
 		answers.AdditionalPackage = ""
 
-		if survErr != nil && survErr.Error() == "interrupt" {
-			exitProgram("Interrupted config creation.\n")
-		}
+		validateSurveyInput(err)
 		if !answers.MorePackages {
 			break
 		}
@@ -61,6 +55,17 @@ func (p *commandInit) survey() string {
 
 	return answers.getConfig()
 
+}
+
+//validateSurveyInput validates the returned error object from survey.Ask()
+func validateSurveyInput(err error) {
+	if nil != err {
+		if err.Error() == "interrupt" {
+			exitProgram("Interrupted: no config file created\n")
+		}
+		// exit with regular error (validation)
+		exitProgram(err.Error() + "\n")
+	}
 }
 
 func (p *commandInit) Execute(args []string) {
