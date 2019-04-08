@@ -30,18 +30,30 @@ func (p *commandInit) survey() string {
 	answers := newConfigAnswers()
 	answers.AdditionalPackages = []string{}
 
-	survey.Ask(surveyInitialQuestionsQuestions, &answers)
+	err := survey.Ask(surveyInitialQuestionsQuestions, &answers)
+
+	if nil != err && err.Error() == "interrupt" {
+		exitProgram("Interrupted config creation.\n")
+	}
 
 	if answers.JarLocationType == "filesystem" {
-		survey.Ask(surveyJarFileQuestions, &answers)
+		err = survey.Ask(surveyJarFileQuestions, &answers)
 	} else {
-		survey.Ask(surveyJarHTTPQuestions, &answers)
+		err = survey.Ask(surveyJarHTTPQuestions, &answers)
+	}
+
+	if nil != err && err.Error() == "interrupt" {
+		exitProgram("Interrupted config creation.\n")
 	}
 
 	for {
-		survey.Ask(surveyAdditionalPackagesQuestions, &answers)
+		survErr := survey.Ask(surveyAdditionalPackagesQuestions, &answers)
 		answers.AdditionalPackages = append(answers.AdditionalPackages, answers.AdditionalPackage)
 		answers.AdditionalPackage = ""
+
+		if survErr != nil && survErr.Error() == "interrupt" {
+			exitProgram("Interrupted config creation.\n")
+		}
 		if !answers.MorePackages {
 			break
 		}
