@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/AlecAivazis/survey"
 	"github.com/pborman/getopt/v2"
 	"github.com/spf13/afero"
@@ -16,7 +17,6 @@ func newInitCommand() commandInit {
 		overwrite: false,
 	}
 }
-
 
 type commandInit struct {
 	u         *utility
@@ -68,7 +68,7 @@ func (p *commandInit) Execute(args []string) {
 		fmt.Printf("Written sample config file. please edit .aem\n")
 
 	} else {
-		exitProgram("\".aem\" file found; please edit to update the values.")
+		exitProgram("\".aem\" file found; please edit to update the values.\n")
 	}
 
 }
