@@ -7,7 +7,6 @@ import (
 	"strings"
 )
 
-
 var surveyInitialQuestionsQuestions = []*survey.Question{
 	{
 		Name: "UseKeyRing",
@@ -100,10 +99,10 @@ var surveyAdditionalPackagesQuestions = []*survey.Question{
 
 func newConfigAnswers() configAnswers {
 	return configAnswers{
-		UseKeyRing:  true,
-		JarLocation: "",
-		JarUsername: "admin",
-		JarPassword: "admin",
+		UseKeyRing:         true,
+		JarLocation:        "",
+		JarUsername:        "admin",
+		JarPassword:        "admin",
 		AdditionalPackages: []string{"https://github.com/Adobe-Consulting-Services/acs-aem-commons/releases/download/acs-aem-commons-3.19.0/acs-aem-commons-content-3.19.0.zip"},
 	}
 }
