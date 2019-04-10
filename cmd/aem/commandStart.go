@@ -199,4 +199,3 @@ func (s *commandStart) getOpt(args []string) {
 	getopt.FlagLong(&s.root, "root", 'r', "Allow root")
 	getopt.CommandLine.Parse(args)
 }
-

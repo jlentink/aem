@@ -38,7 +38,6 @@ func (c *commandOakConsole) Execute(args []string) {
 		oakArgs = append(oakArgs, "--read-write")
 	}
 
-
 	c.oak.execute(oakPath, oakArgs)
 
 }
