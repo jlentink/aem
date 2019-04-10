@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/AlecAivazis/survey"
 	"github.com/pborman/getopt/v2"
 	"github.com/spf13/afero"
@@ -17,7 +18,6 @@ func newInitCommand() commandInit {
 	}
 }
 
-
 type commandInit struct {
 	u         *utility
 	p         *projectStructure
@@ -30,18 +30,24 @@ func (p *commandInit) survey() string {
 	answers := newConfigAnswers()
 	answers.AdditionalPackages = []string{}
 
-	survey.Ask(surveyInitialQuestionsQuestions, &answers)
+	err := survey.Ask(surveyInitialQuestionsQuestions, &answers)
+
+	validateSurveyInput(err)
 
 	if answers.JarLocationType == "filesystem" {
-		survey.Ask(surveyJarFileQuestions, &answers)
+		err = survey.Ask(surveyJarFileQuestions, &answers)
 	} else {
-		survey.Ask(surveyJarHTTPQuestions, &answers)
+		err = survey.Ask(surveyJarHTTPQuestions, &answers)
 	}
 
+	validateSurveyInput(err)
+
 	for {
-		survey.Ask(surveyAdditionalPackagesQuestions, &answers)
+		err = survey.Ask(surveyAdditionalPackagesQuestions, &answers)
 		answers.AdditionalPackages = append(answers.AdditionalPackages, answers.AdditionalPackage)
 		answers.AdditionalPackage = ""
+
+		validateSurveyInput(err)
 		if !answers.MorePackages {
 			break
 		}
@@ -49,6 +55,17 @@ func (p *commandInit) survey() string {
 
 	return answers.getConfig()
 
+}
+
+//validateSurveyInput validates the returned error object from survey.Ask()
+func validateSurveyInput(err error) {
+	if nil != err {
+		if err.Error() == "interrupt" {
+			exitProgram("Interrupted: no config file created\n")
+		}
+		// exit with regular error (validation)
+		exitProgram(err.Error() + "\n")
+	}
 }
 
 func (p *commandInit) Execute(args []string) {
@@ -68,7 +85,7 @@ func (p *commandInit) Execute(args []string) {
 		fmt.Printf("Written sample config file. please edit .aem\n")
 
 	} else {
-		exitProgram("\".aem\" file found; please edit to update the values.")
+		exitProgram("\".aem\" file found; please edit to update the values.\n")
 	}
 
 }
