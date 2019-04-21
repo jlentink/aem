@@ -16,14 +16,34 @@ func newPasswordCommand() commandPassword {
 }
 
 type commandPassword struct {
-	p        *projectStructure
-	utility  *utility
-	name     string
-	group    string
-	all      bool
-	yes      bool
-	instance aemInstanceConfig
-	i        *instance
+	p       *projectStructure
+	utility *utility
+	name    string
+	group   string
+	all     bool
+	yes     bool
+	//instance aemInstanceConfig
+	i *instance
+}
+
+func (c *commandPassword) Init() {
+	c.p = new(projectStructure)
+	c.utility = new(utility)
+	c.i = new(instance)
+	c.all = false
+	c.yes = false
+}
+
+func (c *commandPassword) readConfig() bool {
+	return true
+}
+
+func (c *commandPassword) GetCommand() []string {
+	return []string{"password"}
+}
+
+func (c *commandPassword) GetHelp() string {
+	return "Save passwords to OS keyring"
 }
 
 func (c *commandPassword) Execute(args []string) {

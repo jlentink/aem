@@ -5,23 +5,33 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newBundleStartCommand() bundleStartCommand {
-	return bundleStartCommand{
-		name:    configDefaultInstance,
-		http:    new(httpRequests),
-		utility: new(utility),
-		bundle:  "",
-	}
-}
-
-type bundleStartCommand struct {
+type commandBundleStart struct {
 	name    string
 	http    *httpRequests
 	utility *utility
 	bundle  string
 }
 
-func (c *bundleStartCommand) Execute(args []string) {
+func (c *commandBundleStart) Init() {
+	c.name = configDefaultInstance
+	c.http = new(httpRequests)
+	c.utility = new(utility)
+	c.bundle = ""
+}
+
+func (c *commandBundleStart) readConfig() bool {
+	return true
+}
+
+func (c *commandBundleStart) GetCommand() []string {
+	return []string{"bundle-start"}
+}
+
+func (c *commandBundleStart) GetHelp() string {
+	return "Start bundle on AEM instance."
+}
+
+func (c *commandBundleStart) Execute(args []string) {
 	u := utility{}
 	c.getOpt(args)
 
@@ -43,7 +53,7 @@ func (c *bundleStartCommand) Execute(args []string) {
 
 }
 
-func (c *bundleStartCommand) getOpt(args []string) {
+func (c *commandBundleStart) getOpt(args []string) {
 	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "bundle to start (Symbolic name)")
 	getopt.CommandLine.Parse(args)

@@ -29,14 +29,36 @@ type commandSync struct {
 	projectStructure *projectStructure
 }
 
-func (p *commandSync) Execute(args []string) {
-	p.getOpt(args)
-	instances := p.utility.getInstance(p.instanceName, p.instanceGroup)
+func (c *commandSync) Init() {
+	c.instanceName = configDefaultInstance
+	c.instanceGroup = ""
+	c.utility = new(utility)
+	c.projectStructure = new(projectStructure)
+	c.disableLog = false
+	c.bin = "aemsync"
 
-	target := p.getTargetsString(instances)
+}
+
+func (c *commandSync) readConfig() bool {
+	return true
+}
+
+func (c *commandSync) GetCommand() []string {
+	return []string{"sync"}
+}
+
+func (c *commandSync) GetHelp() string {
+	return "Show log file content."
+}
+
+func (c *commandSync) Execute(args []string) {
+	c.getOpt(args)
+	instances := c.utility.getInstance(c.instanceName, c.instanceGroup)
+
+	target := c.getTargetsString(instances)
 
 	for _, watchPath := range config.WatchPath {
-		p.sync(target, watchPath)
+		c.sync(target, watchPath)
 	}
 
 	fmt.Printf("Press CTRL + c to stop.\n")
@@ -45,7 +67,7 @@ func (p *commandSync) Execute(args []string) {
 	}
 }
 
-func (p *commandSync) getTargetsString(instances []aemInstanceConfig) string {
+func (c *commandSync) getTargetsString(instances []aemInstanceConfig) string {
 	instancesStr := make([]string, 0)
 	for _, instance := range instances {
 		instancesStr = append(instancesStr, instance.PasswordURL())
@@ -54,9 +76,9 @@ func (p *commandSync) getTargetsString(instances []aemInstanceConfig) string {
 	return strings.Join(instancesStr, ",")
 }
 
-func (p *commandSync) sync(instance string, path string) {
-	cmd := exec.Command(p.bin, "-t", instance, "-w", path)
-	if !p.disableLog {
+func (c *commandSync) sync(instance string, path string) {
+	cmd := exec.Command(c.bin, "-t", instance, "-w", path)
+	if !c.disableLog {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 	}
@@ -68,10 +90,10 @@ func (p *commandSync) sync(instance string, path string) {
 	}()
 }
 
-func (p *commandSync) getOpt(args []string) {
-	getopt.FlagLong(&p.instanceName, "instance-name", 'i', "Instance to sync to. (default: "+configDefaultInstance+")")
-	getopt.FlagLong(&p.instanceGroup, "instance-group", 'g', "Instance group to sync to.")
-	getopt.FlagLong(&p.disableLog, "disable-log", 'l', "Disable AEM log output")
-	getopt.FlagLong(&p.bin, "aemsync", 's', "Path to AEM sync")
+func (c *commandSync) getOpt(args []string) {
+	getopt.FlagLong(&c.instanceName, "instance-name", 'i', "Instance to sync to. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.instanceGroup, "instance-group", 'g', "Instance group to sync to.")
+	getopt.FlagLong(&c.disableLog, "disable-log", 'l', "Disable AEM log output")
+	getopt.FlagLong(&c.bin, "aemsync", 's', "Path to AEM sync")
 	getopt.CommandLine.Parse(args)
 }

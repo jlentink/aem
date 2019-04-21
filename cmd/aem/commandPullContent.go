@@ -5,17 +5,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newPullContentCommand() commandPullContent {
-	return commandPullContent{
-		From:             "",
-		To:               configDefaultInstance,
-		utility:          new(utility),
-		projectStructure: newProjectStructure(),
-		forceDownload:    false,
-		http:             new(httpRequests),
-	}
-}
-
 type commandPullContent struct {
 	From             string
 	To               string
@@ -28,14 +17,35 @@ type commandPullContent struct {
 	http             *httpRequests
 }
 
-func (p *commandPullContent) Execute(args []string) {
+func (c *commandPullContent) Init() {
+	c.From = ""
+	c.To = configDefaultInstance
+	c.utility = new(utility)
+	c.projectStructure = newProjectStructure()
+	c.forceDownload = false
+	c.http = new(httpRequests)
+}
+
+func (c *commandPullContent) readConfig() bool {
+	return true
+}
+
+func (c *commandPullContent) GetCommand() []string {
+	return []string{"pull-content"}
+}
+
+func (c *commandPullContent) GetHelp() string {
+	return "Pull content packages from instance to..."
+}
+
+func (c *commandPullContent) Execute(args []string) {
 	u := utility{}
-	p.getOpt(args)
+	c.getOpt(args)
 
-	fromInstance := u.getInstanceByName(p.From)
-	toInstance := u.getInstanceByName(p.To)
+	fromInstance := u.getInstanceByName(c.From)
+	toInstance := u.getInstanceByName(c.To)
 
-	packages := p.http.getListForInstance(fromInstance)
+	packages := c.http.getListForInstance(fromInstance)
 	for _, currentPackage := range config.ContentPackages {
 		fmt.Printf("Content package: %s\n", currentPackage)
 		packageName, packageVersion := u.packageNameVersion(currentPackage)
@@ -43,10 +53,10 @@ func (p *commandPullContent) Execute(args []string) {
 
 		for _, contentPackage := range contentPackages {
 			if packageVersion == contentPackage.Version {
-				_, err := p.http.downloadPackage(fromInstance, contentPackage, p.forceDownload)
+				_, err := c.http.downloadPackage(fromInstance, contentPackage, c.forceDownload)
 				if nil == err {
 					fmt.Printf("Uploading package...")
-					crx, err := p.http.uploadPackage(toInstance, contentPackage, true, true)
+					crx, err := c.http.uploadPackage(toInstance, contentPackage, true, true)
 					fmt.Printf("%s\n", crx.Response.Data.Log)
 					exitFatal(err, "Error installing package.")
 				}
@@ -55,9 +65,9 @@ func (p *commandPullContent) Execute(args []string) {
 	}
 }
 
-func (p *commandPullContent) getOpt(args []string) {
-	getopt.FlagLong(&p.From, "from-name", 'f', "Pull content from")
-	getopt.FlagLong(&p.To, "to-name", 't', "Push content to")
-	getopt.FlagLong(&p.forceDownload, "force-download", 'd', "Force new download")
+func (c *commandPullContent) getOpt(args []string) {
+	getopt.FlagLong(&c.From, "from-name", 'f', "Pull content from")
+	getopt.FlagLong(&c.To, "to-name", 't', "Push content to")
+	getopt.FlagLong(&c.forceDownload, "force-download", 'd', "Force new download")
 	getopt.CommandLine.Parse(args)
 }

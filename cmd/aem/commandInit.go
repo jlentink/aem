@@ -8,16 +8,6 @@ import (
 	"github.com/spf13/afero"
 )
 
-func newInitCommand() commandInit {
-	return commandInit{
-		u:         new(utility),
-		p:         new(projectStructure),
-		fs:        afero.NewOsFs(),
-		dump:      false,
-		overwrite: false,
-	}
-}
-
 type commandInit struct {
 	u         *utility
 	p         *projectStructure
@@ -26,7 +16,28 @@ type commandInit struct {
 	overwrite bool
 }
 
-func (p *commandInit) survey() string {
+func (c *commandInit) Init() {
+	c.u = new(utility)
+	c.p = new(projectStructure)
+	c.fs = afero.NewOsFs()
+	c.dump = false
+	c.overwrite = false
+
+}
+
+func (c *commandInit) readConfig() bool {
+	return true
+}
+
+func (c *commandInit) GetCommand() []string {
+	return []string{"init"}
+}
+
+func (c *commandInit) GetHelp() string {
+	return "Create aem cli config file."
+}
+
+func (c *commandInit) survey() string {
 	answers := newConfigAnswers()
 	answers.AdditionalPackages = []string{}
 
@@ -68,19 +79,19 @@ func validateSurveyInput(err error) {
 	}
 }
 
-func (p *commandInit) Execute(args []string) {
-	p.getOpt(args)
+func (c *commandInit) Execute(args []string) {
+	c.getOpt(args)
 	configTemplateStr := ""
 
-	if !p.u.Exists(p.p.getConfigFileLocation()) || p.overwrite {
-		if !p.dump {
-			configTemplateStr = p.survey()
+	if !c.u.Exists(c.p.getConfigFileLocation()) || c.overwrite {
+		if !c.dump {
+			configTemplateStr = c.survey()
 		} else {
 			answers := newConfigAnswers()
 			configTemplateStr = answers.getConfig()
 		}
 
-		err := afero.WriteFile(p.fs, p.p.getConfigFileLocation(), []byte(configTemplateStr), 0644)
+		err := afero.WriteFile(c.fs, c.p.getConfigFileLocation(), []byte(configTemplateStr), 0644)
 		exitFatal(err, "Could not write config file.")
 		fmt.Printf("Written sample config file. please edit .aem\n")
 
@@ -90,8 +101,8 @@ func (p *commandInit) Execute(args []string) {
 
 }
 
-func (p *commandInit) getOpt(args []string) {
-	getopt.FlagLong(&p.dump, "dump", 'd', "Write default config file without setup questions")
-	getopt.FlagLong(&p.overwrite, "force-overwrite", 'f', "Overwrite current configuration")
+func (c *commandInit) getOpt(args []string) {
+	getopt.FlagLong(&c.dump, "dump", 'd', "Write default config file without setup questions")
+	getopt.FlagLong(&c.overwrite, "force-overwrite", 'f', "Overwrite current configuration")
 	getopt.CommandLine.Parse(args)
 }

@@ -4,17 +4,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newCommandOakCheck() commandOakCheck {
-	return commandOakCheck{
-		name:       configDefaultInstance,
-		aemVersion: "",
-		oakVersion: config.OakVersion,
-		oak:        newOak(),
-		pStructure: newProjectStructure(),
-		utility:    new(utility),
-	}
-}
-
 type commandOakCheck struct {
 	name       string
 	aemVersion string
@@ -22,6 +11,28 @@ type commandOakCheck struct {
 	oak        oak
 	pStructure projectStructure
 	utility    *utility
+}
+
+func (c *commandOakCheck) Init() {
+	c.name = configDefaultInstance
+	c.aemVersion = ""
+	c.oakVersion = config.OakVersion
+	c.oak = newOak()
+	c.pStructure = newProjectStructure()
+	c.utility = new(utility)
+
+}
+
+func (c *commandOakCheck) readConfig() bool {
+	return true
+}
+
+func (c *commandOakCheck) GetCommand() []string {
+	return []string{"oak-check"}
+}
+
+func (c *commandOakCheck) GetHelp() string {
+	return "Run oak-run check on instance. Check the FileStore for inconsistencies."
 }
 
 func (c *commandOakCheck) Execute(args []string) {

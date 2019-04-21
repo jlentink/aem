@@ -5,17 +5,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newPackageRebuildCommand() commandPackageRebuild {
-	return commandPackageRebuild{
-		From:             configDefaultInstance,
-		utility:          new(utility),
-		projectStructure: new(projectStructure),
-		forceDownload:    false,
-		Package:          "",
-		http:             new(httpRequests),
-	}
-}
-
 type commandPackageRebuild struct {
 	From             string
 	Package          string
@@ -25,27 +14,52 @@ type commandPackageRebuild struct {
 	forceDownload    bool
 }
 
-func (p *commandPackageRebuild) Execute(args []string) {
-	p.getOpt(args)
+func (c *commandPackageRebuild) Init() {
+	c.From = configDefaultInstance
+	c.utility = new(utility)
+	c.projectStructure = new(projectStructure)
+	c.forceDownload = false
+	c.Package = ""
+	c.http = new(httpRequests)
+}
 
-	fromInstance := p.utility.getInstanceByName(p.From)
+func (c *commandPackageRebuild) readConfig() bool {
+	return true
+}
 
-	pkgs := make([]packageDescription, 0)
-	if len(p.Package) > 0 {
-		pkgs = p.utility.pkgsFromString(fromInstance, p.Package)
+func (c *commandPackageRebuild) GetCommand() []string {
+	return []string{"package-rebuild"}
+}
+
+func (c *commandPackageRebuild) GetHelp() string {
+	return "Rebuild package on AEM instance."
+}
+
+func (c *commandPackageRebuild) Execute(args []string) {
+	c.getOpt(args)
+
+	fromInstance := c.utility.getInstanceByName(c.From)
+
+	if len(c.Package) > 0 {
+		pkgs := c.utility.pkgsFromString(fromInstance, c.Package)
+		c.buildPackage(fromInstance, pkgs)
 	} else {
 		pkgPicker := newPackagePicker()
-		pkgs = pkgPicker.picker(fromInstance)
+		pkgs := pkgPicker.picker(fromInstance)
+		c.buildPackage(fromInstance, pkgs)
 	}
 
-	for _, pkg := range pkgs {
+}
+
+func (c *commandPackageRebuild) buildPackage(instance aemInstanceConfig, packages []packageDescription) {
+	for _, pkg := range packages {
 		fmt.Printf("Build: %s\n", pkg.Name)
-		p.http.buildPackage(fromInstance, pkg)
+		c.http.buildPackage(instance, pkg)
 	}
 }
 
-func (p *commandPackageRebuild) getOpt(args []string) {
-	getopt.FlagLong(&p.From, "from-name", 'f', "Rebuild package on instance (Default: "+configDefaultInstance+")")
-	getopt.FlagLong(&p.Package, "package", 'p', "Define package package:version (no interactive mode)")
+func (c *commandPackageRebuild) getOpt(args []string) {
+	getopt.FlagLong(&c.From, "from-name", 'f', "Rebuild package on instance (Default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.Package, "package", 'p', "Define package package:version (no interactive mode)")
 	getopt.CommandLine.Parse(args)
 }

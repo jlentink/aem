@@ -9,14 +9,6 @@ import (
 	"os/exec"
 )
 
-func newStopCommand() commandStop {
-	return commandStop{
-		p:       new(projectStructure),
-		utility: new(utility),
-		name:    configDefaultInstance,
-	}
-}
-
 type commandStop struct {
 	p        *projectStructure
 	utility  *utility
@@ -24,17 +16,35 @@ type commandStop struct {
 	instance aemInstanceConfig
 }
 
-func (s *commandStop) Execute(args []string) {
-	s.getOpt(args)
-	s.instance = s.utility.getInstanceByName(s.name)
-	rundir := s.p.getRunDirLocation(s.instance)
+func (c *commandStop) Init() {
+	c.p = new(projectStructure)
+	c.utility = new(utility)
+	c.name = configDefaultInstance
+}
+
+func (c *commandStop) readConfig() bool {
+	return true
+}
+
+func (c *commandStop) GetCommand() []string {
+	return []string{"stop"}
+}
+
+func (c *commandStop) GetHelp() string {
+	return "Stop an Adobe Experience Manager instance."
+}
+
+func (c *commandStop) Execute(args []string) {
+	c.getOpt(args)
+	c.instance = c.utility.getInstanceByName(c.name)
+	rundir := c.p.getRunDirLocation(c.instance)
 
 	if _, err := os.Stat(rundir); os.IsNotExist(err) {
 		log.Fatal("Could not find instance dir.")
 	}
 
-	if s.utility.Exists(s.p.getPidFileLocation(s.instance)) {
-		pid, _ := ioutil.ReadFile(s.p.getPidFileLocation(s.instance))
+	if c.utility.Exists(c.p.getPidFileLocation(c.instance)) {
+		pid, _ := ioutil.ReadFile(c.p.getPidFileLocation(c.instance))
 		cmd := exec.Command("kill", string(pid))
 		cmd.Dir = rundir
 		cmd.Stdout = os.Stdout
@@ -42,13 +52,13 @@ func (s *commandStop) Execute(args []string) {
 		err := cmd.Run()
 		exitFatal(err, "Error stoping AEM")
 		fmt.Println("AEM stopping...")
-		os.Remove(s.p.getPidFileLocation(s.instance))
+		os.Remove(c.p.getPidFileLocation(c.instance))
 	} else {
 		fmt.Printf("No Pid file found. No running AEM expected.")
 	}
 }
 
-func (s *commandStop) getOpt(args []string) {
-	getopt.FlagLong(&s.name, "name", 'n', "Instance to stop. (default: "+configDefaultInstance+")")
+func (c *commandStop) getOpt(args []string) {
+	getopt.FlagLong(&c.name, "name", 'n', "Instance to stop. (default: "+configDefaultInstance+")")
 	getopt.CommandLine.Parse(args)
 }

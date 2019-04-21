@@ -29,28 +29,52 @@ type commandPackageDownload struct {
 	forceDownload    bool
 }
 
-func (p *commandPackageDownload) Execute(args []string) {
-	p.getOpt(args)
+func (c *commandPackageDownload) Init() {
+	c.From = configDefaultInstance
+	c.utility = new(utility)
+	c.projectStructure = newProjectStructure()
+	c.forceDownload = false
+	c.Package = ""
+	c.http = new(httpRequests)
+}
 
-	fromInstance := p.utility.getInstanceByName(p.From)
+func (c *commandPackageDownload) readConfig() bool {
+	return true
+}
 
-	pkgs := make([]packageDescription, 0)
-	if len(p.Package) > 0 {
-		pkgs = p.utility.pkgsFromString(fromInstance, p.Package)
+func (c *commandPackageDownload) GetCommand() []string {
+	return []string{"package-download"}
+}
+
+func (c *commandPackageDownload) GetHelp() string {
+	return "Download package from AEM instance."
+}
+
+func (c *commandPackageDownload) Execute(args []string) {
+	c.getOpt(args)
+
+	fromInstance := c.utility.getInstanceByName(c.From)
+
+	if len(c.Package) > 0 {
+		packages := c.utility.pkgsFromString(fromInstance, c.Package)
+		c.downloadPackages(fromInstance, packages)
 	} else {
 		pkgPicker := newPackagePicker()
-		pkgs = pkgPicker.picker(fromInstance)
-	}
-
-	for _, pkg := range pkgs {
-		fmt.Printf("Download: %s\n", pkg.Name)
-		p.http.downloadPackage(fromInstance, pkg, p.forceDownload)
+		packages := pkgPicker.picker(fromInstance)
+		c.downloadPackages(fromInstance, packages)
 	}
 }
 
-func (p *commandPackageDownload) getOpt(args []string) {
-	getopt.FlagLong(&p.From, "from", 'f', "Pull content from (default: "+configDefaultInstance+")")
-	getopt.FlagLong(&p.Package, "package", 'p', "Define package package:version (no interactive mode)")
-	getopt.FlagLong(&p.forceDownload, "force-download", 'd', "Force new download")
+func (c *commandPackageDownload) downloadPackages(instance aemInstanceConfig, pkgs []packageDescription) {
+	for _, pkg := range pkgs {
+		fmt.Printf("Download: %s\n", pkg.Name)
+		c.http.downloadPackage(instance, pkg, c.forceDownload)
+	}
+}
+
+func (c *commandPackageDownload) getOpt(args []string) {
+	getopt.FlagLong(&c.From, "from", 'f', "Pull content from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.Package, "package", 'p', "Define package package:version (no interactive mode)")
+	getopt.FlagLong(&c.forceDownload, "force-download", 'd', "Force new download")
 	getopt.CommandLine.Parse(args)
 }

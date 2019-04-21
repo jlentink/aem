@@ -4,17 +4,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newCommandOakCompact() commandOakCompact {
-	return commandOakCompact{
-		name:       configDefaultInstance,
-		aemVersion: "",
-		oakVersion: config.OakVersion,
-		oak:        newOak(),
-		pStructure: newProjectStructure(),
-		utility:    new(utility),
-	}
-}
-
 type commandOakCompact struct {
 	name       string
 	aemVersion string
@@ -22,6 +11,28 @@ type commandOakCompact struct {
 	oak        oak
 	pStructure projectStructure
 	utility    *utility
+}
+
+func (c *commandOakCompact) Init() {
+	c.name = configDefaultInstance
+	c.aemVersion = ""
+	c.oakVersion = config.OakVersion
+	c.oak = newOak()
+	c.pStructure = newProjectStructure()
+	c.utility = new(utility)
+
+}
+
+func (c *commandOakCompact) readConfig() bool {
+	return true
+}
+
+func (c *commandOakCompact) GetCommand() []string {
+	return []string{"oak-compact"}
+}
+
+func (c *commandOakCompact) GetHelp() string {
+	return "Run oak-run offline compaction on instance."
 }
 
 func (c *commandOakCompact) Execute(args []string) {

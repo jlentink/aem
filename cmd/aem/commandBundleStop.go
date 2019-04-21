@@ -5,23 +5,34 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newBundleStopCommand() bundleStopCommand {
-	return bundleStopCommand{
-		name:    configDefaultInstance,
-		http:    new(httpRequests),
-		utility: new(utility),
-		bundle:  "",
-	}
-}
-
-type bundleStopCommand struct {
+type commandBundleStop struct {
 	name    string
 	http    *httpRequests
 	utility *utility
 	bundle  string
 }
 
-func (c *bundleStopCommand) Execute(args []string) {
+func (c *commandBundleStop) Init() {
+	c.name = configDefaultInstance
+	c.http = new(httpRequests)
+	c.utility = new(utility)
+	c.bundle = ""
+
+}
+
+func (c *commandBundleStop) readConfig() bool {
+	return true
+}
+
+func (c *commandBundleStop) GetCommand() []string {
+	return []string{"bundle-stop"}
+}
+
+func (c *commandBundleStop) GetHelp() string {
+	return "Stop bundle on instance."
+}
+
+func (c *commandBundleStop) Execute(args []string) {
 	u := utility{}
 	c.getOpt(args)
 
@@ -43,7 +54,7 @@ func (c *bundleStopCommand) Execute(args []string) {
 
 }
 
-func (c *bundleStopCommand) getOpt(args []string) {
+func (c *commandBundleStop) getOpt(args []string) {
 	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "bundle to start (Symbolic name)")
 	getopt.CommandLine.Parse(args)

@@ -24,6 +24,28 @@ type commandOakExplore struct {
 	utility    *utility
 }
 
+func (c *commandOakExplore) Init() {
+	c.name = configDefaultInstance
+	c.aemVersion = ""
+	c.oakVersion = config.OakVersion
+	c.oak = newOak()
+	c.pStructure = newProjectStructure()
+	c.utility = new(utility)
+
+}
+
+func (c *commandOakExplore) readConfig() bool {
+	return true
+}
+
+func (c *commandOakExplore) GetCommand() []string {
+	return []string{"oak-explore"}
+}
+
+func (c *commandOakExplore) GetHelp() string {
+	return "Open oak explorer"
+}
+
 func (c *commandOakExplore) Execute(args []string) {
 	c.getOpt(args)
 	instance := c.utility.getInstanceByName(c.name)

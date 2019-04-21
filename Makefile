@@ -2,7 +2,7 @@
 BUILT_HASH=$(shell git rev-parse HEAD)
 BUILT_VERSION=1.2.1
 
-all: clean get test golint vet fmt coverage build
+all: clean get test code-test coverage build
 
 clean:
 	@-cd cmd/aem && rm test-report.out
@@ -12,17 +12,27 @@ clean:
 	@-rm build/osx/aem
 	@-rm *.zip
 
+code-test: golint vet fmt gocyclo ineffassign
+
 get:
 	@cd cmd/aem && go get -t -v
+	go get github.com/fzipp/gocyclo
+	go get github.com/gordonklaus/ineffassign
 
 golint:
 	@cd cmd/aem && golint -set_exit_status
+
+gocyclo:
+	@cd cmd/aem && test -z $$(gocyclo -over 15 .)
 
 vet:
 	@cd cmd/aem && go vet -all
 
 fmt:
-	@cd cmd/aem && test -z $$(go fmt ./...)
+	@cd cmd/aem && test -z $$(go fmt)
+
+ineffassign:
+	@cd cmd/aem && test -z $$(ineffassign .)
 
 test:
 	@cd cmd/aem && export UNIT_TEST=1; go test -json > test-report.out

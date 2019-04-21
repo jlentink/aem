@@ -57,7 +57,7 @@ func (a *httpRequests) buildPackage(instance aemInstanceConfig, pkg packageDescr
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s"+URLRebuildPackage, instance.URL(), pkg.Path), nil)
+	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("%s"+URLRebuildPackage, instance.URL(), pkg.Path), nil)
 
 	a.addAuthentication(instance, req)
 
@@ -99,7 +99,7 @@ func (a *httpRequests) uploadPackage(instance aemInstanceConfig, aemPackage pack
 	fileLocation := projectStructure.getLocationForPackage(aemPackage)
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("file", aemPackage.DownloadName)
+	part, _ := writer.CreateFormFile("file", aemPackage.DownloadName)
 	fileContent, err := ioutil.ReadFile(fileLocation)
 	exitFatal(err, "Could not read package for upload")
 
@@ -113,7 +113,7 @@ func (a *httpRequests) uploadPackage(instance aemInstanceConfig, aemPackage pack
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLPackageEndpoint, &ProgressReporter{r: body, totalSize: uint64(body.Len()), label: "Uploading"})
+	req, _ := http.NewRequest(http.MethodPost, instance.URL()+URLPackageEndpoint, &ProgressReporter{r: body, totalSize: uint64(body.Len()), label: "Uploading"})
 
 	// Headers
 	// Set Authentication
@@ -145,7 +145,7 @@ func (a *httpRequests) getSystemInformation(instance aemInstanceConfig) (*system
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", instance.URL(), URLSystemInformation), nil)
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", instance.URL(), URLSystemInformation), nil)
 
 	a.addAuthentication(instance, req)
 
@@ -184,7 +184,7 @@ func (a *httpRequests) activateDeactivePage(instance aemInstanceConfig, mode str
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", instance.URL(), URLReplication), body)
+	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", instance.URL(), URLReplication), body)
 	req.Header.Add(headers.ContentType, writer.FormDataContentType())
 
 	a.addAuthentication(instance, req)
@@ -203,7 +203,7 @@ func (a *httpRequests) getListForInstance(instance aemInstanceConfig) []packageD
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodGet, instance.URL()+URLPackageList, nil)
+	req, _ := http.NewRequest(http.MethodGet, instance.URL()+URLPackageList, nil)
 
 	// Headers
 	req.Header.Add(headers.CacheControl, configNoCache)
@@ -235,7 +235,7 @@ func (a *httpRequests) downloadFile(filepath string, url string, username string
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, _ := http.NewRequest(http.MethodGet, url, nil)
 
 	// Headers
 	req.Header.Add(headers.CacheControl, configNoCache)
@@ -321,7 +321,7 @@ func (a *httpRequests) activateTree(instance aemInstanceConfig, path string) boo
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLActivateTree, body)
+	req, _ := http.NewRequest(http.MethodPost, instance.URL()+URLActivateTree, body)
 
 	a.addAuthentication(instance, req)
 
@@ -348,7 +348,7 @@ func (a *httpRequests) listBundles(instance aemInstanceConfig) *bundlesFeed {
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
+	req, _ := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
 
 	a.addAuthentication(instance, req)
 
@@ -383,7 +383,7 @@ func (a *httpRequests) bundleStopStart(instance aemInstanceConfig, bundle bundle
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+fmt.Sprintf(URLBundlePage, bundle.SymbolicName), body)
+	req, _ := http.NewRequest(http.MethodPost, instance.URL()+fmt.Sprintf(URLBundlePage, bundle.SymbolicName), body)
 
 	a.addAuthentication(instance, req)
 
@@ -416,7 +416,7 @@ func (a *httpRequests) bundleUninstall(instance aemInstanceConfig, bundle bundle
 	client := &http.Client{}
 
 	// Create request
-	req, err := http.NewRequest(http.MethodPost, "http://localhost:4505/system/console/bundles/%s", body)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:4505/system/console/bundles/%s", body)
 
 	a.addAuthentication(instance, req)
 
@@ -475,7 +475,7 @@ func (a *httpRequests) bundleInstall(instance aemInstanceConfig, bundleFile stri
 
 	// Create request
 	//req, err := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
-	req, err := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
+	req, _ := http.NewRequest(http.MethodPost, instance.URL()+URLBundles, body)
 
 	a.addAuthentication(instance, req)
 

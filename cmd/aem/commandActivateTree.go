@@ -25,6 +25,27 @@ type commandActivateTree struct {
 	http             *httpRequests
 }
 
+func (c *commandActivateTree) Init() {
+	c.Name = configDefaultInstance
+	c.Path = ""
+	c.utility = new(utility)
+	c.i = new(instance)
+	c.projectStructure = new(projectStructure)
+	c.http = new(httpRequests)
+}
+
+func (c *commandActivateTree) readConfig() bool {
+	return true
+}
+
+func (c *commandActivateTree) GetCommand() []string {
+	return []string{"page-replicate"}
+}
+
+func (c *commandActivateTree) GetHelp() string {
+	return "Activate page on instance."
+}
+
 func (c *commandActivateTree) Execute(args []string) {
 	c.getOpt(args)
 	instance := c.i.getByName(c.Name)

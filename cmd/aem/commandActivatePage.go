@@ -5,20 +5,7 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newPageActivateCommand() commandPageActivate {
-	return commandPageActivate{
-		Group:            "",
-		Name:             configDefaultInstance,
-		Page:             "",
-		activate:         false,
-		deactivate:       false,
-		u:                new(utility),
-		projectStructure: new(projectStructure),
-		http:             new(httpRequests),
-	}
-}
-
-type commandPageActivate struct {
+type commandActivatePage struct {
 	Group            string
 	Type             string
 	Name             string
@@ -30,7 +17,30 @@ type commandPageActivate struct {
 	http             *httpRequests
 }
 
-func (c *commandPageActivate) Execute(args []string) {
+func (c *commandActivatePage) Init() {
+	c.Group = ""
+	c.Name = configDefaultInstance
+	c.Page = ""
+	c.activate = false
+	c.deactivate = false
+	c.u = new(utility)
+	c.projectStructure = new(projectStructure)
+	c.http = new(httpRequests)
+}
+
+func (c *commandActivatePage) readConfig() bool {
+	return true
+}
+
+func (c *commandActivatePage) GetCommand() []string {
+	return []string{"activate-tree"}
+}
+
+func (c *commandActivatePage) GetHelp() string {
+	return "Activate tree on instance."
+}
+
+func (c *commandActivatePage) Execute(args []string) {
 	c.getOpt(args)
 	instances := c.u.getInstance(c.Name, c.Group)
 
@@ -48,7 +58,7 @@ func (c *commandPageActivate) Execute(args []string) {
 	fmt.Printf("Action(s) performed..")
 }
 
-func (c *commandPageActivate) getOpt(args []string) {
+func (c *commandActivatePage) getOpt(args []string) {
 	getopt.FlagLong(&c.Name, "name", 'n', "Instance to target based on name")
 	getopt.FlagLong(&c.Group, "group", 'g', "Instances to target based on group")
 	getopt.FlagLong(&c.Page, "page", 'p', "Page to activate")

@@ -4,18 +4,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newcommandOakCheckpoints() commandOakCheckpoints {
-	return commandOakCheckpoints{
-		name:       configDefaultInstance,
-		aemVersion: "",
-		oakVersion: config.OakVersion,
-		oak:        newOak(),
-		pStructure: newProjectStructure(),
-		rm:         false,
-		utility:    new(utility),
-	}
-}
-
 type commandOakCheckpoints struct {
 	name       string
 	aemVersion string
@@ -24,6 +12,29 @@ type commandOakCheckpoints struct {
 	oak        oak
 	pStructure projectStructure
 	utility    *utility
+}
+
+func (c *commandOakCheckpoints) Init() {
+	c.name = configDefaultInstance
+	c.aemVersion = ""
+	c.oakVersion = config.OakVersion
+	c.oak = newOak()
+	c.pStructure = newProjectStructure()
+	c.rm = false
+	c.utility = new(utility)
+
+}
+
+func (c *commandOakCheckpoints) readConfig() bool {
+	return true
+}
+
+func (c *commandOakCheckpoints) GetCommand() []string {
+	return []string{"oak-checkpoints"}
+}
+
+func (c *commandOakCheckpoints) GetHelp() string {
+	return "Run oak-run checkpoints on instance."
 }
 
 func (c *commandOakCheckpoints) Execute(args []string) {

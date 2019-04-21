@@ -39,7 +39,28 @@ func (c *commandOakConsole) Execute(args []string) {
 	}
 
 	c.oak.execute(oakPath, oakArgs)
+}
 
+func (c *commandOakConsole) Init() {
+	c.name = configDefaultInstance
+	c.aemVersion = ""
+	c.oakVersion = config.OakVersion
+	c.oak = newOak()
+	c.pStructure = newProjectStructure()
+	c.utility = new(utility)
+
+}
+
+func (c *commandOakConsole) readConfig() bool {
+	return true
+}
+
+func (c *commandOakConsole) GetCommand() []string {
+	return []string{"oak-console"}
+}
+
+func (c *commandOakConsole) GetHelp() string {
+	return "Run oak-run console on instance."
 }
 
 func (c *commandOakConsole) getOpt(args []string) {

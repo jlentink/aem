@@ -22,19 +22,37 @@ type commandOpen struct {
 	instance aemInstanceConfig
 }
 
-func (o *commandOpen) Execute(args []string) {
-	o.getOpt(args)
-	o.instance = o.utility.getInstanceByName(o.name)
+func (c *commandOpen) Init() {
+	c.p = new(projectStructure)
+	c.utility = new(utility)
+	c.name = configDefaultInstance
+}
+
+func (c *commandOpen) readConfig() bool {
+	return true
+}
+
+func (c *commandOpen) GetCommand() []string {
+	return []string{"open"}
+}
+
+func (c *commandOpen) GetHelp() string {
+	return "Open instance in browser."
+}
+
+func (c *commandOpen) Execute(args []string) {
+	c.getOpt(args)
+	c.instance = c.utility.getInstanceByName(c.name)
 
 	switch runtime.GOOS {
 	case "windows":
-		cmd := exec.Command("rundll32", "url.dll,FileProtocolHandler", o.instance.URL())
+		cmd := exec.Command("rundll32", "url.dll,FileProtocolHandler", c.instance.URL())
 		cmd.Start()
 	case "darwin":
-		cmd := exec.Command("open", o.instance.URL())
+		cmd := exec.Command("open", c.instance.URL())
 		cmd.Start()
 	case "linux":
-		cmd := exec.Command("xdg-open", o.instance.URL())
+		cmd := exec.Command("xdg-open", c.instance.URL())
 		cmd.Start()
 
 	default:
@@ -42,7 +60,7 @@ func (o *commandOpen) Execute(args []string) {
 	}
 }
 
-func (o *commandOpen) getOpt(args []string) {
-	getopt.FlagLong(&o.name, "name", 'n', "Instance to open. (default: "+configDefaultInstance+")")
+func (c *commandOpen) getOpt(args []string) {
+	getopt.FlagLong(&c.name, "name", 'n', "Instance to open. (default: "+configDefaultInstance+")")
 	getopt.CommandLine.Parse(args)
 }

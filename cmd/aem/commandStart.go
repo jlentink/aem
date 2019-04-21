@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"github.com/pborman/getopt/v2"
 	"github.com/sirupsen/logrus"
@@ -17,18 +16,6 @@ import (
 	"strings"
 )
 
-func newStartCommand() commandStart {
-	return commandStart{
-		projectStructure: newProjectStructure(),
-		utility:          new(utility),
-		httpClient:       new(httpRequests),
-		forceDownload:    false,
-		forGround:        false,
-		root:             false,
-		name:             configDefaultInstance,
-	}
-}
-
 type commandStart struct {
 	projectStructure projectStructure
 	utility          *utility
@@ -40,29 +27,51 @@ type commandStart struct {
 	instance         aemInstanceConfig
 }
 
-func (s *commandStart) Execute(args []string) {
-	s.getOpt(args)
-	s.instance = s.utility.getInstanceByName(s.name)
-
-	s.checkRoot()
-
-	s.projectStructure.createInstanceDir()
-	s.projectStructure.writeGitIgnoreFile()
-	runDir := s.projectStructure.getRunDirLocation(s.instance)
-	s.getJarFile()
-
-	if !s.utility.Exists(runDir) {
-		s.executeUnpack()
-		s.renameUnpackFolder()
-	}
-	s.getAdditionPackages()
-	s.cleanupDeprecated()
-
-	s.executeStart(s.instance)
+func (c *commandStart) Init() {
+	c.projectStructure = newProjectStructure()
+	c.utility = new(utility)
+	c.httpClient = new(httpRequests)
+	c.forceDownload = false
+	c.forGround = false
+	c.root = false
+	c.name = configDefaultInstance
 }
 
-func (s *commandStart) checkRoot() {
-	if s.root {
+func (c *commandStart) readConfig() bool {
+	return true
+}
+
+func (c *commandStart) GetCommand() []string {
+	return []string{"start"}
+}
+
+func (c *commandStart) GetHelp() string {
+	return "Start an Adobe Experience Manager instance."
+}
+
+func (c *commandStart) Execute(args []string) {
+	c.getOpt(args)
+	c.instance = c.utility.getInstanceByName(c.name)
+
+	c.checkRoot()
+
+	c.projectStructure.createInstanceDir()
+	c.projectStructure.writeGitIgnoreFile()
+	runDir := c.projectStructure.getRunDirLocation(c.instance)
+	c.getJarFile()
+
+	if !c.utility.Exists(runDir) {
+		c.executeUnpack()
+		c.renameUnpackFolder()
+	}
+	c.getAdditionPackages()
+	c.cleanupDeprecated()
+
+	c.executeStart(c.instance)
+}
+
+func (c *commandStart) checkRoot() {
+	if c.root {
 		return
 	}
 	user, err := user2.Current()
@@ -73,19 +82,19 @@ func (s *commandStart) checkRoot() {
 	}
 }
 
-func (s *commandStart) getJarFile() {
-	jarFile := s.projectStructure.getJarFileLocation()
-	if !s.utility.Exists(jarFile) || s.forceDownload {
+func (c *commandStart) getJarFile() {
+	jarFile := c.projectStructure.getJarFileLocation()
+	if !c.utility.Exists(jarFile) || c.forceDownload {
 		if len(config.AemJar) > 8 && ("https://" == config.AemJar[0:8] || "http://" == config.AemJar[0:7]) {
 			fmt.Printf("Downloading AEM jar...\n")
-			err := s.httpClient.downloadFile(s.projectStructure.getJarFileLocation(), config.AemJar, config.AemJarUsername, config.AemJarPassword, s.forceDownload)
+			err := c.httpClient.downloadFile(c.projectStructure.getJarFileLocation(), config.AemJar, config.AemJarUsername, config.AemJarPassword, c.forceDownload)
 			exitFatal(err, "Error occurred during downloading aem jar\n.")
 		} else {
 			if _, err := os.Stat(config.AemJar); os.IsNotExist(err) {
 				fmt.Printf("Could not find file at %s\n", config.AemJar)
 				os.Exit(1)
 			}
-			s.utility.copy(config.AemJar, jarFile)
+			c.utility.copy(config.AemJar, jarFile)
 		}
 	} else {
 		fmt.Printf("Found AEM jar. Skipping download...\n")
@@ -93,21 +102,21 @@ func (s *commandStart) getJarFile() {
 
 }
 
-func (s *commandStart) executeUnpack() {
-	cmd := exec.Command("java", "-jar", s.projectStructure.getJarFileLocation(), "-unpack")
-	cmd.Dir = s.projectStructure.getInstanceDirLocation()
+func (c *commandStart) executeUnpack() {
+	cmd := exec.Command("java", "-jar", c.projectStructure.getJarFileLocation(), "-unpack")
+	cmd.Dir = c.projectStructure.getInstanceDirLocation()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	exitFatal(err, "Error while unpacking AEM jar.")
 }
 
-func (s *commandStart) renameUnpackFolder() {
-	s.projectStructure.rename(s.projectStructure.getUnpackDirLocation(), s.projectStructure.getRunDirLocation(s.instance))
+func (c *commandStart) renameUnpackFolder() {
+	c.projectStructure.rename(c.projectStructure.getUnpackDirLocation(), c.projectStructure.getRunDirLocation(c.instance))
 }
 
-func (s *commandStart) findJar() string {
-	files, err := ioutil.ReadDir(s.projectStructure.getAppDirLocation(s.instance))
+func (c *commandStart) findJar() string {
+	files, err := ioutil.ReadDir(c.projectStructure.getAppDirLocation(c.instance))
 	exitFatal(err, "Could not found app dir.")
 	r, _ := regexp.Compile("(.*)\\.jar")
 	for _, file := range files {
@@ -119,7 +128,7 @@ func (s *commandStart) findJar() string {
 	return ""
 }
 
-func (s *commandStart) executeStart(instance aemInstanceConfig) {
+func (c *commandStart) executeStart(instance aemInstanceConfig) {
 	javaOptions := config.JVMOpts
 	javaOptions = append(javaOptions, instance.JVMOptions...)
 	if instance.Debug {
@@ -134,49 +143,49 @@ func (s *commandStart) executeStart(instance aemInstanceConfig) {
 
 	javaOptions = append(javaOptions,
 		"-Dsling.run.modes="+instance.Type+",crx3,crx3tar",
-		"-jar", "app/"+s.findJar(), "start",
-		"-c", s.projectStructure.getRunDirLocation(instance),
+		"-jar", "app/"+c.findJar(), "start",
+		"-c", c.projectStructure.getRunDirLocation(instance),
 		"-i", "launchpad",
 		"-p", fmt.Sprintf("%d", instance.Port),
 		"-Dsling.properties=conf/sling.properties")
 
 	cmd := exec.Command("java", javaOptions...)
-	cmd.Dir = s.projectStructure.getRunDirLocation(instance)
-	err := errors.New("")
+	cmd.Dir = c.projectStructure.getRunDirLocation(instance)
 
-	if !s.forGround {
-		err = cmd.Start()
+	if !c.forGround {
+		err := cmd.Start()
+		exitFatal(err, "Error starting AEM ")
 	} else {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		err = cmd.Run()
+		err := cmd.Run()
+		exitFatal(err, "Error starting AEM ")
 	}
 
-	exitFatal(err, "Error starting AEM ")
 	fmt.Printf("Starting AEM with (pid: %d)\n", cmd.Process.Pid)
-	ioutil.WriteFile(s.projectStructure.getPidFileLocation(s.instance), []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
+	ioutil.WriteFile(c.projectStructure.getPidFileLocation(c.instance), []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
 }
 
-func (s *commandStart) getAdditionPackages() {
-	installDir := s.projectStructure.createAemInstallDir(s.instance)
+func (c *commandStart) getAdditionPackages() {
+	installDir := c.projectStructure.createAemInstallDir(c.instance)
 
 	for _, additional := range config.AdditionalPackages {
 		packagename := path.Base(additional)
-		if !s.utility.Exists(installDir+"/"+packagename) || s.forceDownload {
+		if !c.utility.Exists(installDir+"/"+packagename) || c.forceDownload {
 			url, err := url.Parse(additional)
 			exitFatal(err, "Could not parse url (%s). Please check url format.", additional)
 
 			password, _ := url.User.Password()
 			fmt.Printf("Downloading additional (%s)\n", additional)
-			s.httpClient.downloadFile(installDir+"/"+packagename, s.utility.returnURLString(url), url.User.Username(), password, s.forceDownload)
+			c.httpClient.downloadFile(installDir+"/"+packagename, c.utility.returnURLString(url), url.User.Username(), password, c.forceDownload)
 		} else {
 			logrus.Debugf("Found package %s. Skipping download...", packagename)
 		}
 	}
 }
 
-func (s *commandStart) cleanupDeprecated() {
-	files, err := ioutil.ReadDir(s.projectStructure.getAemInstallDirLocation(s.instance))
+func (c *commandStart) cleanupDeprecated() {
+	files, err := ioutil.ReadDir(c.projectStructure.getAemInstallDirLocation(c.instance))
 	sutil := new(sliceUtil)
 	packages := make([]string, 0)
 	exitFatal(err, "Could not find install dir")
@@ -187,15 +196,15 @@ func (s *commandStart) cleanupDeprecated() {
 	for _, file := range files {
 		if !sutil.inSliceString(packages, file.Name()) {
 			fmt.Printf("Removing package not in config anymore %s\n", file.Name())
-			os.Remove(s.projectStructure.appendSlash(s.projectStructure.getAemInstallDirLocation(s.instance)) + file.Name())
+			os.Remove(c.projectStructure.appendSlash(c.projectStructure.getAemInstallDirLocation(c.instance)) + file.Name())
 		}
 	}
 }
 
-func (s *commandStart) getOpt(args []string) {
-	getopt.FlagLong(&s.forceDownload, "download", 'd', "Force new download")
-	getopt.FlagLong(&s.forGround, "foreground", 'f', "Don't detach aem")
-	getopt.FlagLong(&s.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
-	getopt.FlagLong(&s.root, "root", 'r', "Allow root")
+func (c *commandStart) getOpt(args []string) {
+	getopt.FlagLong(&c.forceDownload, "download", 'd', "Force new download")
+	getopt.FlagLong(&c.forGround, "foreground", 'f', "Don't detach aem")
+	getopt.FlagLong(&c.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.root, "root", 'r', "Allow root")
 	getopt.CommandLine.Parse(args)
 }

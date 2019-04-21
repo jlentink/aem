@@ -8,20 +8,7 @@ import (
 	"strings"
 )
 
-func newPackageListCommand() packagesListCommand {
-	return packagesListCommand{
-		Download:   false,
-		Type:       "author",
-		Role:       "development",
-		Name:       configDefaultInstance,
-		Ascending:  true,
-		Descending: false,
-		SortBy:     "Package",
-		http:       new(httpRequests),
-	}
-}
-
-type packagesListCommand struct {
+type commandPackagesList struct {
 	Download   bool
 	Verbose    bool
 	Type       string
@@ -33,21 +20,44 @@ type packagesListCommand struct {
 	http       *httpRequests
 }
 
-func (p *packagesListCommand) Execute(args []string) {
-	u := utility{}
-	p.getOpt(args)
+func (c *commandPackagesList) Init() {
+	c.Download = false
+	c.Type = "author"
+	c.Role = "development"
+	c.Name = configDefaultInstance
+	c.Ascending = true
+	c.Descending = false
+	c.SortBy = "Package"
+	c.http = new(httpRequests)
+}
 
-	instance := u.getInstanceByName(p.Name)
-	packages := p.http.getListForInstance(instance)
+func (c *commandPackagesList) readConfig() bool {
+	return true
+}
+
+func (c *commandPackagesList) GetCommand() []string {
+	return []string{"bundle-list", "bundles-list"}
+}
+
+func (c *commandPackagesList) GetHelp() string {
+	return "List packages on server."
+}
+
+func (c *commandPackagesList) Execute(args []string) {
+	u := utility{}
+	c.getOpt(args)
+
+	instance := u.getInstanceByName(c.Name)
+	packages := c.http.getListForInstance(instance)
 	sortFields := make([]string, 0)
 
-	if strings.Index(p.SortBy, ",") == -1 {
-		sortFields = append(sortFields, p.SortBy)
+	if strings.Index(c.SortBy, ",") == -1 {
+		sortFields = append(sortFields, c.SortBy)
 	} else {
-		sortFields = strings.Split(p.SortBy, ",")
+		sortFields = strings.Split(c.SortBy, ",")
 	}
 
-	u.sortPackages(packages, p.Descending, sortFields)
+	u.sortPackages(packages, c.Descending, sortFields)
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
@@ -58,17 +68,13 @@ func (p *packagesListCommand) Execute(args []string) {
 	t.Render()
 }
 
-func (p *packagesListCommand) getOpt(args []string) {
-	getopt.FlagLong(&p.Name, "name", 'n', "Name of instance to download from (default: "+configDefaultInstance+")")
-	getopt.FlagLong(&p.Descending, "descending", 'd', "Sort Descending")
-	getopt.FlagLong(&p.SortBy, "sort", 's', "Sort comma separated list")
+func (c *commandPackagesList) getOpt(args []string) {
+	getopt.FlagLong(&c.Name, "name", 'n', "Name of instance to download from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.Descending, "descending", 'd', "Sort Descending")
+	getopt.FlagLong(&c.SortBy, "sort", 's', "Sort comma separated list")
 	getopt.CommandLine.Parse(args)
 
-	if p.Descending {
-		p.Ascending = false
+	if c.Descending {
+		c.Ascending = false
 	}
-}
-
-func (p *packagesListCommand) help() string {
-	return "ssadsad"
 }

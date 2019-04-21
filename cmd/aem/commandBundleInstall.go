@@ -5,18 +5,7 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newBundleInstallCommand() bundleInstallCommand {
-	return bundleInstallCommand{
-		name:             configDefaultInstance,
-		http:             new(httpRequests),
-		utility:          new(utility),
-		projectStructure: newProjectStructure(),
-		bundle:           "",
-		bundleStartLevel: bundleStartLevel,
-	}
-}
-
-type bundleInstallCommand struct {
+type commandBundleInstall struct {
 	name             string
 	http             *httpRequests
 	utility          *utility
@@ -25,7 +14,28 @@ type bundleInstallCommand struct {
 	bundleStartLevel int
 }
 
-func (c *bundleInstallCommand) Execute(args []string) {
+func (c *commandBundleInstall) Init() {
+	c.name = configDefaultInstance
+	c.http = new(httpRequests)
+	c.utility = new(utility)
+	c.projectStructure = newProjectStructure()
+	c.bundle = ""
+	c.bundleStartLevel = bundleStartLevel
+}
+
+func (c *commandBundleInstall) readConfig() bool {
+	return true
+}
+
+func (c *commandBundleInstall) GetCommand() []string {
+	return []string{"bundle-install"}
+}
+
+func (c *commandBundleInstall) GetHelp() string {
+	return "Install bundle on instance."
+}
+
+func (c *commandBundleInstall) Execute(args []string) {
 	c.getOpt(args)
 	instance := c.utility.getInstanceByName(c.name)
 	fmt.Printf("%+v", instance)
@@ -40,7 +50,7 @@ func (c *bundleInstallCommand) Execute(args []string) {
 	}
 }
 
-func (c *bundleInstallCommand) getOpt(args []string) {
+func (c *commandBundleInstall) getOpt(args []string) {
 	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "Path to bundle (.jar)")
 	getopt.FlagLong(&c.bundleStartLevel, "startlevel", 's', "bundle start level (default: "+string(bundleStartLevel)+")")
