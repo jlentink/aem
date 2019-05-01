@@ -50,7 +50,7 @@ func (c *commandStart) GetHelp() string {
 }
 
 func (c *commandStart) checkEnvironmentName() {
-	envName := os.Getenv("AEM_ME")
+	envName := os.Getenv(aemEnvName)
 	if c.name == configDefaultInstance && len(envName) > 0 {
 		fmt.Printf("Found env variable changing instance name to %s.\n", envName)
 		c.name = envName

@@ -20,7 +20,7 @@ get:
 	@cd cmd/aem && go get -t -v
 	go get github.com/fzipp/gocyclo
 	go get github.com/gordonklaus/ineffassign
-	go get github.com/gojp/goreportcard
+	go get github.com/gojp/goreportcard/cmd/goreportcard-cli
 
 golint:
 	@cd cmd/aem && golint -set_exit_status
