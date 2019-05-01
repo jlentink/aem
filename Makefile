@@ -21,6 +21,7 @@ get:
 	go get -u golang.org/x/lint/golint
 	go get github.com/fzipp/gocyclo
 	go get github.com/gordonklaus/ineffassign
+	go get github.com/alecthomas/gometalinter
 	go get github.com/gojp/goreportcard/cmd/goreportcard-cli
 	@cd cmd/aem && go get -t -v
 
