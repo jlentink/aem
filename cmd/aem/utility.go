@@ -17,6 +17,25 @@ import (
 type utility struct {
 }
 
+func (u *utility) getDefaultInstance(selectedInstance string) string {
+	if selectedInstance == configDefaultInstance {
+		envName := os.Getenv(aemEnvName)
+		if len(envName) > 0 {
+			logger.Debugf("Found env default instance variable changing instance name to \"%s\".\n", envName)
+			return envName
+		}
+		if len(config.DefaultInstance) > 0 {
+			logger.Debugf("Found config default instance changing instance name to \"%s\".\n", envName)
+			return config.DefaultInstance
+		}
+
+		logger.Debugf("No self defined default instances found dropping back to application default \"%s\".\n",
+			configDefaultInstance)
+		return selectedInstance
+	}
+	return selectedInstance
+}
+
 func (u *utility) pkgsFromString(instance aemInstanceConfig, pkgString string) []packageDescription {
 	http := new(httpRequests)
 	pkgs := http.getListForInstance(instance)

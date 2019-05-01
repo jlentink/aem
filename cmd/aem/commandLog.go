@@ -34,6 +34,7 @@ func (c *commandLog) GetHelp() string {
 
 func (c *commandLog) Execute(args []string) {
 	c.getOpt(args)
+	c.name = c.utility.getDefaultInstance(c.name)
 	logFile := c.projectStructure.getLogFileLocation(c.utility.getInstanceByName(c.name))
 
 	t, err := tail.TailFile(logFile, tail.Config{Follow: c.follow, MustExist: true})
@@ -45,6 +46,7 @@ func (c *commandLog) Execute(args []string) {
 
 func (c *commandLog) getOpt(args []string) {
 	getopt.FlagLong(&c.follow, "follow", 'f', "Follow log file. Show new lines if they come in.")
-	getopt.FlagLong(&c.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Show local log for instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.CommandLine.Parse(args)
 }

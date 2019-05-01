@@ -37,6 +37,7 @@ func (c *commandBundleInstall) GetHelp() string {
 
 func (c *commandBundleInstall) Execute(args []string) {
 	c.getOpt(args)
+	c.name = c.utility.getDefaultInstance(c.name)
 	instance := c.utility.getInstanceByName(c.name)
 	fmt.Printf("%+v", instance)
 	if c.projectStructure.exists(c.bundle) {
@@ -51,8 +52,10 @@ func (c *commandBundleInstall) Execute(args []string) {
 }
 
 func (c *commandBundleInstall) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Install bundle on instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "Path to bundle (.jar)")
-	getopt.FlagLong(&c.bundleStartLevel, "startlevel", 's', "bundle start level (default: "+string(bundleStartLevel)+")")
+	getopt.FlagLong(&c.bundleStartLevel, "startlevel", 's',
+		fmt.Sprintf("bundle start level (default: %d)", bundleStartLevel))
 	getopt.CommandLine.Parse(args)
 }

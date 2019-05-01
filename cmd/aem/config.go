@@ -8,6 +8,7 @@ type configStruct struct {
 	Packages           []string            `toml:"commandPullContent"`
 	Command            string              `toml:"command,omitempty"`
 	CommandArgs        []string            `toml:"command,omitempty"`
+	DefaultInstance    string              `toml:"defaultInstance"`
 	Instances          []aemInstanceConfig `toml:"instance"`
 	JVMOptions         []string            `toml:"jvm-options"`
 	JVMDebugOptions    []string            `toml:"jvm-debug-options"`

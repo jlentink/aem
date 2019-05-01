@@ -34,7 +34,7 @@ func (c *commandBundleStart) GetHelp() string {
 func (c *commandBundleStart) Execute(args []string) {
 	u := utility{}
 	c.getOpt(args)
-
+	c.name = c.utility.getDefaultInstance(c.name)
 	instance := u.getInstanceByName(c.name)
 	bundlePicker := newBundlePicker()
 	bundles := make([]bundle, 0)
@@ -54,7 +54,8 @@ func (c *commandBundleStart) Execute(args []string) {
 }
 
 func (c *commandBundleStart) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Start bundle on instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "bundle to start (Symbolic name)")
 	getopt.CommandLine.Parse(args)
 }

@@ -34,17 +34,9 @@ func (c *commandStop) GetHelp() string {
 	return "Stop an Adobe Experience Manager instance."
 }
 
-func (c *commandStop) checkEnvironmentName() {
-	envName := os.Getenv(aemEnvName)
-	if c.name == configDefaultInstance && len(envName) > 0 {
-		fmt.Printf("Found env variable changing instance name to %s.\n", envName)
-		c.name = envName
-	}
-}
-
 func (c *commandStop) Execute(args []string) {
 	c.getOpt(args)
-	c.checkEnvironmentName()
+	c.name = c.utility.getDefaultInstance(c.name)
 	c.instance = c.utility.getInstanceByName(c.name)
 	rundir := c.p.getRunDirLocation(c.instance)
 
@@ -68,6 +60,7 @@ func (c *commandStop) Execute(args []string) {
 }
 
 func (c *commandStop) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Instance to stop. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Instance to Stop (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.CommandLine.Parse(args)
 }

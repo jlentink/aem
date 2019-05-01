@@ -49,17 +49,9 @@ func (c *commandStart) GetHelp() string {
 	return "Start an Adobe Experience Manager instance."
 }
 
-func (c *commandStart) checkEnvironmentName() {
-	envName := os.Getenv(aemEnvName)
-	if c.name == configDefaultInstance && len(envName) > 0 {
-		fmt.Printf("Found env variable changing instance name to %s.\n", envName)
-		c.name = envName
-	}
-}
-
 func (c *commandStart) Execute(args []string) {
 	c.getOpt(args)
-	c.checkEnvironmentName()
+	c.name = c.utility.getDefaultInstance(c.name)
 	c.instance = c.utility.getInstanceByName(c.name)
 
 	c.checkRoot()
@@ -77,7 +69,7 @@ func (c *commandStart) Execute(args []string) {
 	c.getAdditionPackages()
 	c.cleanupDeprecated()
 
-	//c.executeStart(c.instance)
+	c.executeStart(c.instance)
 }
 
 func (c *commandStart) checkRoot() {
@@ -227,7 +219,8 @@ func (c *commandStart) cleanupDeprecated() {
 func (c *commandStart) getOpt(args []string) {
 	getopt.FlagLong(&c.forceDownload, "download", 'd', "Force new download")
 	getopt.FlagLong(&c.forGround, "foreground", 'f', "Don't detach aem")
-	getopt.FlagLong(&c.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Instance to start. (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.root, "root", 'r', "Allow root")
 	getopt.CommandLine.Parse(args)
 }

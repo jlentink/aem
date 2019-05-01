@@ -37,6 +37,7 @@ func (c *commandSystemInformation) GetHelp() string {
 
 func (c *commandSystemInformation) Execute(args []string) {
 	c.getOpt(args)
+	c.name = c.utility.getDefaultInstance(c.name)
 	c.instance = c.i.getByName(c.name)
 
 	sysInfo, err := c.a.getSystemInformation(c.instance)
@@ -138,6 +139,7 @@ func (c *commandSystemInformation) printListing(key, valuesString string) {
 }
 
 func (c *commandSystemInformation) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Instance to start. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Show system information of instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.CommandLine.Parse(args)
 }

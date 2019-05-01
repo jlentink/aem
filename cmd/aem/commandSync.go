@@ -42,6 +42,7 @@ func (c *commandSync) GetHelp() string {
 
 func (c *commandSync) Execute(args []string) {
 	c.getOpt(args)
+	c.instanceName = c.utility.getDefaultInstance(c.instanceName)
 	instances := c.utility.getInstance(c.instanceName, c.instanceGroup)
 
 	target := c.getTargetsString(instances)
@@ -80,7 +81,8 @@ func (c *commandSync) sync(instance string, path string) {
 }
 
 func (c *commandSync) getOpt(args []string) {
-	getopt.FlagLong(&c.instanceName, "instance-name", 'i', "Instance to sync to. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.instanceName, "instance-name",
+		'n', "Instance to start. (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.instanceGroup, "instance-group", 'g', "Instance group to sync to.")
 	getopt.FlagLong(&c.disableLog, "disable-log", 'l', "Disable AEM log output")
 	getopt.FlagLong(&c.bin, "aemsync", 's', "Path to AEM sync")

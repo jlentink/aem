@@ -8,13 +8,15 @@ import (
 )
 
 type commandBundleList struct {
-	name string
-	http *httpRequests
+	name    string
+	http    *httpRequests
+	utility *utility
 }
 
 func (c *commandBundleList) Init() {
 	c.name = configDefaultInstance
 	c.http = new(httpRequests)
+	c.utility = new(utility)
 }
 
 func (c *commandBundleList) readConfig() bool {
@@ -30,10 +32,10 @@ func (c *commandBundleList) GetHelp() string {
 }
 
 func (c *commandBundleList) Execute(args []string) {
-	u := utility{}
-	c.getOpt(args)
 
-	instance := u.getInstanceByName(c.name)
+	c.getOpt(args)
+	c.name = c.utility.getDefaultInstance(c.name)
+	instance := c.utility.getInstanceByName(c.name)
 
 	bundles := c.http.listBundles(instance)
 
@@ -48,6 +50,7 @@ func (c *commandBundleList) Execute(args []string) {
 }
 
 func (c *commandBundleList) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "List bundles on instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.CommandLine.Parse(args)
 }

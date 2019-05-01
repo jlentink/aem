@@ -6,7 +6,7 @@ import (
 )
 
 type commandActivateTree struct {
-	Name             string
+	name             string
 	Path             string
 	utility          *utility
 	i                *instance
@@ -15,7 +15,7 @@ type commandActivateTree struct {
 }
 
 func (c *commandActivateTree) Init() {
-	c.Name = configDefaultInstance
+	c.name = configDefaultInstance
 	c.Path = ""
 	c.utility = new(utility)
 	c.i = new(instance)
@@ -28,16 +28,17 @@ func (c *commandActivateTree) readConfig() bool {
 }
 
 func (c *commandActivateTree) GetCommand() []string {
-	return []string{"page-replicate"}
+	return []string{"replicate-tree"}
 }
 
 func (c *commandActivateTree) GetHelp() string {
-	return "Activate page on instance."
+	return "Replicate tree on instance."
 }
 
 func (c *commandActivateTree) Execute(args []string) {
 	c.getOpt(args)
-	instance := c.i.getByName(c.Name)
+	c.name = c.utility.getDefaultInstance(c.name)
+	instance := c.i.getByName(c.name)
 	if c.http.activateTree(instance, c.Path) {
 		fmt.Printf("Tree activated.\n")
 	} else {
@@ -46,7 +47,8 @@ func (c *commandActivateTree) Execute(args []string) {
 }
 
 func (c *commandActivateTree) getOpt(args []string) {
-	getopt.FlagLong(&c.Name, "instance", 'i', "Activate Tree on instance (Default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Activate Tree on instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.Path, "path", 'p', "Path to activate")
 	getopt.CommandLine.Parse(args)
 }

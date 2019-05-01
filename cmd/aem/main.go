@@ -12,6 +12,7 @@ import (
 
 var (
 	config   = configStruct{}
+	logger   = log.New()
 	commands = []ICommand{
 		&commandStart{},
 		&commandStop{},
@@ -118,7 +119,7 @@ func readConfig() {
 
 func setupLog() {
 	if config.Verbose {
-		log.SetLevel(log.DebugLevel)
+		logger.SetLevel(log.DebugLevel)
 	}
 }
 

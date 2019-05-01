@@ -83,7 +83,7 @@ Available options:
 
      -d, --download    Force new download
      -f, --foreground  Don't detach aem from current tty.
-     -n, --name=value  Instance to start. (default: local-author)
+     -n, --name=value  Instance to start
      -r, --root        Allow root
      -v, --verbose     Enable verbose
 
@@ -95,7 +95,7 @@ stop is compatible with the start and stop scripts provided by Adobe.
 
 Available options:
 
-    -n, --name=value  Instance to stop. (default: local-author)
+    -n, --name=value  Instance to stop
     -v, --verbose     Enable verbose
     
 ### sync
@@ -104,7 +104,7 @@ sync triggers [aemsync](https://github.com/gavoja/aemsync). [aemsync](https://gi
 Available options:
 
     -g, --instance-group=value  Instance group to sync to.
-    -i, --instance-name=value   Instance to sync to. (default: local-author)
+    -i, --instance-name=value   Instance to sync to
     -l, --disable-log           Disable AEM log output
     -s, --aemsync=value         Path to AEM sync executable
     -v, --verbose               Enable verbose
@@ -115,8 +115,8 @@ Download the content packages defined in the configuration file and upload them 
 Available options:
 
     -d, --force-download  Force new download
-    -f, --from-name=value Pull content from
-    -t, --to-name=value   Push content to (default: local-author)
+    -f, --from-name=value Pull content from instance
+    -t, --to-name=value   Push content to instance
     -v, --verbose         Enable verbose
     
 ### passwords
@@ -135,7 +135,7 @@ Display information about an instance. This feature is only available from AEM 6
 
 Available options:
 
-    -n, --name=value  Instance to start. (default: local-author)
+    -n, --name=value  Show system information of instance
     -v, --verbose     Enable verbose
 
 ### package-list
@@ -143,7 +143,7 @@ List the packages installed on an instance of your choosing.
 
 Available options:
 
-    -n, --name=value  Instance to start. (default: local-author)
+    -n, --name=value  List packages on instance
     -v, --verbose     Enable verbose
 
 ### package-rebuild
@@ -151,7 +151,7 @@ Rebuild a package on an instance of your choosing.
 
 Available options:
 
-    -f, --from-name=value  Rebuild package on instance (Default: local-author)
+    -f, --from-name=value  Rebuild package on instance
     -p, --package=value    Define package package:version (no interactive mode)
     -v, --verbose          Enable verbose
 
@@ -161,7 +161,7 @@ Download a package from any instance defined in the configuration file
 Available options:
 
      -d, --force-download  Force new download
-     -f, --from=value      Pull content from (default: local-author)
+     -f, --from=value      Download package from instance
      -p, --package=value   Define package package:version (no interactive mode)
      -v, --verbose         Enable verbose
 
@@ -171,7 +171,7 @@ Copy a package from one instance to another. The destination can be a group to e
 Available options:
 
       -d, --force-download  Force new download
-      -f, --from-name=value Pull package from (default: local-author)
+      -f, --from-name=value Copy package from instance
       -g, --to-group=value  Push package to group
       -l, --log             Show AEM log output
       -p, --package=value   Packages (multiple use comma separated list.)
@@ -184,10 +184,10 @@ The name of the package will be extracted from the manifest in the package
 
 Available options:
 
-    -g, --to-group=value  Push package to group
+    -g, --to-group=value  Install package to group
     -n, --no-install      Do not install package
     -p, --package=value   Package to install (path to file)
-    -t, --to-name=value   Push package to instance
+    -t, --to-name=value   Install package to instance
     -v, --verbose         Enable verbose
     -y, --yes             Skip confirmation
     
@@ -196,7 +196,7 @@ List all bundles on an instance.
 
 Available options:
 
-    -n, --name=value  Name of instance to list bundles from from (default: local-author)
+    -n, --name=value  List packages on instance
     -v, --verbose     Enable verbose
 
 ### bundle-start
@@ -205,7 +205,7 @@ Start a bundle based by its symbolic name
 Available options:
 
     -b, --bundle=value  Bundle to start (Symbolic name)
-    -n, --name=value    Name of instance to list bundles from from (default: local-author)
+    -n, --name=value    Start bundle on instance
     -v, --verbose       Enable verbose
 
 
@@ -215,7 +215,7 @@ Stop a bundle based on it's symbolic name
 Available options:
 
     -b, --bundle=value  Bundle to stop (Symbolic name)
-    -n, --name=value    Name of instance to list bundles from from (default: local-author)
+    -n, --name=value    Stop bundle on instance
     -v, --verbose       Enable verbose
 
 
@@ -225,7 +225,7 @@ Install a bundle based on it's symbolic name
 Available options:
 
     -b, --bundle=value      Path to bundle (.jar)
-    -n, --name=value        Name of instance to list bundles from from (default: local-author)
+    -n, --name=value        Install bundle on instance (default: local-author)
     -s --startlevel=value   Bundle start level (default: 20)
     -v, --verbose           Enable verbose
 
@@ -236,10 +236,10 @@ See the log file for an instance running locally. Use -f to follow the log file 
 Available options:
 
     -f, --follow      Follow log file. Show new lines if they come in.
-    -n, --name=value  Instance to start. (default: local-author)
+    -n, --name=value  Show local log for instance
     -v, --verbose     Enable verbose
 
-### page-replicate
+### activate-page
 Activate or deactivate a page. use the page path to define which page to activate.
 
 Available options:
@@ -247,7 +247,7 @@ Available options:
     -a, --activate     Activate
     -d, --deactivate   Deactivate
     -g, --group=value  Instances to target based on group
-    -n, --name=value   Instance to target based on name
+    -n, --name=value   Instance that need page activation
     -p, --page=value   Page to activate
     -v, --verbose      Enable verbose
 
@@ -278,7 +278,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 Available options:
 
     -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -n, --name=value  Name of instance to use oak-run on
     -o, --oak=value   Define version of oak-run to use
     -v, --verbose     Enable verbose
 
@@ -295,7 +295,7 @@ Available options:
 
     -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
     -d, --rm          Define version of oak-run to use
-    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -n, --name=value  Name of instance to use oak-run on
     -o, --oak=value   Define version of oak-run to use
     -v, --verbose     Enable verbose
 
@@ -310,7 +310,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 Available options:
 
     -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -n, --name=value  Name of instance to use oak-run on
     -o, --oak=value   Define version of oak-run to use
     -v, --verbose     Enable verbose
 
@@ -325,7 +325,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 Available options:
 
     -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -n, --name=value  Name of instance to use oak-run on
     -o, --oak=value   Define version of oak-run to use
     -v, --verbose     Enable verbose
     -w, --write       Enable write mode
@@ -340,7 +340,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 Available options:
 
     -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on (default: local-author)
+    -n, --name=value  Name of instance to use oak-run on
     -o, --oak=value   Define version of oak-run to use
     -v, --verbose     Enable verbose
 
@@ -350,6 +350,15 @@ Output the current version of the aem command line interface you are using.
 Available options:
    
     No options available
+
+## Environment variables
+
+### AEM_ME
+Set the AEM_ME variable to change the default instance choosen by start, stop and log
+
+```
+export AEM_ME=<instance name>
+```  
 
 ## Todo
 

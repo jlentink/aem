@@ -8,7 +8,7 @@ import (
 type commandActivatePage struct {
 	Group            string
 	Type             string
-	Name             string
+	name             string
 	Page             string
 	activate         bool
 	deactivate       bool
@@ -19,7 +19,7 @@ type commandActivatePage struct {
 
 func (c *commandActivatePage) Init() {
 	c.Group = ""
-	c.Name = configDefaultInstance
+	c.name = configDefaultInstance
 	c.Page = ""
 	c.activate = false
 	c.deactivate = false
@@ -33,16 +33,17 @@ func (c *commandActivatePage) readConfig() bool {
 }
 
 func (c *commandActivatePage) GetCommand() []string {
-	return []string{"activate-tree"}
+	return []string{"activate-page"}
 }
 
 func (c *commandActivatePage) GetHelp() string {
-	return "Activate tree on instance."
+	return "Activate page on instance."
 }
 
 func (c *commandActivatePage) Execute(args []string) {
 	c.getOpt(args)
-	instances := c.u.getInstance(c.Name, c.Group)
+	c.name = c.u.getDefaultInstance(c.name)
+	instances := c.u.getInstance(c.name, c.Group)
 
 	for _, instance := range instances {
 		if c.activate {
@@ -59,7 +60,8 @@ func (c *commandActivatePage) Execute(args []string) {
 }
 
 func (c *commandActivatePage) getOpt(args []string) {
-	getopt.FlagLong(&c.Name, "name", 'n', "Instance to target based on name")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Instance that need page activation (default: "+c.u.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.Group, "group", 'g', "Instances to target based on group")
 	getopt.FlagLong(&c.Page, "page", 'p', "Page to activate")
 	getopt.FlagLong(&c.activate, "activate", 'a', "Activate")

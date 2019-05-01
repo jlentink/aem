@@ -41,7 +41,7 @@ func (c *commandPackageDownload) GetHelp() string {
 
 func (c *commandPackageDownload) Execute(args []string) {
 	c.getOpt(args)
-
+	c.From = c.utility.getDefaultInstance(c.From)
 	fromInstance := c.utility.getInstanceByName(c.From)
 
 	if len(c.Package) > 0 {
@@ -62,7 +62,8 @@ func (c *commandPackageDownload) downloadPackages(instance aemInstanceConfig, pk
 }
 
 func (c *commandPackageDownload) getOpt(args []string) {
-	getopt.FlagLong(&c.From, "from", 'f', "Pull content from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.From, "from-name",
+		'n', "Download package from instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.Package, "package", 'p', "Define package package:version (no interactive mode)")
 	getopt.FlagLong(&c.forceDownload, "force-download", 'd', "Force new download")
 	getopt.CommandLine.Parse(args)

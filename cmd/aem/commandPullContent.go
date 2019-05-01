@@ -41,7 +41,7 @@ func (c *commandPullContent) GetHelp() string {
 func (c *commandPullContent) Execute(args []string) {
 	u := utility{}
 	c.getOpt(args)
-
+	c.From = c.utility.getDefaultInstance(c.From)
 	fromInstance := u.getInstanceByName(c.From)
 	toInstance := u.getInstanceByName(c.To)
 
@@ -66,7 +66,8 @@ func (c *commandPullContent) Execute(args []string) {
 }
 
 func (c *commandPullContent) getOpt(args []string) {
-	getopt.FlagLong(&c.From, "from-name", 'f', "Pull content from")
+	getopt.FlagLong(&c.From, "from-name",
+		'f', "Pull content from instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.To, "to-name", 't', "Push content to")
 	getopt.FlagLong(&c.forceDownload, "force-download", 'd', "Force new download")
 	getopt.CommandLine.Parse(args)

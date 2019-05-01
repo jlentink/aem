@@ -39,6 +39,7 @@ func (c *commandOakCheckpoints) GetHelp() string {
 
 func (c *commandOakCheckpoints) Execute(args []string) {
 	c.getOpt(args)
+	c.name = c.utility.getDefaultInstance(c.name)
 	instance := c.utility.getInstanceByName(c.name)
 	instancePath := c.pStructure.getRunDirLocation(instance)
 	oakPath := c.oak.getVersion(c.aemVersion, c.oakVersion)
@@ -57,6 +58,7 @@ func (c *commandOakCheckpoints) getOpt(args []string) {
 	getopt.FlagLong(&c.aemVersion, "aem", 'a', "Version of AEM to use oak-run on. (use matching AEM version of oak-run)")
 	getopt.FlagLong(&c.oakVersion, "oak", 'o', "Define version of oak-run to use")
 	getopt.FlagLong(&c.rm, "rm", 'd', "Define version of oak-run to use")
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to use oak-run on (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Name of instance to use oak-run on (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.CommandLine.Parse(args)
 }

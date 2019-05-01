@@ -215,6 +215,11 @@ licenseVersion = "%s"
 licenseDownloadID = "%s"
 
 #
+# Default instance to use if not providing the detail in the command
+#
+defaultInstance = "local-author"
+
+#
 # paths to watch and sync during development.
 # aemsync needs to be installed to use this function
 # npm install aemsync -g

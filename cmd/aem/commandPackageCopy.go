@@ -79,6 +79,7 @@ func (c *commandPackageCopy) Execute(args []string) {
 	u := utility{}
 	c.getOpt(args)
 
+	c.From = c.utility.getDefaultInstance(c.From)
 	fromInstance := u.getInstanceByName(c.From)
 	toInstances := u.getInstance(c.ToName, c.ToGroup)
 
@@ -101,7 +102,8 @@ func (c *commandPackageCopy) Execute(args []string) {
 }
 
 func (c *commandPackageCopy) getOpt(args []string) {
-	getopt.FlagLong(&c.From, "from-name", 'f', "Pull content from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.From, "from-name",
+		'n', "Copy package from instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.ToName, "to-name", 't', "Push package to instance")
 	getopt.FlagLong(&c.ToGroup, "to-group", 'g', "Push package to group")
 	getopt.FlagLong(&c.Packages, "package", 'p', "Packages (multiple use comma separated list.)")

@@ -34,6 +34,7 @@ func (c *commandOpen) GetHelp() string {
 
 func (c *commandOpen) Execute(args []string) {
 	c.getOpt(args)
+	c.name = c.utility.getDefaultInstance(c.name)
 	c.instance = c.utility.getInstanceByName(c.name)
 
 	switch runtime.GOOS {
@@ -53,6 +54,7 @@ func (c *commandOpen) Execute(args []string) {
 }
 
 func (c *commandOpen) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Instance to open. (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Open browser to instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.CommandLine.Parse(args)
 }

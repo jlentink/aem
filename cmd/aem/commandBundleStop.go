@@ -33,10 +33,9 @@ func (c *commandBundleStop) GetHelp() string {
 }
 
 func (c *commandBundleStop) Execute(args []string) {
-	u := utility{}
 	c.getOpt(args)
-
-	instance := u.getInstanceByName(c.name)
+	c.name = c.utility.getDefaultInstance(c.name)
+	instance := c.utility.getInstanceByName(c.name)
 	bundles := make([]bundle, 0)
 	bundlePicker := newBundlePicker()
 
@@ -55,7 +54,8 @@ func (c *commandBundleStop) Execute(args []string) {
 }
 
 func (c *commandBundleStop) getOpt(args []string) {
-	getopt.FlagLong(&c.name, "name", 'n', "Name of instance to list bundles from from (default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.name, "name",
+		'n', "Stop bundle on instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.bundle, "bundle", 'b', "bundle to start (Symbolic name)")
 	getopt.CommandLine.Parse(args)
 }

@@ -53,6 +53,7 @@ func (c *commandPackageInstall) Execute(args []string) {
 	toInstances := make([]aemInstanceConfig, 0)
 
 	if len(c.ToName) > 0 {
+		c.ToName = c.u.getDefaultInstance(c.ToName)
 		toInstances = append(toInstances, c.u.getInstanceByName(c.ToName))
 	} else if len(c.ToGroup) > 0 {
 		toInstances = c.u.getInstanceByGroup(c.ToGroup)
@@ -77,8 +78,9 @@ func (c *commandPackageInstall) Execute(args []string) {
 }
 
 func (c *commandPackageInstall) getOpt(args []string) {
-	getopt.FlagLong(&c.ToName, "to-name", 't', "Push package to instance (default: "+configDefaultInstance+")")
-	getopt.FlagLong(&c.ToGroup, "to-group", 'g', "Push package to group")
+	getopt.FlagLong(&c.From, "to-name",
+		't', "Install package to instance (default: "+c.u.getDefaultInstance(configDefaultInstance)+")")
+	getopt.FlagLong(&c.ToGroup, "to-group", 'g', "Install package to group")
 	getopt.FlagLong(&c.Package, "package", 'p', "Package to install (path to file)")
 	getopt.FlagLong(&c.yes, "yes", 'y', "Skip confirmation")
 	getopt.FlagLong(&c.noInstall, "no-install", 'n', "Do not install package")

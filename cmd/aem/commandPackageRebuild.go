@@ -37,7 +37,7 @@ func (c *commandPackageRebuild) GetHelp() string {
 
 func (c *commandPackageRebuild) Execute(args []string) {
 	c.getOpt(args)
-
+	c.From = c.utility.getDefaultInstance(c.From)
 	fromInstance := c.utility.getInstanceByName(c.From)
 
 	if len(c.Package) > 0 {
@@ -59,7 +59,8 @@ func (c *commandPackageRebuild) buildPackage(instance aemInstanceConfig, package
 }
 
 func (c *commandPackageRebuild) getOpt(args []string) {
-	getopt.FlagLong(&c.From, "from-name", 'f', "Rebuild package on instance (Default: "+configDefaultInstance+")")
+	getopt.FlagLong(&c.From, "from-name",
+		'f', "Rebuild package on instance (default: "+c.utility.getDefaultInstance(configDefaultInstance)+")")
 	getopt.FlagLong(&c.Package, "package", 'p', "Define package package:version (no interactive mode)")
 	getopt.CommandLine.Parse(args)
 }
