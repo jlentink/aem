@@ -11,6 +11,7 @@ import (
 )
 
 // Labels to retrieve data from the manifest
+//nolint
 const (
 	ManifestLabelManifestVersion           = "Manifest-Version"
 	ManifestLabelImplementationTitle       = "Implementation-Title"
@@ -38,7 +39,7 @@ func newManifestPackage() manifestPackage {
 	return manifestPackage{
 		fs:        afero.NewOsFs(),
 		u:         new(utility),
-		keyValues: make(map[string]string, 0),
+		keyValues: make(map[string]string),
 	}
 }
 
@@ -58,8 +59,8 @@ func (m *manifestPackage) Get(manifestLabel string) (string, error) {
 }
 
 func (m *manifestPackage) labelValue(line string) (string, string) {
-	regLabel, _ := regexp.Compile("^([A-Z])([A-Za-z\\-]*) ?: ?(.*)$")
-	regValue, _ := regexp.Compile("^ (.*)$")
+	regLabel, _ := regexp.Compile(`^([A-Z])([A-Za-z\-]*) ?: ?(.*)$`)
+	regValue, _ := regexp.Compile(`^ (.*)$`)
 
 	if regLabel.MatchString(line) {
 		line = strings.TrimSuffix(line, manifestReturn)
@@ -110,7 +111,7 @@ func (m *manifestPackage) parse(manifest string) map[string]string {
 
 func (m *manifestPackage) readZip(path string) (string, error) {
 	reader, err := zip.OpenReader(path)
-	exitFatal(err, "Package does not seem to be a valid zip.")
+	exitFatal(err, "Error while reading the package: ")
 
 	for _, file := range reader.File {
 		if file.Name == manifestPath {

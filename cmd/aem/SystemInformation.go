@@ -1,5 +1,6 @@
 package main
 
+//nolint
 type systemInformation struct {
 	HealthChecks interface{} `json:"Health Checks"`
 	Instance     struct {

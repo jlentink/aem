@@ -5,17 +5,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newPackageDownloadCommand() commandPackageDownload {
-	return commandPackageDownload{
-		From:             configDefaultInstance,
-		utility:          new(utility),
-		projectStructure: newProjectStructure(),
-		forceDownload:    false,
-		Package:          "",
-		http:             new(httpRequests),
-	}
-}
-
 type commandPackageDownload struct {
 	From             string
 	To               string

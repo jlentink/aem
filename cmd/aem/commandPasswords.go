@@ -5,16 +5,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newPasswordCommand() commandPassword {
-	return commandPassword{
-		p:       new(projectStructure),
-		utility: new(utility),
-		i:       new(instance),
-		all:     false,
-		yes:     false,
-	}
-}
-
 type commandPassword struct {
 	p       *projectStructure
 	utility *utility

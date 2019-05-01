@@ -65,6 +65,33 @@ var surveyJarFileQuestions = []*survey.Question{
 	},
 }
 
+var surveyLicenseQuestions = []*survey.Question{
+	{
+		Name: "LicenseCustomer",
+		Prompt: &survey.Input{
+			Message: "License customer",
+			Help:    "What is the license customer name. (only use this in private projects; keep license a secret!)",
+			Default: "foo-bar",
+		},
+	},
+	{
+		Name: "LicenseVersion",
+		Prompt: &survey.Input{
+			Message: "License version",
+			Help:    "What is the AEM version.",
+			Default: "6.x",
+		},
+	},
+	{
+		Name: "LicenseDownloadID",
+		Prompt: &survey.Input{
+			Message: "License download ID",
+			Help:    "What is the AEM download id. (only use this in private projects; keep license a secret!)",
+			Default: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+		},
+	},
+}
+
 var surveyAdditionalPackagesQuestions = []*survey.Question{
 	{
 		Name: "AdditionalPackage",
@@ -103,6 +130,9 @@ func newConfigAnswers() configAnswers {
 		JarLocation:        "",
 		JarUsername:        "admin",
 		JarPassword:        "admin",
+		LicenseCustomer:    "",
+		LicenseVersion:     "",
+		LicenseDownloadID:  "",
 		AdditionalPackages: []string{"https://github.com/Adobe-Consulting-Services/acs-aem-commons/releases/download/acs-aem-commons-3.19.0/acs-aem-commons-content-3.19.0.zip"},
 	}
 }
@@ -115,6 +145,9 @@ type configAnswers struct {
 	JarLocation        string
 	JarUsername        string
 	JarPassword        string
+	LicenseCustomer    string
+	LicenseVersion     string
+	LicenseDownloadID  string
 	AdditionalPackage  string
 	AdditionalPackages []string
 }
@@ -129,7 +162,15 @@ func (c *configAnswers) joinStrings(stringsArr []string) string {
 }
 
 func (c *configAnswers) getConfig() string {
-	return fmt.Sprintf(configTemplate, c.UseKeyRing, c.JarLocation, c.JarUsername, c.JarPassword, c.joinStrings(c.AdditionalPackages))
+	return fmt.Sprintf(configTemplate,
+		c.UseKeyRing,
+		c.JarLocation,
+		c.JarUsername,
+		c.JarPassword,
+		c.LicenseCustomer,
+		c.LicenseVersion,
+		c.LicenseDownloadID,
+		c.joinStrings(c.AdditionalPackages))
 }
 
 const (
@@ -163,6 +204,15 @@ use-keyring = %t
 jarLocation = "%s"
 jarUsername = "%s"
 jarPassword = "%s"
+
+#
+# Project license information.
+# licenses are sensitive material and should not be shared outside of the project
+# or miss used. So be very careful when using this functonality!!!!
+#
+licenseCustomer = "%s"
+licenseVersion = "%s"
+licenseDownloadID = "%s"
 
 #
 # paths to watch and sync during development.

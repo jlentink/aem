@@ -25,7 +25,6 @@ const (
 	URLActivateTree      = "/etc/replication/treeactivation.html"
 	URLBundles           = "/system/console/bundles"
 	URLRebuildPackage    = "/crx/packmgr/service/.json%s?cmd=build"
-	URLBundleInstall     = "/system/console/bundles/%s"
 	URLBundlePage        = "/system/console/bundles/%s"
 	URLReplication       = "/bin/replicate.json"
 	URLPackageList       = "/crx/packmgr/list.jsp"
@@ -251,7 +250,9 @@ func (a *httpRequests) downloadFile(filepath string, url string, username string
 	exitFatal(err, "Could not retrieve list from Adobe Experience manager.")
 	defer resp.Body.Close()
 
-	fmt.Printf("%d", resp.StatusCode)
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+		exitProgram("Could not download file. Got status: %d", resp.StatusCode)
+	}
 
 	// Create our progress reporter and pass it to be used alongside our writer
 	counter := &ProgressReporter{r: resp.Body, totalSize: filesize, label: "Downloading"}
@@ -488,6 +489,7 @@ func (a *httpRequests) bundleInstall(instance aemInstanceConfig, bundleFile stri
 	resp, err := client.Do(req)
 	exitFatal(err, bundleResponseErrorMsg, instance.URL())
 
+	//nolint
 	if resp.StatusCode == 200 {
 		return true
 	}

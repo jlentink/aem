@@ -7,14 +7,6 @@ import (
 	"runtime"
 )
 
-func newOpenCommand() commandOpen {
-	return commandOpen{
-		p:       new(projectStructure),
-		utility: new(utility),
-		name:    configDefaultInstance,
-	}
-}
-
 type commandOpen struct {
 	p        *projectStructure
 	utility  *utility

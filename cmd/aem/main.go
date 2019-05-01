@@ -42,6 +42,7 @@ var (
 		&commandOakExplore{},
 		&commandOakCheck{},
 		&commandOakCompact{},
+		&commandOakConsole{},
 	}
 
 	// BuiltVersion Holds the build version
@@ -99,7 +100,7 @@ func confirm(format string, force bool, args ...interface{}) bool {
 	if strings.ToLower(input) == "y\n" {
 		return true
 	}
-	fmt.Printf(strings.ToLower(input))
+	fmt.Print(strings.ToLower(input))
 	return false
 }
 

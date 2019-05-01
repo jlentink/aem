@@ -4,18 +4,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newCommandOakConsole() commandOakConsole {
-	return commandOakConsole{
-		name:       configDefaultInstance,
-		aemVersion: "",
-		oakVersion: config.OakVersion,
-		oak:        newOak(),
-		write:      false,
-		pStructure: newProjectStructure(),
-		utility:    new(utility),
-	}
-}
-
 type commandOakConsole struct {
 	name       string
 	aemVersion string

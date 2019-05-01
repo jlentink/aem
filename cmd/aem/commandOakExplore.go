@@ -4,17 +4,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newCommandOakExplore() commandOakExplore {
-	return commandOakExplore{
-		name:       configDefaultInstance,
-		aemVersion: "",
-		oakVersion: config.OakVersion,
-		oak:        newOak(),
-		pStructure: newProjectStructure(),
-		utility:    new(utility),
-	}
-}
-
 type commandOakExplore struct {
 	name       string
 	aemVersion string

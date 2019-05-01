@@ -49,8 +49,17 @@ func (c *commandStart) GetHelp() string {
 	return "Start an Adobe Experience Manager instance."
 }
 
+func (c *commandStart) checkEnvironmentName() {
+	envName := os.Getenv("AEM_ME")
+	if c.name == configDefaultInstance && len(envName) > 0 {
+		fmt.Printf("Found env variable changing instance name to %s.\n", envName)
+		c.name = envName
+	}
+}
+
 func (c *commandStart) Execute(args []string) {
 	c.getOpt(args)
+	c.checkEnvironmentName()
 	c.instance = c.utility.getInstanceByName(c.name)
 
 	c.checkRoot()
@@ -59,6 +68,7 @@ func (c *commandStart) Execute(args []string) {
 	c.projectStructure.writeGitIgnoreFile()
 	runDir := c.projectStructure.getRunDirLocation(c.instance)
 	c.getJarFile()
+	c.writeLicense()
 
 	if !c.utility.Exists(runDir) {
 		c.executeUnpack()
@@ -67,7 +77,7 @@ func (c *commandStart) Execute(args []string) {
 	c.getAdditionPackages()
 	c.cleanupDeprecated()
 
-	c.executeStart(c.instance)
+	//c.executeStart(c.instance)
 }
 
 func (c *commandStart) checkRoot() {
@@ -99,7 +109,20 @@ func (c *commandStart) getJarFile() {
 	} else {
 		fmt.Printf("Found AEM jar. Skipping download...\n")
 	}
+}
 
+func (c *commandStart) writeLicense() {
+	if !c.utility.Exists(c.projectStructure.getLicenseLocation()) {
+		license := fmt.Sprintf(
+			"#Adobe Granite License Properties\n"+
+				"license.product.name=Adobe Experience Manager\n"+
+				"license.customer.name=%s\n"+
+				"license.product.version=%s\n"+
+				"license.downloadID=%s\n", config.LicenseCustomer, config.LicenseVersion, config.LicenseDownloadID)
+		c.projectStructure.writeTextFile(c.projectStructure.getLicenseLocation(), license)
+	} else {
+		fmt.Println("License found skipping...")
+	}
 }
 
 func (c *commandStart) executeUnpack() {
@@ -118,7 +141,7 @@ func (c *commandStart) renameUnpackFolder() {
 func (c *commandStart) findJar() string {
 	files, err := ioutil.ReadDir(c.projectStructure.getAppDirLocation(c.instance))
 	exitFatal(err, "Could not found app dir.")
-	r, _ := regexp.Compile("(.*)\\.jar")
+	r, _ := regexp.Compile(`(.*)\.jar`)
 	for _, file := range files {
 		if r.MatchString(file.Name()) {
 			return file.Name()

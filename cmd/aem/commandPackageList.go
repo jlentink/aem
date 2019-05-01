@@ -36,7 +36,7 @@ func (c *commandPackagesList) readConfig() bool {
 }
 
 func (c *commandPackagesList) GetCommand() []string {
-	return []string{"bundle-list", "bundles-list"}
+	return []string{"package-list", "packages-list"}
 }
 
 func (c *commandPackagesList) GetHelp() string {
@@ -51,7 +51,7 @@ func (c *commandPackagesList) Execute(args []string) {
 	packages := c.http.getListForInstance(instance)
 	sortFields := make([]string, 0)
 
-	if strings.Index(c.SortBy, ",") == -1 {
+	if strings.Contains(c.SortBy, ",") {
 		sortFields = append(sortFields, c.SortBy)
 	} else {
 		sortFields = strings.Split(c.SortBy, ",")

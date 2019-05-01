@@ -14,6 +14,9 @@ type configStruct struct {
 	AemJar             string              `toml:"jarLocation"`
 	AemJarUsername     string              `toml:"jarUsername"`
 	AemJarPassword     string              `toml:"jarPassword"`
+	LicenseCustomer    string              `toml:"licenseCustomer"`
+	LicenseVersion     string              `toml:"licenseVersion"`
+	LicenseDownloadID  string              `toml:"licenseDownloadID"`
 	WatchPath          []string            `toml:"watchPath"`
 	Port               int                 `toml:"port"`
 	Role               string              `toml:"role"`

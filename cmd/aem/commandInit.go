@@ -53,6 +53,10 @@ func (c *commandInit) survey() string {
 
 	validateSurveyInput(err)
 
+	err = survey.Ask(surveyLicenseQuestions, &answers)
+
+	validateSurveyInput(err)
+
 	for {
 		err = survey.Ask(surveyAdditionalPackagesQuestions, &answers)
 		answers.AdditionalPackages = append(answers.AdditionalPackages, answers.AdditionalPackage)

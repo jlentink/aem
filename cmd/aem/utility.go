@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
+	"path"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -47,6 +49,18 @@ func (u *utility) zipToPackage(filepath string) packageDescription {
 	description := packageDescription{}
 	name := manifestValues[ManifestLabelPackageName]
 	version := manifestValues[ManifestLabelPackageVersion]
+
+	if len(name) <= 0 {
+		fmt.Println("Could not find name in manifest using zip to identify name.")
+
+		zipName := path.Base(filepath)
+		r, _ := regexp.Compile(regexPackageZip)
+		if r.MatchString(zipName) {
+			matches := r.FindAllStringSubmatch(zipName, -1)
+			name = matches[0][1]
+			version = matches[0][2]
+		}
+	}
 
 	if len(name) > 0 {
 		description = packageDescription{Name: name, Version: version, DownloadName: name + "-" + version + ".zip"}
@@ -153,6 +167,7 @@ func (u *utility) sortPackages(packages []packageDescription, ascending bool, ad
 		compare := strings.Compare(from, to)
 
 		if ascending {
+			//nolint
 			if compare > 0 {
 				return true
 			}
@@ -176,7 +191,8 @@ func (u *utility) packageNameVersion(packageName string) (string, string) {
 	packageVersion := ""
 
 	packageName = strings.TrimSpace(packageName)
-	if strings.Index(packageName, ":") != -1 {
+
+	if strings.Contains(packageName, ":") {
 		splits := strings.Split(packageName, ":")
 		packageName = splits[0]
 		packageVersion = splits[1]

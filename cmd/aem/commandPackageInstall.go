@@ -6,21 +6,6 @@ import (
 	"regexp"
 )
 
-func newPackageInstallCommand() commandPackageInstall {
-	return commandPackageInstall{
-		From:             "",
-		ToGroup:          "",
-		ToName:           configDefaultInstance,
-		u:                new(utility),
-		projectStructure: newProjectStructure(),
-		showLog:          false,
-		forceDownload:    false,
-		yes:              false,
-		noInstall:        false,
-		http:             new(httpRequests),
-	}
-}
-
 type commandPackageInstall struct {
 	From             string
 	ToName           string

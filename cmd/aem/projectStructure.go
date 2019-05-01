@@ -22,6 +22,7 @@ const (
 	configInstanceGitIgnoreContent = "# Ignore everything in this directory\n*\n# Except this file\n!.gitignore"
 	configAemLogFile               = "logs/error.log"
 	configAemPidFile               = "conf/cq.pid"
+	configLicenseFile              = "license.properties"
 )
 
 func newProjectStructure() projectStructure {
@@ -68,6 +69,10 @@ func (p *projectStructure) getInstanceDirLocation() string {
 	return p.appendSlash(dir) + p.appendSlash(configAemInstanceDir)
 }
 
+func (p *projectStructure) getLicenseLocation() string {
+	return p.appendSlash(p.getInstanceDirLocation()) + configLicenseFile
+}
+
 func (p *projectStructure) appendSlash(path string) string {
 	if path[len(path)-1:] != "/" {
 		path = path + "/"
@@ -95,7 +100,7 @@ func (p *projectStructure) getUnpackDirLocation() string {
 }
 
 func (p *projectStructure) normalizeString(input string) string {
-	r, _ := regexp.Compile("(\\s|\\W)")
+	r, _ := regexp.Compile(`(\s|\W)`)
 	return r.ReplaceAllString(input, "-")
 }
 
@@ -211,4 +216,16 @@ func (p *projectStructure) copy(src, dst string) (int64, error) {
 	defer destination.Close()
 	nBytes, err := io.Copy(destination, source)
 	return nBytes, err
+}
+
+func (p *projectStructure) writeTextFile(path, content string) (int, error) {
+	bytes := 0
+	f, err := p.fs.Create(path)
+
+	if err == nil {
+		defer f.Close()
+		bytes, err = f.WriteString(content)
+	}
+
+	return bytes, err
 }

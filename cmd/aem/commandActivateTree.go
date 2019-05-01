@@ -5,17 +5,6 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-func newActivateTreeCommand() commandActivateTree {
-	return commandActivateTree{
-		Name:             configDefaultInstance,
-		Path:             "",
-		utility:          new(utility),
-		i:                new(instance),
-		projectStructure: new(projectStructure),
-		http:             new(httpRequests),
-	}
-}
-
 type commandActivateTree struct {
 	Name             string
 	Path             string

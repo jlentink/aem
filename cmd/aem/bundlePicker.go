@@ -73,7 +73,7 @@ func (b *bundlePicker) picker(instance aemInstanceConfig) []bundle {
 		case "d":
 			return b.getSelectedBundles(selected, bundles.Data)
 		default:
-			r, _ := regexp.Compile("\\d")
+			r, _ := regexp.Compile(`\d`)
 			if r.MatchString(input) {
 				id, _ := strconv.ParseInt(input, 10, 32)
 				if int(id) < len(bundles.Data)-1 && id > 0 {

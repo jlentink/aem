@@ -7,6 +7,7 @@ type packagesFeed struct {
 	Total   int                  `json:"total"`
 }
 
+//nolint
 type packageDescription struct {
 	Pid             string        `json:"pid"`
 	Path            string        `json:"path"`
@@ -52,6 +53,7 @@ type packageDescription struct {
 	ProviderLink    string        `json:"providerLink,omitempty"`
 }
 
+//nolint
 type crxResponse struct {
 	XMLName   xml.Name `xml:"crx"`
 	Text      string   `xml:",chardata"`

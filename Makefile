@@ -1,6 +1,6 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows clean
 BUILT_HASH=$(shell git rev-parse HEAD)
-BUILT_VERSION=1.2.1
+BUILT_VERSION=1.2.2
 
 all: clean get test code-test coverage build
 
@@ -11,16 +11,25 @@ clean:
 	@-rm build/windows/aem.exe
 	@-rm build/osx/aem
 	@-rm *.zip
+	@-rm *.tbz2
+	@-rm *.tgz
 
-code-test: golint vet fmt gocyclo ineffassign
+code-test: golint vet fmt gocyclo ineffassign goreportcard
 
 get:
 	@cd cmd/aem && go get -t -v
 	go get github.com/fzipp/gocyclo
 	go get github.com/gordonklaus/ineffassign
+	go get github.com/gojp/goreportcard
 
 golint:
 	@cd cmd/aem && golint -set_exit_status
+
+golintci:
+	golangci-lint run
+
+goreportcard:
+	goreportcard-cli -t 100
 
 gocyclo:
 	@cd cmd/aem && test -z $$(gocyclo -over 15 .)
@@ -49,7 +58,8 @@ LDFLAGS=-ldflags "-w -s -X main.BuiltHash=${BUILT_HASH} -X main.BuiltVersion=${B
 linux:
 	@cd cmd/aem && env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ../../build/linux/aem
 	@cp README.md ./build/linux/
-	@cd build/linux/ && zip ../../linux-v${BUILT_VERSION}.zip aem README.md
+	@cd build/linux/ && tar -jcf ../../linux-v${BUILT_VERSION}.tbz2 aem README.md
+	@cd build/linux/ && tar -zcf ../../linux-v${BUILT_VERSION}.tgz aem README.md
 
 osx:
 	@cd cmd/aem && env GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ../../build/osx/aem

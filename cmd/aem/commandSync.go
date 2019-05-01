@@ -9,17 +9,6 @@ import (
 	"time"
 )
 
-func newSyncCommand() commandSync {
-	return commandSync{
-		instanceName:     configDefaultInstance,
-		instanceGroup:    "",
-		utility:          new(utility),
-		projectStructure: new(projectStructure),
-		disableLog:       false,
-		bin:              "aemsync",
-	}
-}
-
 type commandSync struct {
 	instanceName     string
 	instanceGroup    string
