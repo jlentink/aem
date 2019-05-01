@@ -17,10 +17,12 @@ clean:
 code-test: golint vet fmt gocyclo ineffassign goreportcard
 
 get:
-	@cd cmd/aem && go get -t -v
+	go get golang.org/x/tools/cmd/cover
+	go get -u golang.org/x/lint/golint
 	go get github.com/fzipp/gocyclo
 	go get github.com/gordonklaus/ineffassign
 	go get github.com/gojp/goreportcard/cmd/goreportcard-cli
+	@cd cmd/aem && go get -t -v
 
 golint:
 	@cd cmd/aem && golint -set_exit_status
@@ -38,6 +40,7 @@ vet:
 	@cd cmd/aem && go vet -all
 
 fmt:
+	gofmt -l .
 	@cd cmd/aem && test -z $$(go fmt)
 
 ineffassign:

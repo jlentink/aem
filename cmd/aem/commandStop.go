@@ -42,7 +42,6 @@ func (c *commandStop) checkEnvironmentName() {
 	}
 }
 
-
 func (c *commandStop) Execute(args []string) {
 	c.getOpt(args)
 	c.checkEnvironmentName()

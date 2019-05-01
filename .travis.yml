@@ -3,7 +3,5 @@ language: go
 go:
   - 1.11.x
 install:
-  - go get golang.org/x/tools/cmd/cover
   - go get github.com/danieljoos/wincred
   - go get github.com/konsorten/go-windows-terminal-sequences
-  - go get -u golang.org/x/lint/golint
