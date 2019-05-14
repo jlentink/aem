@@ -2,7 +2,8 @@
 BUILT_HASH=$(shell git rev-parse HEAD)
 BUILT_VERSION=1.0.0rc1
 
-all: clean get test code-test coverage build
+#test
+all: clean get code-test coverage build
 
 clean:
 	@-cd cmd/aem && rm test-report.out
