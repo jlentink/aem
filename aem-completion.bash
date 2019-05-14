@@ -158,6 +158,12 @@ __aem_completions()
             COMPREPLY+=("--oak=")
             COMPREPLY+=("--verbose")
             ;;
+        vlt-copy)
+            COMPREPLY+=("--from=")
+            COMPREPLY+=("--to=")
+            COMPREPLY+=("--path=")
+            COMPREPLY+=("--verbose")
+            ;;
         help)
             ;;
         *)

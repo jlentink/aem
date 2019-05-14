@@ -28,6 +28,7 @@ type configStruct struct {
 	ContentPackages    []string            `toml:"contentPackages"`
 	OakOptions         []string            `toml:"oakOptions"`
 	OakVersion         string              `toml:"oakDefaultVersion"`
+	VltPaths           []string            `toml:"vltSyncPaths"`
 }
 
 type aemInstanceConfig struct {

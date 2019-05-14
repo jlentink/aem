@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestSliceUtil_InSliceInt64(t *testing.T) {
 	type args struct {
@@ -89,6 +91,60 @@ func TestSliceUtil_InSliceString(t *testing.T) {
 			s := &sliceUtil{}
 			if got := s.inSliceString(tt.args.slice, tt.args.needle); got != tt.want {
 				t.Errorf("sliceUtil.inSliceString() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_sliceUtil_sliceCompareString(t *testing.T) {
+	type args struct {
+		s1 []string
+		s2 []string
+	}
+	tests := []struct {
+		name string
+		s    *sliceUtil
+		args args
+		want bool
+	}{
+		{
+			name: "Equal slices",
+			args: args{
+				s1: []string{"1", "2"},
+				s2: []string{"1", "2"},
+			},
+			want: true,
+		},
+		{
+			name: "different length long 1",
+			args: args{
+				s1: []string{"1", "2"},
+				s2: []string{"1", "2", "3"},
+			},
+			want: false,
+		},
+		{
+			name: "different length long 2",
+			args: args{
+				s1: []string{"1", "2", "3"},
+				s2: []string{"1", "2"},
+			},
+			want: false,
+		},
+		{
+			name: "Different value",
+			args: args{
+				s1: []string{"1", "2", "3"},
+				s2: []string{"1", "2", "4"},
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &sliceUtil{}
+			if got := s.sliceStringCompare(tt.args.s1, tt.args.s2); got != tt.want {
+				t.Errorf("sliceUtil.sliceCompareString() = %v, want %v", got, tt.want)
 			}
 		})
 	}

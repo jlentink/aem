@@ -343,6 +343,20 @@ Available options:
     -n, --name=value  Name of instance to use oak-run on
     -o, --oak=value   Define version of oak-run to use
     -v, --verbose     Enable verbose
+     
+### vlt-copy
+Copy content from one instance to the other. Set in the config under `vltSyncPaths` the paths your
+want to copy or provide a path via `-p` or `--path`. Prepend the path with an exclamation mark (!) to do
+an recursive copy.
+
+
+Available options:
+
+    -f, --from=value  Instance to data from
+    -p, --path=value  Use path instead of configuration paths
+    -t, --to=value    Instance to data to (default: local-author)
+    -v, --verbose     Enable verbose
+ 
 
 ### version
 Output the current version of the aem command line interface you are using.
@@ -421,7 +435,6 @@ Thank all authors and contributors of these libraries. For publishing such great
 - more code testing and coverage
 - combine with lazybones
 - Features
-  - pull/copy content over vlt
   - thread dumps
   - sling tracer
 

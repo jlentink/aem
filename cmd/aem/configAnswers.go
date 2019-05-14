@@ -264,6 +264,16 @@ contentPackages = [
 	"assets:1.0.0",
 ]
 
+#
+# Paths to copy when using vlt-sync
+# Prepend path with ! to prevent recursive copy.
+#
+# e.g:
+#   None recursive: "!/content/some-path/"
+#   Recursive:      "/content/some-other-path/"
+#
+vltSyncPaths = [
+]
 
 #
 # Additional packages to auto install.
@@ -292,10 +302,6 @@ jvm-options = [
     "-server",
     "-Xmx4048m",
     "-XX:MaxPermSize=512M",
-    "-Djava.awt.headless=true",
-    "-Dcom.sun.management.jmxremote.port=3233",
-    "-Dcom.sun.management.jmxremote.ssl=false",
-    "-Dcom.sun.management.jmxremote.authenticate=false"
 ]
 
 #

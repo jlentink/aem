@@ -21,6 +21,7 @@ var (
 
 		&commandSync{},
 		&commandPullContent{},
+		&commandVltCopy{},
 
 		&commandInit{},
 		&commandVersion{},
