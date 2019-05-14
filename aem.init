@@ -1,0 +1,52 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          aem
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: AEM wrapper
+# Description:       Enable service to start stop aem.
+### END INIT INFO
+
+dir="/var/aem/"
+cmd="aem"
+user="aem"
+
+name=`basename $0`
+stdout_log="/var/log/$name.log"
+stderr_log="/var/log/$name.err"
+
+
+case "$1" in
+    start)
+    echo "Starting $name"
+    cd "$dir"
+    if [ -z "$user" ]; then
+        sudo $cmd start >> "$stdout_log" 2>> "$stderr_log" &
+    else
+        sudo -u "$user" $cmd start  >> "$stdout_log" 2>> "$stderr_log" &
+    fi
+    ;;
+    stop)
+    echo "Stoping $name"
+    cd "$dir"
+    if [ -z "$user" ]; then
+        sudo $cmd stop >> "$stdout_log" 2>> "$stderr_log" &
+    else
+        sudo -u "$user" $cmd start  >> "$stdout_log" 2>> "$stderr_log" &
+    fi
+    ;;
+    restart)
+    echo "unsuported"
+    ;;
+    status)
+    echo "unsuported"
+    ;;
+    *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+
+exit 0

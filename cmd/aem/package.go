@@ -53,6 +53,11 @@ type packageDescription struct {
 	ProviderLink    string        `json:"providerLink,omitempty"`
 }
 
+func (p *packageDescription) valueForIndex(i int) string {
+	//panic("implement me")
+	return ""
+}
+
 //nolint
 type crxResponse struct {
 	XMLName   xml.Name `xml:"crx"`

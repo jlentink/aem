@@ -18,11 +18,14 @@ var (
 		&commandStop{},
 		&commandOpen{},
 		&commandLog{},
+
 		&commandSync{},
+		&commandPullContent{},
+
 		&commandInit{},
 		&commandVersion{},
 		&commandPassword{},
-		&commandPullContent{},
+		&commandSetupCheck{},
 
 		&commandPackagesList{},
 		&commandPackageInstall{},

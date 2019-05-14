@@ -92,6 +92,29 @@ var surveyLicenseQuestions = []*survey.Question{
 	},
 }
 
+var surveyLazybonesQuestions = []*survey.Question{
+	{
+		Name: "Lazybones",
+		Prompt: &survey.Confirm{
+			Message: "Want to generate a project with lazybones?",
+			Help:    "Use Lazybones (https://github.com/Adobe-Consulting-Services/lazybones-aem-templates) to generate new project?",
+		},
+		Validate: survey.Required,
+	},
+}
+
+var surveyLazybonesTemplateQuestions = []*survey.Question{
+	{
+		Name: "LazybonesTemplate",
+		Prompt: &survey.Input{
+			Message: "What template do you want to use for lazybones?",
+			Default: "aem-multimodule-project",
+			Help:    "Default one provided by ACS is: aem-multimodule-project.",
+		},
+		Validate: survey.Required,
+	},
+}
+
 var surveyAdditionalPackagesQuestions = []*survey.Question{
 	{
 		Name: "AdditionalPackage",
@@ -127,6 +150,8 @@ var surveyAdditionalPackagesQuestions = []*survey.Question{
 func newConfigAnswers() configAnswers {
 	return configAnswers{
 		UseKeyRing:         true,
+		Lazybones:          false,
+		LazybonesTemplate:  "aem-multimodule-project",
 		JarLocation:        "",
 		JarUsername:        "admin",
 		JarPassword:        "admin",
@@ -140,6 +165,8 @@ func newConfigAnswers() configAnswers {
 type configAnswers struct {
 	UseKeyRing         bool
 	MorePackages       bool
+	Lazybones          bool
+	LazybonesTemplate  string
 	JarURL             string
 	JarLocationType    string
 	JarLocation        string

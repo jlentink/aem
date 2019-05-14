@@ -51,6 +51,28 @@ func (c *commandPackageDownload) Execute(args []string) {
 		pkgPicker := newPackagePicker()
 		packages := pkgPicker.picker(fromInstance)
 		c.downloadPackages(fromInstance, packages)
+
+		//packages := c.http.getListForInstance(fromInstance)
+		//bla := itemPicker{pageSize: 25}
+		//list := make([]IItemPickerItem, len(packages))
+		//bla.setItems(list)
+		//gaap := bla.pick()
+		//fmt.Printf("%+v", gaap)
+
+		//bla := make([]IItemPickerItem, 0)
+		//
+		//for _, item := range packages {
+		//	bla = append(bla, &item)
+		//}
+		//
+		//for _, item2 := range bla {
+		//	//org, ok := &item2
+		//	//reflect.PtrTo(packageDescription{})
+		//	item2.pnt
+		//	fmt.Printf("%+v", tmp)
+		//	//tmp := packageDescription.(&item2)
+		//}
+
 	}
 }
 

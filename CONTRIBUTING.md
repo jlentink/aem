@@ -8,10 +8,11 @@ Please note we have a code of conduct, please follow it in all your interactions
 ## Pull Request Process
 
 
-1. Update the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations and container parameters.
+1. Update the README.md with details of changes to the interface, this includes new environment variables, useful file locations parameters.
 2. Increase the version numbers in any examples files and the README.md to the new version that this
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
 3. When you do a pull request it will be reviewed and merged in when approved
+4. Make sure it passes all tests predefined in the Makefile
 
 ## Code of Conduct
 

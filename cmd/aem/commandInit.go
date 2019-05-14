@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/AlecAivazis/survey"
 	"github.com/pborman/getopt/v2"
 	"github.com/spf13/afero"
+	"os"
+	"os/exec"
 )
 
 type commandInit struct {
@@ -38,10 +39,23 @@ func (c *commandInit) GetHelp() string {
 }
 
 func (c *commandInit) survey() string {
+
 	answers := newConfigAnswers()
 	answers.AdditionalPackages = []string{}
 
-	err := survey.Ask(surveyInitialQuestionsQuestions, &answers)
+	_, err := exec.LookPath("lazybones")
+	if err == nil {
+		err = survey.Ask(surveyLazybonesQuestions, &answers)
+		validateSurveyInput(err)
+
+		if answers.Lazybones {
+			err = survey.Ask(surveyLazybonesTemplateQuestions, &answers)
+			validateSurveyInput(err)
+			c.executeLazybones(answers.LazybonesTemplate)
+		}
+	}
+
+	err = survey.Ask(surveyInitialQuestionsQuestions, &answers)
 
 	validateSurveyInput(err)
 
@@ -103,6 +117,17 @@ func (c *commandInit) Execute(args []string) {
 		exitProgram("\".aem\" file found; please edit to update the values.\n")
 	}
 
+}
+
+func (c *commandInit) executeLazybones(template string) {
+	cmd := exec.Command("lazybones", "create", template, ".")
+	cmd.Dir = c.p.getWorkDir()
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		exitProgram("")
+	}
 }
 
 func (c *commandInit) getOpt(args []string) {

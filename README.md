@@ -360,33 +360,15 @@ Set the AEM_ME variable to change the default instance choosen by start, stop an
 export AEM_ME=<instance name>
 ```  
 
-## Todo
+#### Instance name resolution
+There are 2 ways to influence the default instance that is selected when not specified as parameter command. The resolution order can be seen below:
 
-- Code cleanup
-- more code testing and coverage
-- Features
-  - pull/copy content over vlt
-  - thread dumps
-  - sling tracer
+1. AEM_ME Variable
+2. config file "defaultInstance" variable
+3. default name set in application "local-author"
 
-
-## Built With
-
-* [Getopt](https://github.com/pborman/getopt/tree/master/v2) - For command line parsing
-* [Go-pretty](github.com/jedib0t/go-pretty/table) - For table printing
-* [Logrus](https://github.com/sirupsen/logrus) - For logging
-* [Afero](https://github.com/spf13/afero) - For FileSystem Abstraction
-* [Progressbar](https://github.com/schollz/progressbar) - For progress bar printing
-* [Go-humanize](https://github.com/dustin/go-humanize) - Formatters for units to human friendly sizes
-* [Go-keyring](https://github.com/zalando/go-keyring) - Store password in operating systems own keyring
-* [TOML](https://github.com/BurntSushi/toml) - TOML parser for Golang with reflection.
-* [Tail](https://github.com/hpcloud/tail) - For tailing files
-* [Aemsync](https://github.com/gavoja/aemsync) - Syncing files to the JCR
-* [Survey](https://github.com/AlecAivazis/survey) - For console survey
-
-Thank all authors and contributors of these libraries. For publishing such great software.
-
-## Bash Completion
+## Shell scripts
+### Bash Completion
 
 Terminals are fun. Completion in the terminal is even more fun. Add `aem-completion.bash` to you completion folder.
 or execute the following commands
@@ -401,6 +383,47 @@ or execute the following commands
 Or replace the last line with the following if you use [zshell](https://sourceforge.net/p/zsh/code/ci/master/tree/)
 
     echo "source ~/.bash-completion/aem-completion.bash" >> ~/.zshrc
+    
+### Init script (System V)
+This script helps with automaticly booting and stopping AEM when the server starts or stops.
+
+Place the init script in the right location. To set it ready for usage.
+
+	cp aem.init /etc/init.d/aem
+	chown root: /etc/init.d/aem
+	chmod u+x /etc/init.d/aem
+
+Enable to start automaticly at boot with:
+
+	update-rc.d aem defaults
+	update-rc.d aem enable	
+
+## Built With
+
+* [Getopt](https://github.com/pborman/getopt/tree/master/v2) - For command line parsing
+* [Go-pretty](github.com/jedib0t/go-pretty/table) - For table printing
+* [Logrus](https://github.com/sirupsen/logrus) - For logging
+* [Afero](https://github.com/spf13/afero) - For FileSystem Abstraction
+* [Progressbar](https://github.com/schollz/progressbar) - For progress bar printing
+* [Go-humanize](https://github.com/dustin/go-humanize) - Formatters for units to human friendly sizes
+* [Go-keyring](https://github.com/zalando/go-keyring) - Store password in operating systems own keyring
+* [TOML](https://github.com/BurntSushi/toml) - TOML parser for Golang with reflection.
+* [Tail](https://github.com/hpcloud/tail) - For tailing files
+* [Aemsync](https://github.com/gavoja/aemsync) - Syncing files to the JCR
+* [Survey](https://github.com/AlecAivazis/survey) - For console survey
+* [Go-colortext](github.com/daviddengcn/go-colortext) - Color text printing
+
+Thank all authors and contributors of these libraries. For publishing such great software.
+
+## Todo
+
+- Code cleanup
+- more code testing and coverage
+- combine with lazybones
+- Features
+  - pull/copy content over vlt
+  - thread dumps
+  - sling tracer
 
 ## Contributing
 
