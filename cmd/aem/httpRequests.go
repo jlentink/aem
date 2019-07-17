@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -51,6 +52,7 @@ func (a *httpRequests) getPassword(aeminstance aemInstanceConfig) string {
 }
 
 func (a *httpRequests) buildPackage(instance aemInstanceConfig, pkg packageDescription) {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Create client
 	client := &http.Client{}
@@ -93,6 +95,7 @@ func (a *httpRequests) downloadPackage(instance aemInstanceConfig, aemPackage pa
 }
 
 func (a *httpRequests) uploadPackage(instance aemInstanceConfig, aemPackage packageDescription, force bool, install bool) (*crxResponse, error) {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	projectStructure := newProjectStructure()
 
 	fileLocation := projectStructure.getLocationForPackage(aemPackage)
@@ -138,6 +141,8 @@ func (a *httpRequests) uploadPackage(instance aemInstanceConfig, aemPackage pack
 
 func (a *httpRequests) getSystemInformation(instance aemInstanceConfig) (*systemInformation, error) {
 
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
 	systemInformation := &systemInformation{}
 
 	// Create client
@@ -172,7 +177,7 @@ func (a *httpRequests) deactivatePage(instance aemInstanceConfig, path string) i
 }
 
 func (a *httpRequests) activateDeactivePage(instance aemInstanceConfig, mode string, path string) int {
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField("path", path)
@@ -197,7 +202,7 @@ func (a *httpRequests) activateDeactivePage(instance aemInstanceConfig, mode str
 }
 
 func (a *httpRequests) getListForInstance(instance aemInstanceConfig) []packageDescription {
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	// Create client
 	client := &http.Client{}
 
@@ -226,6 +231,7 @@ func (a *httpRequests) getListForInstance(instance aemInstanceConfig) []packageD
 }
 
 func (a *httpRequests) downloadFile(filepath string, url string, username string, password string, forceDownload bool) error {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	u := new(utility)
 	if u.Exists(filepath) && !forceDownload {
 		fmt.Printf("Found \"%s\" file skipping...\n", filepath)
@@ -286,6 +292,7 @@ func (a *httpRequests) downloadFile(filepath string, url string, username string
 }
 
 func (a *httpRequests) downloadSize(req *http.Request) uint64 {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	oldMethod := req.Method
 	req.Method = http.MethodHead
 
@@ -309,7 +316,7 @@ func (a *httpRequests) downloadSize(req *http.Request) uint64 {
 }
 
 func (a *httpRequests) activateTree(instance aemInstanceConfig, path string) bool {
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField("cmd", "activate")
@@ -340,7 +347,7 @@ func (a *httpRequests) activateTree(instance aemInstanceConfig, path string) boo
 }
 
 func (a *httpRequests) listBundles(instance aemInstanceConfig) *bundlesFeed {
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	params := url.Values{}
 	params.Set(bundleFormActionField, bundleRefresh)
 	body := bytes.NewBufferString(params.Encode())
@@ -374,7 +381,7 @@ func (a *httpRequests) listBundles(instance aemInstanceConfig) *bundlesFeed {
 }
 
 func (a *httpRequests) bundleStopStart(instance aemInstanceConfig, bundle bundle, status string) *bundleResponse {
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField(bundleFormActionField, status)
@@ -408,7 +415,7 @@ func (a *httpRequests) bundleStopStart(instance aemInstanceConfig, bundle bundle
 
 func (a *httpRequests) bundleUninstall(instance aemInstanceConfig, bundle bundle) *bundleResponse {
 	// cURL (POST http://localhost:4505/system/console/bundles/name%20of%20bundle)
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	params := url.Values{}
 	params.Set(bundleFormActionField, bundleUninstall)
 	body := bytes.NewBufferString(params.Encode())
@@ -461,7 +468,7 @@ func (a *httpRequests) createFilePart(w *multipart.Writer, path string, fieldnam
 }
 
 func (a *httpRequests) bundleInstall(instance aemInstanceConfig, bundleFile string, command string, bundleStartLevel int) bool {
-
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	body := &bytes.Buffer{}
 
 	writer := multipart.NewWriter(body)
