@@ -1,12 +1,13 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows clean
 BUILT_HASH=$(shell git rev-parse HEAD)
 BUILT_VERSION=1.0.0rc2
+LDFLAGS=-ldflags "-w -s -X internal.commands.versionBuild=${BUILT_HASH} -X internal.commands.versionMain=${BUILT_VERSION}"
 
 all: clean get test code-test coverage build
 
 clean:
-	@-cd cmd/aem && rm test-report.out
-	@-cd cmd/aem && rm coverage.out
+	@-rm test-report.out
+	@-rm coverage.out
 	@-rm build/linux/aem
 	@-rm build/windows/aem.exe
 	@-rm build/osx/aem
@@ -14,7 +15,7 @@ clean:
 	@-rm *.tbz2
 	@-rm *.tgz
 
-code-test: golint vet fmt gocyclo ineffassign goreportcard
+code-test: lint vet fmt cyclo ineffassign card
 
 get:
 	go get golang.org/x/tools/cmd/cover
@@ -26,55 +27,58 @@ get:
 	go get github.com/client9/misspell/cmd/misspell
 	go get github.com/spf13/pflag
 	go get github.com/daviddengcn/go-colortext
-	@cd cmd/aem && go get -t -v
+	go get github.com/inconshreveable/mousetrap
+	go get -t -v
 
-golint:
-	@cd cmd/aem && golint -set_exit_status
+lint:
+	golint -set_exit_status ./...
 
 golintci:
 	golangci-lint run
 
-goreportcard:
-	goreportcard-cli -t 100
 
-gocyclo:
-	@cd cmd/aem && test -z $$(gocyclo -over 15 .)
+card:
+	goreportcard-cli -v -t 100
+
+cyclo:
+	@test -z $$(gocyclo -over 15 .)
 
 vet:
-	@cd cmd/aem && go vet -all
+	@go vet -all
 
 fmt:
 	gofmt -l .
-	@cd cmd/aem && test -z $$(go fmt)
+	@test -z $$(go fmt)
 
 ineffassign:
-	@cd cmd/aem && test -z $$(ineffassign .)
+	@test -z $$(ineffassign .)
 
 test:
-	@cd cmd/aem && export UNIT_TEST=1; go test -json > test-report.out
+	@export UNIT_TEST=1; go test -json > test-report.out
 
 coverage:
-	@cd cmd/aem && export UNIT_TEST=1; go test -coverprofile=coverage.out
+	@export UNIT_TEST=1; go test -coverprofile=coverage.out
 
 scan:
 	/usr/local/sonar-scanner/bin/sonar-scanner
 
 build: linux osx windows
 
-LDFLAGS=-ldflags "-w -s -X main.BuiltHash=${BUILT_HASH} -X main.BuiltVersion=${BUILT_VERSION}"
 linux:
-	@cd cmd/aem && env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ../../build/linux/aem
+	env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ./build/linux/aem
+	upx --brute ./build/linux/aem
 	@cp README.md ./build/linux/
 	@cd build/linux/ && tar -jcf ../../linux-v${BUILT_VERSION}.tbz2 aem README.md
 	@cd build/linux/ && tar -zcf ../../linux-v${BUILT_VERSION}.tgz aem README.md
 
 osx:
-	@cd cmd/aem && env GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ../../build/osx/aem
+	env GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ./build/osx/aem
+	upx --brute ./build/osx/aem
 	@cp README.md ./build/osx/
 	@cd build/osx/ && zip ../../osx-v${BUILT_VERSION}.zip aem README.md
 
 windows:
-	@cd cmd/aem && env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ../../build/windows/aem.exe
+	env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ./build/windows/aem.exe
 	@cp README.md ./build/windows/
 	@cd build/windows/ && zip ../../windows-v${BUILT_VERSION}.zip aem.exe README.md
 

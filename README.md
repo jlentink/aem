@@ -1,4 +1,4 @@
-# AEMcli (command line interface)
+# aemCLI (command line interface)
 
 [![](https://travis-ci.org/jlentink/aem.svg?branch=master)](https://travis-ci.org/jlentink/aem)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=jlentink_aem&metric=alert_status)](https://sonarcloud.io/dashboard?id=jlentink_aem)
@@ -52,21 +52,70 @@ Place the executable in for example `"C:\Program files\aem"` and follow the [tut
 
 The command line tool is broken up in different sub-commands. The commands can be used by typing `aem <command>` eg. `aem start` All the possible commands are listed below. Every command has the option to request help on the specifications of that commands. eg. `aem start -h`
 
-### help
-Use help to get a list + description of possible sub-commands.
 
-Available options:
-   
-    No options available
+    Available Commands:
+      bash-completion    Generate bash completion for aemCLI
+      build              Build application
+      bundle-install     Install bundle
+      bundle-list        List bundles
+      bundle-start       Start bundle
+      bundle-stop        Stop bundle
+      deploy             Deploy to server(s)
+      help               Help about any command
+      init               Init new project in current directory
+      invalidate         Invalidate path's on dispatcher
+      log                List error log or application log
+      oak-check          Run oak check
+      oak-checkpoints    Run oak checkpoints
+      oak-compact        Run oak compact
+      oak-console        Run oak console
+      oak-explorer       Run oak explorer
+      open               Open URL for Adobe Experience Manager instance in browser
+      package-copy       Copy packages from one instance to another
+      package-download   List packages
+      package-install    Install uploaded package
+      package-list       List packages
+      package-rebuild    package rebuild
+      package-upload     Upload package to aem
+      passwords          Set passwords into your keychain
+      pull-content       Pull content in from instance via packages
+      setup-check        Check if all needed binaries are available for all functionality
+      start              Start Adobe Experience Manager instance
+      stop               stop Adobe Experience Manager instance
+      system-information Get system information from Adobe Experience Manager instance
+      version            Show version of aemcli
+
+### bash-completion
+Create a bash completion script for to use on your system.<br />
+**E.g: aem bash > aem-completion.bash**
+
+
+	Usage:
+	  aem bash-completion [flags]
+	
+	Aliases:
+	  bash-completion, bash
+	
+	Flags:
+	  -h, --help          help for bash-completion
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+
 
 ### init
 Creates a config file. The config file allows you to define the instances used during the project. (E.g. local author, local dev etc...)
-
-Available options:
-
-     -d, --dump              Write default config file without setup questions
-     -f, --force-overwrite   Overwrite current configuration
-     -v, --verbose           Enable verbose
+	
+	Usage:
+	  aem init [flags]
+	
+	Flags:
+	  -f, --force   Force override of current configuration
+	  -h, --help    help for init
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 
 
@@ -79,13 +128,20 @@ By default, the start commands also checks that you are not starting the aem ser
 
 start is compatible with the start and stop scripts provided by Adobe.
 
-Available options:
 
-     -d, --download    Force new download
-     -f, --foreground  Don't detach aem from current tty.
-     -n, --name=value  Instance to start
-     -r, --root        Allow root
-     -v, --verbose     Enable verbose
+	Usage:
+	  aem start [flags]
+	
+	Flags:
+	  -r, --allow-root    Allow to start as root user (UID: 0)
+	  -d, --download      Force re-download
+	  -f, --foreground    on't detach aem from current tty
+	  -h, --help          help for start
+	  -p, --ignore-pid    Ignore existing PID file and start AEM
+	  -n, --name string   Instance to start (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 
 ### stop
@@ -93,180 +149,289 @@ Stop AEM instances running.
 
 stop is compatible with the start and stop scripts provided by Adobe.
 
-Available options:
-
-    -n, --name=value  Instance to stop
-    -v, --verbose     Enable verbose
-    
-### sync
-sync triggers [aemsync](https://github.com/gavoja/aemsync). [aemsync](https://github.com/gavoja/aemsync) needs to be installed on your system to make this work. In the .aem file, you can define which directories to watch. and sync. When using `instance-name` one instance will be used to sync the content to. When using `instance-group` all instances that are defined in the group will be synced Eg. `aem sync -g local` can sync to the local author and publish.
-
-Available options:
-
-    -g, --instance-group=value  Instance group to sync to.
-    -i, --instance-name=value   Instance to sync to
-    -l, --disable-log           Disable AEM log output
-    -s, --aemsync=value         Path to AEM sync executable
-    -v, --verbose               Enable verbose
+	Usage:
+	  aem stop [flags]
+	
+	Flags:
+	  -h, --help          help for stop
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### pull-content
 Download the content packages defined in the configuration file and upload them to an instance of your choosing. Handy to sync content to developer instances during the project.
 
-Available options:
-
-    -d, --force-download  Force new download
-    -f, --from-name=value Pull content from instance
-    -t, --to-name=value   Push content to instance
-    -v, --verbose         Enable verbose
+	Usage:
+	  aem pull-content [flags]
+	
+	Aliases:
+	  pull-content, cpull
+	
+	Flags:
+	  -b, --build         Build before download
+	  -f, --from string   Instance to copy from
+	  -h, --help          help for pull-content
+	  -t, --to string     Destination Instance (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
     
 ### passwords
 You don't want to store passwords in a git repository for secure development. Although the tool allows you to define passwords in the configuration file there is an option to safely store the passwords in the key-ring (password managers eg. OSX key-chain) of the operating system. Use the passwords command to populate or update the stored passwords.
 
-Available options:
-
-    -a, --all          Update all
-    -g, --group=value  Instance group to update.
-    -n, --name=value   Instance to update.
-    -v, --verbose      Enable verbose
-    -y, --yes          Confirm all questions with yes
+	Usage:
+	  aem passwords [flags]
+	
+	Aliases:
+	  passwords, password, passwd
+	
+	Flags:
+	  -h, --help          help for passwords
+	  -n, --name string   Update specific instance
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### system-information or sysinfo
 Display information about an instance. This feature is only available from AEM 6.4 or newer.
 
-Available options:
-
-    -n, --name=value  Show system information of instance
-    -v, --verbose     Enable verbose
+	Usage:
+	  aem system-information [flags]
+	
+	Aliases:
+	  system-information, sys, sysinfo
+	
+	Flags:
+	  -r, --allow-root    Allow to start as root user (UID: 0)
+	  -d, --download      Force re-download
+	  -f, --foreground    on't detach aem from current tty
+	  -h, --help          help for system-information
+	      --ignore-pid    Ignore existing PID file and start AEM
+	  -n, --name string   Instance to start (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### package-list
 List the packages installed on an instance of your choosing.
 
-Available options:
-
-    -n, --name=value  List packages on instance
-    -v, --verbose     Enable verbose
+	Usage:
+	  aem package-list [flags]
+	
+	Aliases:
+	  package-list, plist
+	
+	Flags:
+	  -h, --help          help for package-list
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### package-rebuild
 Rebuild a package on an instance of your choosing.
 
-Available options:
-
-    -f, --from-name=value  Rebuild package on instance
-    -p, --package=value    Define package package:version (no interactive mode)
-    -v, --verbose          Enable verbose
+	Usage:
+	  aem package-rebuild [flags]
+	
+	Flags:
+	  -h, --help             help for package-rebuild
+	  -n, --name string      Instance to rebuild package on (default "local-author")
+	  -p, --package string   Package to rebuild
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### package-download
 Download a package from any instance defined in the configuration file
 
-Available options:
-
-     -d, --force-download  Force new download
-     -f, --from=value      Download package from instance
-     -p, --package=value   Define package package:version (no interactive mode)
-     -v, --verbose         Enable verbose
+	Usage:
+	  aem package-download [flags]
+	
+	Aliases:
+	  package-download, pdownload, pdown
+	
+	Flags:
+	  -h, --help             help for package-download
+	  -n, --name string      Instance to stop (default "local-author")
+	  -p, --package string   Package name. E.g: name, name:1.0.0
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### package-copy
 Copy a package from one instance to another. The destination can be a group to easily install to all members of a group or a single target.
 
-Available options:
-
-      -d, --force-download  Force new download
-      -f, --from-name=value Copy package from instance
-      -g, --to-group=value  Push package to group
-      -l, --log             Show AEM log output
-      -p, --package=value   Packages (multiple use comma separated list.)
-      -t, --to-name=value   Push package to instance
-      -v, --verbose         Enable verbose
-      
+	Usage:
+	  aem package-copy [flags]
+	
+	Flags:
+	  -f, --from string      Instance to copy from
+	  -h, --help             help for package-copy
+	  -p, --package string   Package to copy
+	  -t, --to string        Destination Instance
+	
+	Global Flags:
+	  -v, --verbose   verbose output      
+	  
 ### package-install
 Install a package you have locally to one instance or to a complete group.
 The name of the package will be extracted from the manifest in the package
 
-Available options:
-
-    -g, --to-group=value  Install package to group
-    -n, --no-install      Do not install package
-    -p, --package=value   Package to install (path to file)
-    -t, --to-name=value   Install package to instance
-    -v, --verbose         Enable verbose
-    -y, --yes             Skip confirmation
+	Usage:
+	  aem package-install [flags]
+	
+	Flags:
+	  -h, --help             help for package-install
+	  -n, --name string      Instance to rebuild package on (default "local-author")
+	  -p, --package string   Package to rebuild
+	
+	Global Flags:
+	  -v, --verbose   verbose output
     
 ### bundle-list
 List all bundles on an instance.
 
-Available options:
-
-    -n, --name=value  List packages on instance
-    -v, --verbose     Enable verbose
+	Usage:
+	  aem bundle-list [flags]
+	
+	Aliases:
+	  bundle-list, blist
+	
+	Flags:
+	  -h, --help          help for bundle-list
+	  -n, --name string   Instance to list bundles off (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 ### bundle-start
 Start a bundle based by its symbolic name
 
-Available options:
-
-    -b, --bundle=value  Bundle to start (Symbolic name)
-    -n, --name=value    Start bundle on instance
-    -v, --verbose       Enable verbose
+	Usage:
+	  aem bundle-start [flags]
+	
+	Aliases:
+	  bundle-start, bstart
+	
+	Flags:
+	  -b, --bundle string   Instance group to install bundle on
+	  -g, --group string    Instance group to install bundle on
+	  -h, --help            help for bundle-start
+	  -n, --name string     Instance to install bundle on (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 
 ### bundle-stop
 Stop a bundle based on it's symbolic name
 
-Available options:
+	Usage:
+	  aem bundle-stop [flags]
+	
+	Aliases:
+	  bundle-stop, bstop
+	
+	Flags:
+	  -b, --bundle string   Instance group to install bundle on
+	  -g, --group string    Instance group to install bundle on
+	  -h, --help            help for bundle-stop
+	  -n, --name string     Instance to install bundle on (default "local-author")
 
-    -b, --bundle=value  Bundle to stop (Symbolic name)
-    -n, --name=value    Stop bundle on instance
-    -v, --verbose       Enable verbose
+	Global Flags:
+	  -v, --verbose   verbose output
 
 
 ### bundle-install
 Install a bundle based on it's symbolic name
 
-Available options:
-
-    -b, --bundle=value      Path to bundle (.jar)
-    -n, --name=value        Install bundle on instance (default: local-author)
-    -s --startlevel=value   Bundle start level (default: 20)
-    -v, --verbose           Enable verbose
+	Usage:
+	  aem bundle-install [flags]
+	
+	Aliases:
+	  bundle-install, binstall
+	
+	Flags:
+	  -b, --bundle string   Instance group to install bundle on
+	  -g, --group string    Instance group to install bundle on
+	  -h, --help            help for bundle-install
+	  -l, --level string    Bundle start level (default "20")
+	  -n, --name string     Instance to install bundle on (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 
 ### log
 See the log file for an instance running locally. Use -f to follow the log file for more log information coming in. use CTRL+c to stop following the log file.
 
-Available options:
+	Usage:
+	  aem log [flags]
+	
+	Aliases:
+	  log, logs
+	
+	Flags:
+	  -f, --follow        Actively follow lines when they come in
+	  -h, --help          help for log
+	      --list          List available log files
+	  -l, --log string    Which file(s) to follow (default "error.log")
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
-    -f, --follow      Follow log file. Show new lines if they come in.
-    -n, --name=value  Show local log for instance
-    -v, --verbose     Enable verbose
-
-### activate-page
+### replication-page
 Activate or deactivate a page. use the page path to define which page to activate.
 
-Available options:
+	Usage:
+	  aem replication-page [flags]
+	
+	Flags:
+	  -a, --activate       Activate page
+	  -d, --deactivate     Deactivate
+	  -g, --group string   Instance group to (de)activate page on
+	  -h, --help           help for replication-page
+	  -n, --name string    Instance to (de)activate page on (default "local-author")
+	  -p, --path string    Path to (de)activate
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
-    -a, --activate     Activate
-    -d, --deactivate   Deactivate
-    -g, --group=value  Instances to target based on group
-    -n, --name=value   Instance that need page activation
-    -p, --page=value   Page to activate
-    -v, --verbose      Enable verbose
 
 ### activate-tree 
 Activate a piece of the tree. use the path to define which part.
 
-Available options:
+	Usage:
+	  aem activate-tree [flags]
+	
+	Flags:
+	  -g, --group string         Instance group to (de)activate page on
+	  -h, --help                 help for activate-tree
+	  -d, --ignore-deactivated   Ignore Deactivated
+	  -n, --name string          Instance to (de)activate page on (default "local-author")
+	  -o, --only-modified        Only Modified
+	  -p, --path string          Path to (de)activate
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
-    -i, --instance=value  Activate Tree on instance (Default: local-author)
-    -p, --path=value      Path to activate
-    -v, --verbose         Enable verbose
 
 ### open
 Open a browser to the instance of your choosing.
 
-Available options:
+	Usage:
+	  aem open [flags]
+	
+	Flags:
+	  -h, --help          help for open
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
-    -n, --name=value  Instance to open. (default: local-author)
-    -v, --verbose     Enable verbose
 
 ### oak-check
 Run oak-run check on instance. Check the FileStore for inconsistencies. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
@@ -275,12 +440,18 @@ Use ```--aem``` to define which AEM version you are running this against and aem
 When you wan't to define a specific version use the ```--oak```. 
 The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
 
-Available options:
+	Usage:
+	  aem oak-check [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for oak-check
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
-    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on
-    -o, --oak=value   Define version of oak-run to use
-    -v, --verbose     Enable verbose
 
 
 ### oak-checkpoints
@@ -291,13 +462,17 @@ When you wan't to define a specific version use the ```--oak```.
 The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
 
 
-Available options:
-
-    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -d, --rm          Define version of oak-run to use
-    -n, --name=value  Name of instance to use oak-run on
-    -o, --oak=value   Define version of oak-run to use
-    -v, --verbose     Enable verbose
+	Usage:
+	  aem oak-checkpoints [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for oak-checkpoints
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
 
 ### oak-compact
@@ -307,12 +482,18 @@ Use ```--aem``` to define which AEM version you are running this against and aem
 When you wan't to define a specific version use the ```--oak```. 
 The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
 
-Available options:
+	Usage:
+	  aem oak-compact [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for oak-compact
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -v, --verbose   verbose output
 
-    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on
-    -o, --oak=value   Define version of oak-run to use
-    -v, --verbose     Enable verbose
 
 
 ### oak-console
@@ -322,13 +503,20 @@ Use ```--aem``` to define which AEM version you are running this against and aem
 When you wan't to define a specific version use the ```--oak```. 
 The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
 
-Available options:
+Usage:
+  aem oak-console [flags]
 
-    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on
-    -o, --oak=value   Define version of oak-run to use
-    -v, --verbose     Enable verbose
-    -w, --write       Enable write mode
+Flags:
+  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+  -h, --help          help for oak-console
+  -m, --metrics       Enables metrics based statistics collection
+  -n, --name string   Instance to stop (default "local-author")
+  -o, --oak string    Define version of oak-run to use
+  -w, --read-write    Connect to repository in read-write mode
+
+Global Flags:
+  -v, --verbose   verbose output
+
 
 ### oak-explore
 Run oak-run explore on instance. Starts a GUI browser based on java swing. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
@@ -337,12 +525,12 @@ Use ```--aem``` to define which AEM version you are running this against and aem
 When you wan't to define a specific version use the ```--oak```. 
 The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
 
-Available options:
-
-    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-    -n, --name=value  Name of instance to use oak-run on
-    -o, --oak=value   Define version of oak-run to use
-    -v, --verbose     Enable verbose
+	Available options:
+	
+	    -a, --aem=value   Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	    -n, --name=value  Name of instance to use oak-run on
+	    -o, --oak=value   Define version of oak-run to use
+	    -v, --verbose     Enable verbose
      
 ### vlt-copy
 Copy content from one instance to the other. Set in the config under `vltSyncPaths` the paths your
@@ -361,9 +549,16 @@ Available options:
 ### version
 Output the current version of the aem command line interface you are using.
 
-Available options:
-   
-    No options available
+	Usage:
+	  aem version [flags]
+	
+	Flags:
+	  -h, --help      help for version
+	  -m, --minimal   Show the minimal version information
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+
 
 ## Environment variables
 
@@ -421,11 +616,12 @@ Enable to start automaticly at boot with:
 * [Progressbar](https://github.com/schollz/progressbar) - For progress bar printing
 * [Go-humanize](https://github.com/dustin/go-humanize) - Formatters for units to human friendly sizes
 * [Go-keyring](https://github.com/zalando/go-keyring) - Store password in operating systems own keyring
+* [Cobra](https://github.com/spf13/cobra) - Commandline library
 * [TOML](https://github.com/BurntSushi/toml) - TOML parser for Golang with reflection.
 * [Tail](https://github.com/hpcloud/tail) - For tailing files
 * [Aemsync](https://github.com/gavoja/aemsync) - Syncing files to the JCR
 * [Survey](https://github.com/AlecAivazis/survey) - For console survey
-* [Go-colortext](github.com/daviddengcn/go-colortext) - Color text printing
+* [Go-colortext](https://github.com/daviddengcn/go-colortext) - Color text printing
 
 Thank all authors and contributors of these libraries. For publishing such great software.
 
