@@ -1,6 +1,6 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows clean
 BUILT_HASH=$(shell git rev-parse HEAD)
-BUILT_VERSION=1.0.0rc2
+BUILT_VERSION=1.0.0rc3
 LDFLAGS=-ldflags "-w -s -X internal.commands.versionBuild=${BUILT_HASH} -X internal.commands.versionMain=${BUILT_VERSION}"
 
 all: clean get test code-test coverage build
