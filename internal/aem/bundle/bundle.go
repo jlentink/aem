@@ -24,6 +24,10 @@ import (
 
 // List bundles on instance
 func List(i *objects.Instance) ([]*Bundle, error) {
+	if !aem.Cnf.ValidateSSL {
+		http.DisableSSLValidation()
+	}
+
 	data := url.Values{}
 	data.Set("name", "foo")
 	data.Add(bundleFormActionField, bundleRefresh)
