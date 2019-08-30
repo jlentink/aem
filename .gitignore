@@ -17,3 +17,6 @@
 /*.zip
 /*.tbz2
 /*.tgz
+/aem
+/aem.toml
+/instances
