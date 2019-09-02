@@ -38,15 +38,15 @@ func (c *commandBundleStart) run(cmd *cobra.Command, args []string) {
 	_, is, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	for idx, i := range is {
 		if idx == 0 && c.bundle == "" {
-			bundleObject, err := bundle.BundleSearch(&i, "Starting")
+			bundleObject, err := bundle.Search(&i, "Starting")
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not list bundles: %s", err.Error())
-				os.Exit(EXIT_ERROR)
+				os.Exit(ExitError)
 			}
 			c.bundle = bundleObject.SymbolicName
 		}
@@ -54,21 +54,21 @@ func (c *commandBundleStart) run(cmd *cobra.Command, args []string) {
 		bndl, err := bundle.Get(&i, c.bundle)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not find bundle on: %s", i.Name)
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 
 		b, err := bundle.Start(&i, bndl)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not start bundle %s", err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 
 		if b.StateRaw == 32 {
 			output.Printf(output.NORMAL, "\U00002705 Bundle %s - %s\n", b.SymbolicName, bundle.BundleRawState[b.StateRaw])
-			os.Exit(EXIT_NORMAL)
+			os.Exit(ExitNormal)
 		}
 		output.Printf(output.NORMAL, "\U0001F631 Bundle %s - %s\n", b.SymbolicName, bundle.BundleRawState[b.StateRaw])
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 
 	}
 }

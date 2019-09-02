@@ -36,13 +36,13 @@ func (c *commandWatch) run(cmd *cobra.Command, args []string) {
 	_, _, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not start watcher: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 	defer watcher.Close()
 

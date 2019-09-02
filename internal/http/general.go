@@ -37,7 +37,7 @@ func DisableSSLValidation() {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 }
 
-// URLToUrlString  convert the url to string
-func URLToUrlString(u *url.URL) string {
+// URLToURLString  convert the url to string
+func URLToURLString(u *url.URL) string {
 	return fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, u.RequestURI())
 }

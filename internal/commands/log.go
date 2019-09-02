@@ -43,7 +43,7 @@ func (c *commandLog) list(i *objects.Instance) {
 	files, err := aem.ListLogFiles(i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not list log files (%s)", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	output.Printf(output.NORMAL, "Available log files.\n")
@@ -52,14 +52,14 @@ func (c *commandLog) list(i *objects.Instance) {
 			output.Printf(output.NORMAL, " - %s\n", file.Name())
 		}
 	}
-	os.Exit(EXIT_NORMAL)
+	os.Exit(ExitNormal)
 }
 
 func (c *commandLog) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if c.listLogs {

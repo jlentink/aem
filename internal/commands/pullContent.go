@@ -41,13 +41,13 @@ func (c *commandPullContent) run(cmd *cobra.Command, args []string) {
 	cnf, f, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	_, t, errorString, err := getConfigAndInstance(c.toInstanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
@@ -62,13 +62,13 @@ func (c *commandPullContent) run(cmd *cobra.Command, args []string) {
 		path, err := project.GetLocationForPackage(pd)
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 
 		crx, err := pkg.Upload(*t, path, true, true)
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 		output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 	}

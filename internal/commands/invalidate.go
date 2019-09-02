@@ -41,21 +41,21 @@ func (c *commandInvalidate) run(cmd *cobra.Command, args []string) {
 	var instances []objects.Instance
 	if len(c.instanceName) == 0 && len(c.instanceGroup) == 0 {
 		output.Print(output.NORMAL, "Please set group (-g|--group) or instance(-n|--name) to sent invalidate to.\n")
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 	if len(c.instanceName) > 0 {
 		_, i, errorString, err := getConfigAndInstance(c.instanceName)
 		instances = append(instances, *i)
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 	} else {
 		_, is, errorString, err := getConfigAndGroupWithRole(c.instanceGroup, aem.RoleDispatcher)
 		instances = is
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 
 	}
@@ -70,7 +70,7 @@ func (c *commandInvalidate) run(cmd *cobra.Command, args []string) {
 			err := dispatcher.Invalidate(&instance, p)
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not invalidate path: %s\n", err.Error())
-				os.Exit(EXIT_ERROR)
+				os.Exit(ExitError)
 			}
 		}
 	}

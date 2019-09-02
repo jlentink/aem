@@ -46,13 +46,13 @@ func (c *commandSystemInformation) run(cmd *cobra.Command, args []string) {
 	_, currentInstance, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	sysInfo, err := systeminformation.GetSystemInformation(currentInstance)
 	if err != nil {
 		output.Printf(output.NORMAL, "Error while fetching system information (%s)", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	fmt.Printf("Adobe Experience manager:\n")

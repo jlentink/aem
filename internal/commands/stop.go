@@ -35,12 +35,12 @@ func (c *commandStop) run(cmd *cobra.Command, args []string) {
 	_, currentInstance, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	err = aem.Stop(*currentInstance)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not stop instance. (%s)", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 }

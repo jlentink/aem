@@ -36,12 +36,12 @@ func (c *commandPackageInstall) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if len(c.packageName) <= 0 {
 		installPackageSearch(i)
-		os.Exit(EXIT_NORMAL)
+		os.Exit(ExitNormal)
 	}
 
 	installPackage(i, c.packageName)

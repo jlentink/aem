@@ -41,19 +41,19 @@ func (c *commandBundleInstall) run(cmd *cobra.Command, args []string) {
 	_, is, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if !project.Exists(c.bundle) {
 		output.Printf(output.NORMAL, "Could not find bundle at: %s", c.bundle)
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	for _, i := range is {
 		err := bundle.Install(&i, c.bundle, c.startLevel)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not install bundle %s", err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 	}
 }

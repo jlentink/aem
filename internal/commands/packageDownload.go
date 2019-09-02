@@ -42,7 +42,7 @@ func (c *commandPackageDownload) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if len(c.packageName) > 0 {
@@ -57,7 +57,7 @@ func (c *commandPackageDownload) downloadByName(i *objects.Instance) {
 
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not download package. %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 }
 
@@ -65,7 +65,7 @@ func (c *commandPackageDownload) downloadSearch(i *objects.Instance) {
 	pkgs, err := pkg.PackageList(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not retrieve list from server %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	templates := &promptui.SelectTemplates{

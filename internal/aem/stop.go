@@ -74,7 +74,7 @@ func Stop(i objects.Instance) error {
 		}
 		fmt.Print(".")
 		time.Sleep(1 * time.Second)
-		retry += 1
+		retry++
 	}
 	fmt.Print("\n")
 	return err

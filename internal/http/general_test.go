@@ -39,7 +39,7 @@ func Test_URLToUrlString(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.args.u, _ = url.Parse(tt.args.s)
-			if got := URLToUrlString(tt.args.u); got != tt.want {
+			if got := URLToURLString(tt.args.u); got != tt.want {
 				t.Errorf("urlToUrlString() = %v, want %v", got, tt.want)
 			}
 		})

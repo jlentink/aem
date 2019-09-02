@@ -39,7 +39,7 @@ func (c *commandPackageList) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	t := table.NewWriter()
@@ -48,7 +48,7 @@ func (c *commandPackageList) run(cmd *cobra.Command, args []string) {
 	pkgs, err := _package.PackageList(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not get list from instance: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 
 	}
 	for i, cP := range pkgs {

@@ -2,7 +2,7 @@ package objects
 
 import "encoding/xml"
 
-//nolint
+//CrxResponse descriptive struct
 type CrxResponse struct {
 	XMLName   xml.Name `xml:"crx"`
 	Text      string   `xml:",chardata"`

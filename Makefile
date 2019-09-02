@@ -1,5 +1,5 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows clean
-BUILT_HASH=$(shell git rev-parse HEAD)
+BUILT_HASH=$(shell git rev-parse --short HEAD)
 BUILT_VERSION=1.0.0rc3
 LDFLAGS=-ldflags "-w -s -X internal.commands.versionBuild=${BUILT_HASH} -X internal.commands.versionMain=${BUILT_VERSION}"
 
@@ -8,26 +8,16 @@ all: clean get test code-test coverage build
 clean:
 	@-rm test-report.out
 	@-rm coverage.out
-	@-rm build/linux/aem
-	@-rm build/windows/aem.exe
-	@-rm build/osx/aem
+	@-rm -rf build/*
 	@-rm *.zip
 	@-rm *.tbz2
 	@-rm *.tgz
+	@-rm aem
 
 code-test: lint vet fmt cyclo ineffassign card
 
 get:
-	go get golang.org/x/tools/cmd/cover
-	go get -u golang.org/x/lint/golint
-	go get github.com/fzipp/gocyclo
-	go get github.com/gordonklaus/ineffassign
-	go get github.com/alecthomas/gometalinter
-	go get github.com/gojp/goreportcard/cmd/goreportcard-cli
-	go get github.com/client9/misspell/cmd/misspell
-	go get github.com/spf13/pflag
-	go get github.com/daviddengcn/go-colortext
-	go get github.com/inconshreveable/mousetrap
+	echo "get"
 
 lint:
 	golint -set_exit_status ./...

@@ -31,7 +31,7 @@ func GetPlainWithHeaders(uri string, username string, password string, header []
 
 // GetWithHeaders Do a get request with url.URL
 func GetWithHeaders(uri *url.URL, header []Header) ([]byte, error) {
-	req, _ := http.NewRequest(http.MethodGet, URLToUrlString(uri), nil)
+	req, _ := http.NewRequest(http.MethodGet, URLToURLString(uri), nil)
 	for _, h := range header {
 		req.Header.Add(h.Key, h.Value)
 	}

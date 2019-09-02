@@ -15,7 +15,7 @@ func rebuildPackage(i *objects.Instance, p string) {
 	_, err := pkg.RebuildbyName(i, p)
 	if err != nil {
 		output.Printf(output.NORMAL, "Rebuild failed: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 }
 
@@ -24,7 +24,7 @@ func installPackage(i *objects.Instance, p string) {
 	_, err := pkg.InstallByName(i, p)
 	if err != nil {
 		output.Printf(output.NORMAL, "Install failed: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 }
 
@@ -32,7 +32,7 @@ func rebuildPackageSearch(i *objects.Instance) {
 	pkgs, err := pkg.PackageList(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not retrieve list from server %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	templates := &promptui.SelectTemplates{
@@ -75,7 +75,7 @@ func rebuildPackageSearch(i *objects.Instance) {
 	_, err = pkg.Rebuild(i, &pkgs[in])
 	if err != nil {
 		output.Printf(output.NORMAL, "Rebuild failed: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 }
 
@@ -83,7 +83,7 @@ func installPackageSearch(i *objects.Instance) {
 	pkgs, err := pkg.PackageList(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not retrieve list from server %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	templates := &promptui.SelectTemplates{
@@ -126,6 +126,6 @@ func installPackageSearch(i *objects.Instance) {
 	_, err = pkg.Install(i, &pkgs[in])
 	if err != nil {
 		output.Printf(output.NORMAL, "Install failed: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 }

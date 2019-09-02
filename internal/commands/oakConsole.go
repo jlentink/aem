@@ -44,13 +44,13 @@ func (c *commandOakConsole) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	instancePath, err := project.GetRunDirLocation(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	oak.SetDefaultVersion(aem.Cnf.OakVersion)

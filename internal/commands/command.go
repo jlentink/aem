@@ -10,8 +10,8 @@ import (
 
 // Exit codes for AEM
 const (
-	EXIT_NORMAL = 0
-	EXIT_ERROR  = 1
+	ExitNormal = 0
+	ExitError  = 1
 )
 
 // Command internal interface for commands

@@ -32,11 +32,11 @@ func (c *commandInit) preRun(cmd *cobra.Command, args []string) {
 func (c *commandInit) run(cmd *cobra.Command, args []string) {
 	if aem.ConfigExists() && !c.force {
 		output.Print(output.NORMAL, "Instance file already exists. (use force to override)\n")
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	output.Printf(output.NORMAL, "Writing sample file.")
 	aem.WriteConfigFile()
-	os.Exit(EXIT_NORMAL)
+	os.Exit(ExitNormal)
 
 }

@@ -36,12 +36,12 @@ func (c *commandPackageRebuild) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if len(c.packageName) <= 0 {
 		rebuildPackageSearch(i)
-		os.Exit(EXIT_NORMAL)
+		os.Exit(ExitNormal)
 	}
 
 	rebuildPackage(i, c.packageName)

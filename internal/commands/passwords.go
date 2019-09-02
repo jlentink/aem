@@ -35,21 +35,21 @@ func (c *commandPassword) run(cmd *cobra.Command, args []string) {
 	cnf, err := getConfig()
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not get config file: %s", err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if len(c.instanceName) > 0 {
 		_, i, errorString, err := getConfigAndInstance(c.instanceName)
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 		cnf.Instances = []objects.Instance{*i}
 	}
 
 	if !cnf.KeyRing {
 		output.Printf(output.NORMAL, "keyring is disabled. use passwords from the aem.toml file.")
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	for _, i := range cnf.Instances {
@@ -60,7 +60,7 @@ func (c *commandPassword) run(cmd *cobra.Command, args []string) {
 		err := i.SetPassword(pw[:len(pw)-1])
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not update password: %s", err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 	}
 }

@@ -43,7 +43,7 @@ func (c *commandPackageUpload) run(cmd *cobra.Command, args []string) {
 	_, i, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	for _, instance := range i {
@@ -51,7 +51,7 @@ func (c *commandPackageUpload) run(cmd *cobra.Command, args []string) {
 		crx, err := pkg.Upload(instance, c.path, c.install, c.force)
 		if err != nil {
 			output.Printf(output.NORMAL, "\U0000274C %s\n", err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 		output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 	}

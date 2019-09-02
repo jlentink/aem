@@ -185,8 +185,8 @@ func constructInstallBody(bundlePath, level string) (*bytes.Buffer, string, erro
 	return body, writer.FormDataContentType(), nil
 }
 
-// BundleSearch searches through bundles on instance
-func BundleSearch(i *objects.Instance, label string) (*Bundle, error) {
+// Search searches through bundles on instance
+func Search(i *objects.Instance, label string) (*Bundle, error) {
 	bundles, err := List(i)
 	if err != nil {
 		return nil, fmt.Errorf("could not retrieve bundle list from server %s", err.Error())
@@ -224,7 +224,7 @@ func BundleSearch(i *objects.Instance, label string) (*Bundle, error) {
 	in, _, err := prompt.Run()
 
 	if err != nil {
-		return nil, fmt.Errorf("prompt failed %v\n", err)
+		return nil, fmt.Errorf("prompt failed %v", err)
 	}
 
 	return bundles[in], nil

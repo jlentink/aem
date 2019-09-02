@@ -51,5 +51,5 @@ func (c *commandSetupCheck) run(cmd *cobra.Command, args []string) {
 	for _, bin := range setup.Check() {
 		c.printStatus(bin)
 	}
-	os.Exit(EXIT_NORMAL)
+	os.Exit(ExitNormal)
 }

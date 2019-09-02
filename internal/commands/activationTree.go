@@ -41,19 +41,19 @@ func (c *commandActivateTree) run(cmd *cobra.Command, args []string) {
 	_, is, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor})
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	if len(c.path) == 0 {
 		output.Printf(output.NORMAL, "no path provided")
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	for _, i := range is {
 		body, err := replication.ActivateTree(&i, c.path, c.ignoreDeactivate, c.onlyModified)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not activate tree: %s", err.Error())
-			os.Exit(EXIT_ERROR)
+			os.Exit(ExitError)
 		}
 		output.Printf(output.NORMAL, "\U00002705 tree activated: %s\n", c.path)
 		output.Printf(output.VERBOSE, "%s", body)

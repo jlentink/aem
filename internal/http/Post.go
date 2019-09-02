@@ -49,7 +49,7 @@ func PostWithHeaders(uri *url.URL, body *bytes.Buffer, header []Header) ([]byte,
 	if nil == body {
 		body = &bytes.Buffer{}
 	}
-	req, _ := http.NewRequest(http.MethodPost, URLToUrlString(uri), body)
+	req, _ := http.NewRequest(http.MethodPost, URLToURLString(uri), body)
 	req.Header.Add(headers.CacheControl, configNoCache)
 	for _, h := range header {
 		req.Header.Add(h.Key, h.Value)

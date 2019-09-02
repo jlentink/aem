@@ -41,7 +41,7 @@ func (c *commandReplicationPage) run(cmd *cobra.Command, args []string) {
 	_, is, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor})
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(EXIT_ERROR)
+		os.Exit(ExitError)
 	}
 
 	for _, i := range is {
@@ -49,14 +49,14 @@ func (c *commandReplicationPage) run(cmd *cobra.Command, args []string) {
 			_, err := replication.Activate(&i, c.path)
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not activate page: %s", err.Error())
-				os.Exit(EXIT_ERROR)
+				os.Exit(ExitError)
 			}
 			output.Printf(output.NORMAL, "\U00002705 Page activated: %s\n", c.path)
 		} else if c.deactivate {
 			_, err := replication.Deactivate(&i, c.path)
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not activate page: %s", err.Error())
-				os.Exit(EXIT_ERROR)
+				os.Exit(ExitError)
 			}
 			output.Printf(output.NORMAL, "\U00002705 Page deactivated: %s\n", c.path)
 		}

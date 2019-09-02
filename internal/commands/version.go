@@ -34,5 +34,5 @@ func (c *commandVersion) preRun(cmd *cobra.Command, args []string) {
 
 func (c *commandVersion) run(cmd *cobra.Command, args []string) {
 	output.Print(output.NORMAL, version.DisplayVersion(c.verbose, c.minimal))
-	os.Exit(EXIT_NORMAL)
+	os.Exit(ExitNormal)
 }

@@ -1,6 +1,6 @@
 package objects
 
-//nolint
+//SystemInformation descriptive struct
 type SystemInformation struct {
 	HealthChecks interface{} `json:"Health Checks"`
 	Instance     struct {

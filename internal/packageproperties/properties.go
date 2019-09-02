@@ -10,13 +10,13 @@ const (
 	CreatedBy             = "createdBy"
 	AllowIndexDefinitions = "allowIndexDefinitions"
 	Name                  = "name"
-	GroupId               = "groupId"
+	GroupID               = "groupId"
 	Version               = "version"
 	PackageType           = "packageType"
 	RequiresRoot          = "requiresRoot"
 	Group                 = "group"
 	Description           = "description"
-	ArtifactId            = "artifactId"
+	ArtifactID            = "artifactId"
 )
 
 type propertiesXML struct {
