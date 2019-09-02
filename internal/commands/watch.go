@@ -19,7 +19,7 @@ type commandWatch struct {
 func (c *commandWatch) setup() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:    "watch",
-		Short:  "Watch file changes and deploy",
+		Short:  "Watch file changes and deploy (Work in progress)",
 		PreRun: c.preRun,
 		Run:    c.run,
 	}
