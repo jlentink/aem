@@ -5,5 +5,13 @@ go:
 env:
   - GO111MODULE=on
 install:
-  - go get github.com/danieljoos/wincred
-  - go get github.com/konsorten/go-windows-terminal-sequences
+  - (
+    go get golang.org/x/lint/golint
+    go get github.com/kisielk/errcheck
+    go get honnef.co/go/tools/cmd/staticcheck
+    go get github.com/client9/misspell/cmd/misspell
+    go get mvdan.cc/unparam
+    go get github.com/mgechev/revive
+    go get github.com/danieljoos/wincred
+    go get github.com/konsorten/go-windows-terminal-sequences
+  )
