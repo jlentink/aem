@@ -28,7 +28,6 @@ get:
 	go get github.com/spf13/pflag
 	go get github.com/daviddengcn/go-colortext
 	go get github.com/inconshreveable/mousetrap
-	go get -t -v
 
 lint:
 	golint -set_exit_status ./...
