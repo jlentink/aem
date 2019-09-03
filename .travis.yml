@@ -3,8 +3,9 @@ language: go
 go:
   - 1.12.x
 env:
-  - GO111MODULE=on
-  - TRAVISBUILD=on
+  global:
+    - GO111MODULE=on
+    - TRAVISBUILD=on
 install:
   - go get golang.org/x/lint/golint
   - go get github.com/fzipp/gocyclo
