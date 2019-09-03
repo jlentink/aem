@@ -14,7 +14,7 @@ clean:
 	@-rm *.tgz
 	@-rm aem
 
-code-test: lint vet fmt cyclo ineffassign card
+code-test: lint vet fmt cyclo ineffassign
 
 get:
 	echo "get"
@@ -70,4 +70,3 @@ windows:
 	env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ./build/windows/aem.exe
 	@cp README.md ./build/windows/
 	@cd build/windows/ && zip ../../windows-v${BUILT_VERSION}.zip aem.exe README.md
-
