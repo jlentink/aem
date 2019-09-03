@@ -8,6 +8,7 @@ install:
   - go get golang.org/x/lint/golint
   - go get github.com/fzipp/gocyclo
   - go get github.com/gordonklaus/ineffassign
+  - go get github.com/gojp/goreportcard/cmd/goreportcard-cli
   - go get github.com/gojp/goreportcard
   - go get github.com/danieljoos/wincred
   - go get github.com/konsorten/go-windows-terminal-sequences
