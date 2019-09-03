@@ -56,7 +56,7 @@ build: linux osx windows
 
 linux:
 	env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ./build/linux/aem
-ifeq ($(TRAVISBUILD),off)
+ifeq ($(TRAVISBUILD),"off")
 	upx --brute ./build/linux/aem
 endif
 	@cp README.md ./build/linux/
@@ -65,7 +65,7 @@ endif
 
 osx:
 	env GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ./build/osx/aem
-ifeq ($(TRAVISBUILD),off)
+ifeq ($(TRAVISBUILD),"off")
 	upx --brute ./build/osx/aem
 endif
 	@cp README.md ./build/osx/
