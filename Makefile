@@ -2,6 +2,7 @@
 BUILT_HASH=$(shell git rev-parse --short HEAD)
 BUILT_VERSION=1.0.0rc4
 LDFLAGS=-ldflags "-w -s -X internal.commands.versionBuild=${BUILT_HASH} -X internal.commands.versionMain=${BUILT_VERSION}"
+TRAVISBUILD?=off
 
 all: clean get test code-test coverage build
 
@@ -55,14 +56,18 @@ build: linux osx windows
 
 linux:
 	env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ./build/linux/aem
+ifeq ($(TRAVISBUILD),off)
 	upx --brute ./build/linux/aem
+endif
 	@cp README.md ./build/linux/
 	@cd build/linux/ && tar -jcf ../../linux-v${BUILT_VERSION}.tbz2 aem README.md
 	@cd build/linux/ && tar -zcf ../../linux-v${BUILT_VERSION}.tgz aem README.md
 
 osx:
 	env GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ./build/osx/aem
+ifeq ($(TRAVISBUILD),off)
 	upx --brute ./build/osx/aem
+endif
 	@cp README.md ./build/osx/
 	@cd build/osx/ && zip ../../osx-v${BUILT_VERSION}.zip aem README.md
 
