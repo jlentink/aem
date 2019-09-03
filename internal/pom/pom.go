@@ -44,7 +44,7 @@ func (p *Pom) basePath() string {
 
 // GetModules gets the modules available in the pom file
 func (p *Pom) GetModules() []string {
-	m := xmlquery.Find(p.doc, "//project//modules//module")
+	m := xmlquery.Find(p.doc, "/project/modules/module")
 	var modules []string
 	if m == nil {
 		return modules
