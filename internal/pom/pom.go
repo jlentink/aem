@@ -30,8 +30,9 @@ func (p *Pom) Open(path string) error {
 	return err
 }
 
+//nolint - for later use
 func (p *Pom) hasParent() bool {
-	if g := xmlquery.FindOne(p.doc, "//project//parent"); g != nil {
+	if g := xmlquery.FindOne(p.doc, "/project/parent"); g != nil {
 		return true
 	}
 	return false
