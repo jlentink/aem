@@ -24,6 +24,7 @@ func downloadSize(req *http.Request) (uint64, error) {
 		output.Print(output.VERBOSE, "unable to create http client\n")
 		return 0, errors.New("unable to create http client")
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		req.Method = method

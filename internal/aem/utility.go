@@ -42,9 +42,5 @@ func isURL(s string) bool {
 	}
 
 	r, _ := regexp.Compile(`(?i)^http(s?)://`)
-	if r.MatchString(s) {
-		return true
-	}
-
-	return false
+	return r.MatchString(s)
 }

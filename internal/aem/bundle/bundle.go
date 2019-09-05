@@ -170,7 +170,7 @@ func Delete(i *objects.Instance) {
 func constructInstallBody(bundlePath, level string) (*bytes.Buffer, string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writer.WriteField("action", "install")
+	writer.WriteField(bundleFormActionField, bundleInstall)
 	writer.WriteField("bundlestartlevel", level)
 
 	part, _ := writer.CreateFormFile("bundlefile", filepath.Base(bundlePath))

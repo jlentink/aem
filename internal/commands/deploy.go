@@ -101,6 +101,7 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
 	}
 
 	for _, i := range is {
+		i := i
 		switch a.Kind() {
 		case pom.Bundle:
 			bundle.Install(&i, a.CompletePath(), "20")

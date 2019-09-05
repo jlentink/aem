@@ -50,6 +50,7 @@ func (c *commandActivateTree) run(cmd *cobra.Command, args []string) {
 	}
 
 	for _, i := range is {
+		i := i
 		body, err := replication.ActivateTree(&i, c.path, c.ignoreDeactivate, c.onlyModified)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not activate tree: %s", err.Error())

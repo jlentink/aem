@@ -21,10 +21,7 @@ const (
 // ConfigExists is there a config available
 func ConfigExists() bool {
 	path, _ := project.GetConfigFileLocation()
-	if project.Exists(path) {
-		return true
-	}
-	return false
+	return project.Exists(path)
 }
 
 // Render 's the template to a string

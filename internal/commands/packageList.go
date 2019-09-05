@@ -53,6 +53,7 @@ func (c *commandPackageList) run(cmd *cobra.Command, args []string) {
 		e := output.UnixTime(cP.LastModified)
 		tt := ""
 		if e != nil {
+			//nolint
 			tt = fmt.Sprintf("%s", e.UTC())
 		}
 		t.AppendRow([]interface{}{i, cP.Name, cP.Version, cP.Group, humanize.Bytes(uint64(cP.Size)), tt})

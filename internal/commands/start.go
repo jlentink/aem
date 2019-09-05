@@ -54,6 +54,7 @@ func (c *commandStart) run(cmd *cobra.Command, args []string) {
 	}
 
 	for _, currentInstance := range instances {
+		currentInstance := currentInstance
 		if aem.PidExists(currentInstance) && !c.ignorePid {
 			p, _ := project.GetPidFileLocation(currentInstance)
 			output.Printf(output.NORMAL, "Pid already in place. AEM properly already running. (%s)", p)

@@ -3,18 +3,18 @@ package version
 import "fmt"
 
 var (
-	versionMain  = "1.0.0"
-	versionBuild = "no-build-hash"
+	Main  = "1.0.0"
+	Build = "no-build-hash"
 )
 
 // GetVersion Get version for application
 func GetVersion() string {
-	return versionMain
+	return Main
 }
 
 // GetBuild Get build hash for application
 func GetBuild() string {
-	return versionBuild
+	return Build
 }
 
 // DisplayVersion returns version string for application

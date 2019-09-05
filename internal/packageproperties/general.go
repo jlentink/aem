@@ -27,10 +27,10 @@ func Open(location string) (*Properties, error) {
 	for _, file := range reader.File {
 		if file.Name == propertiesPath {
 			properties, err := file.Open()
-			defer properties.Close()
 			if err != nil {
 				return nil, err
 			}
+			defer properties.Close()
 			return parseProperties(properties)
 		}
 	}

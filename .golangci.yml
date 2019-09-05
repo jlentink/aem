@@ -247,4 +247,4 @@ issues:
   new-from-rev: REV
 
   # Show only new issues created in git patch with set file path.
-  new-from-patch: ./.golangresult.diff
+  new-from-patch: golangresult.diff

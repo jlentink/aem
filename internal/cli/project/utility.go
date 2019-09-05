@@ -53,7 +53,8 @@ func appendSlash(path string) string {
 	return path
 }
 
-func removeSlash(path string) string {
+// Remove slash from end of path
+func RemoveSlash(path string) string {
 	if len(path) == 1 && path == `/` || len(path) == 0 {
 		return ``
 	}

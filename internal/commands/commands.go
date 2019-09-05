@@ -38,7 +38,6 @@ var (
 		&commandOakConsole{},
 		&commandReplicationPage{},
 		&commandActivateTree{},
-		&commandWatch{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}
 )

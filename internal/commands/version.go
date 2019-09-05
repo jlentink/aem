@@ -7,11 +7,6 @@ import (
 	"os"
 )
 
-var (
-	versionMain  = "1.0.0rc1"
-	versionBuild = "no-build-hash"
-)
-
 type commandVersion struct {
 	verbose bool
 	minimal bool

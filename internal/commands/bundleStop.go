@@ -42,6 +42,7 @@ func (c *commandBundelStop) run(cmd *cobra.Command, args []string) {
 	}
 
 	for idx, i := range is {
+		i:= i
 		if idx == 0 && c.bundle == "" {
 			bundleObject, err := bundle.Search(&i, "Stopping")
 			if err != nil {

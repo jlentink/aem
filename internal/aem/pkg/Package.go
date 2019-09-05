@@ -48,10 +48,12 @@ func list(i objects.Instance) ([]objects.Package, error) {
 	for i, cPkg := range packageResultList.Results {
 		if cPkg.Created > 0 {
 			tt := output.UnixTime(cPkg.Created)
+			//nolint
 			packageResultList.Results[i].CreatedStr = fmt.Sprintf("%s", tt.UTC())
 		}
 		if cPkg.LastModified > 0 {
 			tt := output.UnixTime(cPkg.LastModified)
+			//nolint
 			packageResultList.Results[i].LastModifiedByStr = fmt.Sprintf("%s", tt.UTC())
 		}
 
@@ -168,6 +170,7 @@ func DownloadWithName(i *objects.Instance, n string) (*objects.Package, error) {
 		return nil, err
 	}
 	for _, cPkg := range pkgs {
+		cPkg := cPkg
 		if strings.ToLower(cPkg.Name) == strings.ToLower(pkgName) && (pkgVersion == "" || pkgVersion == cPkg.Version) {
 			return Download(i, &cPkg)
 		}
@@ -183,6 +186,7 @@ func RebuildbyName(i *objects.Instance, n string) (*objects.Package, error) {
 		return nil, err
 	}
 	for _, cPkg := range pkgs {
+		cPkg := cPkg
 		if strings.ToLower(cPkg.Name) == strings.ToLower(pkgName) && (pkgVersion == "" || pkgVersion == cPkg.Version) {
 			return Rebuild(i, &cPkg)
 		}
@@ -230,6 +234,7 @@ func InstallByName(i *objects.Instance, n string) (*objects.Package, error) {
 		return nil, err
 	}
 	for _, cPkg := range pkgs {
+		cPkg := cPkg
 		if strings.ToLower(cPkg.Name) == strings.ToLower(pkgName) && (pkgVersion == "" || pkgVersion == cPkg.Version) {
 			return Install(i, &cPkg)
 		}

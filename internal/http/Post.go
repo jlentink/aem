@@ -65,6 +65,7 @@ func PostWithHeaders(uri *url.URL, body *bytes.Buffer, header []Header) ([]byte,
 	if err != nil {
 		return []byte{}, err
 	}
+	defer resp.Body.Close()
 
 	rBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

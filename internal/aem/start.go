@@ -47,6 +47,7 @@ func FindJarVersion(configVersion, instanceVersion string, config *objects.Confi
 
 	for _, jar := range config.AemJar {
 		if jar.Version == version {
+			jar := jar
 			return &jar, nil
 		}
 	}

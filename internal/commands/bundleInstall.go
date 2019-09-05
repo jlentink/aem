@@ -50,6 +50,7 @@ func (c *commandBundleInstall) run(cmd *cobra.Command, args []string) {
 	}
 
 	for _, i := range is {
+		i := i
 		err := bundle.Install(&i, c.bundle, c.startLevel)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not install bundle %s", err.Error())
