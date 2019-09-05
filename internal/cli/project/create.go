@@ -36,7 +36,8 @@ func CreateInstanceDir(instance objects.Instance) (string, error) {
 	return instanceDir, nil
 }
 
-func createAemInstallDir(instance objects.Instance) (string, error) {
+// CreateAemInstallDir creates aem install dir
+func CreateAemInstallDir(instance objects.Instance) (string, error) {
 	path, err := GetAemInstallDirLocation(instance)
 	if err != nil {
 		return ``, err

@@ -11,8 +11,6 @@ import (
 
 type commandPullContent struct {
 	verbose        bool
-	dump           bool
-	force          bool
 	instanceName   string
 	toInstanceName string
 	build          bool

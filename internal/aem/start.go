@@ -47,6 +47,7 @@ func FindJarVersion(configVersion, instanceVersion string, config *objects.Confi
 
 	for _, jar := range config.AemJar {
 		if jar.Version == version {
+			jar := jar
 			return &jar, nil
 		}
 	}
@@ -240,8 +241,5 @@ func cleanupPackages(p string, c objects.Config) error {
 // PidExists Does the pid exists?
 func PidExists(i objects.Instance) bool {
 	path, _ := project.GetPidFileLocation(i)
-	if project.Exists(path) {
-		return true
-	}
-	return false
+	return project.Exists(path)
 }

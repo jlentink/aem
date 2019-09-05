@@ -17,22 +17,11 @@ const (
 	instanceEnv         = `AEM_ME`
 )
 
-func joinStrings(s []string) string {
-	returnString := ""
-	for _, path := range s {
-		returnString = returnString + "\t\"" + path + "\",\n"
-	}
-
-	return returnString
-}
 
 // ConfigExists is there a config available
 func ConfigExists() bool {
 	path, _ := project.GetConfigFileLocation()
-	if project.Exists(path) {
-		return true
-	}
-	return false
+	return project.Exists(path)
 }
 
 // Render 's the template to a string

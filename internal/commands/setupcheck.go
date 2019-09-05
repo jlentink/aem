@@ -10,7 +10,6 @@ import (
 
 type commandSetupCheck struct {
 	verbose bool
-	minimal bool
 }
 
 func (c *commandSetupCheck) setup() *cobra.Command {

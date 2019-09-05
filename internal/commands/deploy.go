@@ -101,10 +101,10 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
 	}
 
 	for _, i := range is {
+		i := i
 		switch a.Kind() {
 		case pom.Bundle:
 			bundle.Install(&i, a.CompletePath(), "20")
-			break
 		case pom.Package:
 			resp, err := pkg.Upload(i, a.CompletePath(), true, true)
 			if err != nil {
@@ -115,7 +115,6 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
 				fmt.Printf("Status: \U00002705\n")
 				output.Printf(output.VERBOSE, "%s\n", resp.Response.Data.Log)
 			}
-			break
 		default:
 			output.Printf(output.NORMAL, "Unknown package type. %s", a.Packaging)
 			os.Exit(ExitError)

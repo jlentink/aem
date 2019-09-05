@@ -488,7 +488,6 @@ func TestRemove(t *testing.T) {
 		args       args
 		want       []os.FileInfo
 		wantErr    bool
-		wantMock   bool
 		wantMockRO bool
 		wantFile   bool
 		wantFsErr  bool

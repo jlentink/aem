@@ -54,9 +54,9 @@ func Stop(i objects.Instance) error {
 	}
 
 	if strings.ToLower(runtime.GOOS) == "windows" {
-		err := stopWindows(pid, runPath)
+		winerr := stopWindows(pid, runPath)
 		project.Remove(pidPath)
-		return err
+		return winerr
 	}
 
 	err = stopNix(pid, runPath)

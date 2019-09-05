@@ -13,9 +13,6 @@ import (
 type commandOpen struct {
 	verbose       bool
 	instanceName  string
-	allowRoot     bool
-	foreground    bool
-	forceDownload bool
 }
 
 func (c *commandOpen) setup() *cobra.Command {

@@ -14,7 +14,6 @@ const (
 )
 
 var (
-	currentKey string
 	keyValues  map[string]string
 )
 
@@ -28,10 +27,10 @@ func Open(location string) (*Properties, error) {
 	for _, file := range reader.File {
 		if file.Name == propertiesPath {
 			properties, err := file.Open()
-			defer properties.Close()
 			if err != nil {
 				return nil, err
 			}
+			defer properties.Close()
 			return parseProperties(properties)
 		}
 	}
@@ -53,7 +52,7 @@ func OpenXML(location string) (*Properties, error) {
 }
 
 func parseProperties(r io.Reader) (*Properties, error) {
-	keyValues = make(map[string]string, 0)
+	keyValues = make(map[string]string)
 	d, err := ioutil.ReadAll(r)
 	if err != nil {
 		return nil, err

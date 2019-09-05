@@ -43,6 +43,7 @@ func (c *commandBundleStart) run(cmd *cobra.Command, args []string) {
 
 	for idx, i := range is {
 		if idx == 0 && c.bundle == "" {
+			i := i
 			bundleObject, err := bundle.Search(&i, "Starting")
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not list bundles: %s", err.Error())
@@ -51,6 +52,7 @@ func (c *commandBundleStart) run(cmd *cobra.Command, args []string) {
 			c.bundle = bundleObject.SymbolicName
 		}
 
+		i := i
 		bndl, err := bundle.Get(&i, c.bundle)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not find bundle on: %s", i.Name)

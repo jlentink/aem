@@ -43,6 +43,7 @@ func GetWithHeaders(uri *url.URL, header []Header) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
+	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

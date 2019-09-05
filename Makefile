@@ -1,7 +1,7 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows clean
 BUILT_HASH=$(shell git rev-parse --short HEAD)
-BUILT_VERSION=1.0.0rc4
-LDFLAGS=-ldflags "-w -s -X internal.commands.versionBuild=${BUILT_HASH} -X internal.commands.versionMain=${BUILT_VERSION}"
+BUILT_VERSION=1.0.0rc5
+LDFLAGS=-ldflags "-X github.com/jlentink/aem/internal/version.Build=${BUILT_HASH} -X github.com/jlentink/aem/internal/version.Main=${BUILT_VERSION} -w -s"
 TRAVISBUILD?=off
 
 all: clean get test code-test coverage build
@@ -15,7 +15,7 @@ clean:
 	@-rm *.tgz
 	@-rm aem
 
-code-test: lint vet fmt cyclo ineffassign
+code-test: golintci
 
 get:
 	echo "get"

@@ -13,9 +13,7 @@ type commandInvalidate struct {
 	verbose       bool
 	instanceName  string
 	instanceGroup string
-	group         string
 	path          string
-	paths         []string
 }
 
 func (c *commandInvalidate) setup() *cobra.Command {
@@ -65,6 +63,7 @@ func (c *commandInvalidate) run(cmd *cobra.Command, args []string) {
 	}
 
 	for _, instance := range instances {
+		instance := instance
 		for _, p := range aem.Cnf.InvalidatePaths {
 			output.Printf(output.NORMAL, "\U0001F5D1 Invalidating: %s (%s)\n", p, instance.Name)
 			err := dispatcher.Invalidate(&instance, p)

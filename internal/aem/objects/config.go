@@ -1,8 +1,6 @@
 package objects
 
 const (
-	instanceMainDefault = `local-author`
-	instanceEnv         = `AEM_ME`
 	serviceName         = `aemCLI`
 )
 

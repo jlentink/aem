@@ -16,6 +16,7 @@ const (
 // GetByName find instance by name
 func GetByName(n string, i []objects.Instance) (*objects.Instance, error) {
 	for _, instance := range i {
+		instance := instance
 		if n == instance.Name {
 			return &instance, nil
 		}

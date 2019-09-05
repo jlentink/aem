@@ -45,6 +45,7 @@ func (c *commandReplicationPage) run(cmd *cobra.Command, args []string) {
 	}
 
 	for _, i := range is {
+		i := i
 		if c.activate {
 			_, err := replication.Activate(&i, c.path)
 			if err != nil {

@@ -13,7 +13,6 @@ type Pom struct {
 	name     string
 	path     string
 	doc      *xmlquery.Node
-	children []*xmlquery.Node
 }
 
 // Open a pomfile based on path
@@ -31,8 +30,9 @@ func (p *Pom) Open(path string) error {
 	return err
 }
 
+//nolint - for later use
 func (p *Pom) hasParent() bool {
-	if g := xmlquery.FindOne(p.doc, "//project//parent"); g != nil {
+	if g := xmlquery.FindOne(p.doc, "/project/parent"); g != nil {
 		return true
 	}
 	return false

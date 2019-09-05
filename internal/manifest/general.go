@@ -30,7 +30,6 @@ const (
 	ManifestLabelPackageVersion            = "Package-Version"
 
 	manifestPath         = "META-INF/MANIFEST.MF"
-	manifestKeySeperator = ":"
 	manifestReturn       = "\r"
 )
 
@@ -49,10 +48,10 @@ func OpenPackage(location string) (*Manifest, error) {
 	for _, file := range reader.File {
 		if file.Name == manifestPath {
 			manifest, err := file.Open()
-			defer manifest.Close()
 			if err != nil {
 				return nil, err
 			}
+			defer manifest.Close()
 			return openManifest(manifest)
 		}
 	}
@@ -96,6 +95,7 @@ func labelValue(line string) (string, string) {
 	if regLabel.MatchString(line) {
 		line = strings.TrimSuffix(line, manifestReturn)
 		matches := regLabel.FindAllStringSubmatch(line, -1)
+		//nolint
 		return fmt.Sprintf("%s%s", matches[0][1], matches[0][2]), fmt.Sprintf("%s", matches[0][3])
 	}
 
