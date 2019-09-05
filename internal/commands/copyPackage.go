@@ -14,8 +14,6 @@ import (
 
 type commandCopyPackage struct {
 	verbose        bool
-	dump           bool
-	force          bool
 	instanceName   string
 	toInstanceName string
 	cPackage       string
@@ -67,12 +65,17 @@ func (c *commandCopyPackage) run(cmd *cobra.Command, args []string) {
 	}
 
 	p, err := project.GetLocationForPackage(dp)
-	crx, err := pkg.Upload(*t, p, true, true)
-	output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 	if err != nil {
-		output.Printf(output.NORMAL, errorString, err.Error())
+		output.Printf(output.NORMAL, "Getting package location ended up in an error: %s", err.Error())
 		os.Exit(ExitError)
 	}
+
+	crx, err := pkg.Upload(*t, p, true, true)
+	if err != nil {
+		output.Printf(output.NORMAL, "Issue while coping package: %s", err.Error())
+		os.Exit(ExitError)
+	}
+	output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 }
 
 func (c *commandCopyPackage) downloadSearch(i *objects.Instance) *objects.Package {
