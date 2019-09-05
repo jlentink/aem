@@ -240,8 +240,5 @@ func cleanupPackages(p string, c objects.Config) error {
 // PidExists Does the pid exists?
 func PidExists(i objects.Instance) bool {
 	path, _ := project.GetPidFileLocation(i)
-	if project.Exists(path) {
-		return true
-	}
-	return false
+	return project.Exists(path)
 }

@@ -23,13 +23,6 @@ const (
 	ServiceName = "aem-cli"
 
 	JarContentType = "application/java-archive"
-
-	bundleResponseErrorMsg = "Could not parse bundle response from Adobe Experience manager. (%s)"
-	bundleStartLevel       = 20
-	bundleFormActionField  = "action"
-	bundleInstall          = "install"
-	bundleRefresh          = "refreshPackages"
-	bundleUninstall        = "uninstall"
 )
 
 //DisableSSLValidation Disables SSL validation

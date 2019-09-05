@@ -10,9 +10,6 @@ import (
 type commandStop struct {
 	verbose       bool
 	instanceName  string
-	allowRoot     bool
-	foreground    bool
-	forceDownload bool
 }
 
 func (c *commandStop) setup() *cobra.Command {

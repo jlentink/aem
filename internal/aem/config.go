@@ -17,14 +17,6 @@ const (
 	instanceEnv         = `AEM_ME`
 )
 
-func joinStrings(s []string) string {
-	returnString := ""
-	for _, path := range s {
-		returnString = returnString + "\t\"" + path + "\",\n"
-	}
-
-	return returnString
-}
 
 // ConfigExists is there a config available
 func ConfigExists() bool {

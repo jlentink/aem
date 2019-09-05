@@ -109,7 +109,7 @@ func bundleAction(i *objects.Instance, bundle *Bundle, action string) (*Bundle, 
 	}
 
 	bResponse := bundleResponse{}
-	json.Unmarshal(resp, &bResponse)
+	err = json.Unmarshal(resp, &bResponse)
 
 	if err != nil {
 		return nil, err

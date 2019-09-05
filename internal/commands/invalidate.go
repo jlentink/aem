@@ -13,9 +13,7 @@ type commandInvalidate struct {
 	verbose       bool
 	instanceName  string
 	instanceGroup string
-	group         string
 	path          string
-	paths         []string
 }
 
 func (c *commandInvalidate) setup() *cobra.Command {

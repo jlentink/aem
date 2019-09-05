@@ -126,7 +126,7 @@ func CreateInstallDir(instance objects.Instance) (string, error) {
 		return path, err
 	}
 
-	if ex == true {
+	if ex  {
 		return path, nil
 	}
 

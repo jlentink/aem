@@ -30,7 +30,6 @@ const (
 	ManifestLabelPackageVersion            = "Package-Version"
 
 	manifestPath         = "META-INF/MANIFEST.MF"
-	manifestKeySeperator = ":"
 	manifestReturn       = "\r"
 )
 

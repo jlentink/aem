@@ -14,7 +14,6 @@ const (
 )
 
 var (
-	currentKey string
 	keyValues  map[string]string
 )
 
@@ -53,7 +52,7 @@ func OpenXML(location string) (*Properties, error) {
 }
 
 func parseProperties(r io.Reader) (*Properties, error) {
-	keyValues = make(map[string]string, 0)
+	keyValues = make(map[string]string)
 	d, err := ioutil.ReadAll(r)
 	if err != nil {
 		return nil, err

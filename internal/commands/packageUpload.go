@@ -10,7 +10,6 @@ import (
 
 type commandPackageUpload struct {
 	verbose       bool
-	dump          bool
 	force         bool
 	install       bool
 	path          string

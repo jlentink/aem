@@ -40,7 +40,7 @@ func osCombine() []Description {
 	case "linux":
 		return append(general, linux...)
 	case "windows":
-		return append(general, darwin...)
+		return append(general, windows...)
 	default:
 		return general
 	}

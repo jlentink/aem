@@ -10,9 +10,6 @@ import (
 type commandBash struct {
 	verbose       bool
 	instanceName  string
-	allowRoot     bool
-	foreground    bool
-	forceDownload bool
 }
 
 func (c *commandBash) setup() *cobra.Command {

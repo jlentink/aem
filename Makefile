@@ -15,7 +15,7 @@ clean:
 	@-rm *.tgz
 	@-rm aem
 
-code-test: lint vet fmt cyclo ineffassign
+code-test: golintci
 
 get:
 	echo "get"

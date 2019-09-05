@@ -13,7 +13,6 @@ type Pom struct {
 	name     string
 	path     string
 	doc      *xmlquery.Node
-	children []*xmlquery.Node
 }
 
 // Open a pomfile based on path

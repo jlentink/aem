@@ -9,8 +9,6 @@ import (
 
 type commandPackageInstall struct {
 	verbose      bool
-	dump         bool
-	force        bool
 	instanceName string
 	packageName  string
 }

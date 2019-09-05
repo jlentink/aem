@@ -62,7 +62,8 @@ func list(i objects.Instance) ([]objects.Package, error) {
 }
 
 func nameVersion(p string) (string, string) {
-	if strings.Index(p, `:`) > -1 {
+
+	if strings.Contains(p, `:`) {
 		r := strings.Split(p, `:`)
 		return r[0], r[1]
 	}
