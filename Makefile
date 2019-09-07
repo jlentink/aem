@@ -15,7 +15,7 @@ clean:
 	@-rm *.tgz
 	@-rm aem
 
-code-test: card golintci
+code-test: golintci
 
 get:
 	echo "get"
