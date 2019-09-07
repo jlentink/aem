@@ -35,14 +35,18 @@ Prebuild versions are:
 Download or build and copy the binary to a location in your path.
 Latest prebuild version can be found [here](https://github.com/jlentink/aem/releases/latest).
 
-OSX/Linux can also execture this oneliner:
+Or use the following OSX/Linux oneliner to install:
 
 
-####install /usr/local/bin
-curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | sh -b /usr/local/bin
+#### install to /usr/local/bin
+`curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash -s -- -b /usr/local/bin`
 
-####install ~/bin
-curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | sh
+#### install to ~/bin
+`curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash`
+
+#### install to other location
+`curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash -s -- -b YOUR_LOCATION`
+
 
 
 Example install locations.
