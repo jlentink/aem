@@ -170,7 +170,7 @@ func Test_removeSlash(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			setUpTest()
-			if got := removeSlash(tt.args.path); got != tt.want {
+			if got := RemoveSlash(tt.args.path); got != tt.want {
 				t.Errorf("Structure.removeSlash() = %v, want %v", got, tt.want)
 			}
 		})

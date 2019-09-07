@@ -11,7 +11,7 @@ import (
 type commandStart struct {
 	verbose       bool
 	instanceName  string
-	groupName  string
+	groupName     string
 	allowRoot     bool
 	foreground    bool
 	forceDownload bool

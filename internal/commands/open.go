@@ -11,8 +11,8 @@ import (
 )
 
 type commandOpen struct {
-	verbose       bool
-	instanceName  string
+	verbose      bool
+	instanceName string
 }
 
 func (c *commandOpen) setup() *cobra.Command {
@@ -32,6 +32,9 @@ func (c *commandOpen) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandOpen) run(cmd *cobra.Command, args []string) {
+	if len(args) == 1 {
+		c.instanceName = args[0]
+	}
 	_, i, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())

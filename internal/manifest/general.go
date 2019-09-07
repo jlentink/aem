@@ -29,8 +29,8 @@ const (
 	ManifestLabelPackageName               = "Package-Name"
 	ManifestLabelPackageVersion            = "Package-Version"
 
-	manifestPath         = "META-INF/MANIFEST.MF"
-	manifestReturn       = "\r"
+	manifestPath   = "META-INF/MANIFEST.MF"
+	manifestReturn = "\r"
 )
 
 var (

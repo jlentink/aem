@@ -437,7 +437,7 @@ Activate a piece of the tree. use the path to define which part.
 Open a browser to the instance of your choosing.
 
 	Usage:
-	  aem open [flags]
+	  aem open [instance name] [flags]
 	
 	Flags:
 	  -h, --help          help for open

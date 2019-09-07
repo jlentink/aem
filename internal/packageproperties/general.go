@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	keyValues  map[string]string
+	keyValues map[string]string
 )
 
 // Open properties file of package
