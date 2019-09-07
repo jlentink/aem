@@ -17,7 +17,6 @@ const (
 	instanceEnv         = `AEM_ME`
 )
 
-
 // ConfigExists is there a config available
 func ConfigExists() bool {
 	path, _ := project.GetConfigFileLocation()

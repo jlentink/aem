@@ -8,8 +8,8 @@ import (
 )
 
 type commandStop struct {
-	verbose       bool
-	instanceName  string
+	verbose      bool
+	instanceName string
 }
 
 func (c *commandStop) setup() *cobra.Command {

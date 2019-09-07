@@ -3,7 +3,9 @@ package version
 import "fmt"
 
 var (
-	Main  = "1.0.0"
+	//Main app version
+	Main = "1.0.0"
+	// Build app build
 	Build = "no-build-hash"
 )
 

@@ -17,9 +17,9 @@ var BundleRawState = map[int]string{
 }
 
 const (
-	bundleFormActionField  = "action"
-	bundleInstall          = "install"
-	bundleRefresh          = "refreshPackages"
+	bundleFormActionField = "action"
+	bundleInstall         = "install"
+	bundleRefresh         = "refreshPackages"
 )
 
 type bundlesFeed struct {

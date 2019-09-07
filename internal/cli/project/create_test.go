@@ -174,7 +174,7 @@ func Test_createAemInstallDir(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			Mock(tt.wantRO)
 			FilesystemError(tt.wantFsErr)
-			got, err := createAemInstallDir(tt.args.instance)
+			got, err := CreateAemInstallDir(tt.args.instance)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Structure.createAemInstallDir() error = %v, wantErr %v", err, tt.wantErr)
 				return

@@ -53,7 +53,7 @@ func appendSlash(path string) string {
 	return path
 }
 
-// Remove slash from end of path
+// RemoveSlash Removes slash from end of path
 func RemoveSlash(path string) string {
 	if len(path) == 1 && path == `/` || len(path) == 0 {
 		return ``
@@ -63,6 +63,11 @@ func RemoveSlash(path string) string {
 		path = path[:len(path)-1]
 	}
 	return path
+}
+
+// nolint
+func filesystem() afero.Fs {
+	return fs
 }
 
 func normalizeString(input string) string {

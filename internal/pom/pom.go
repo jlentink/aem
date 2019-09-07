@@ -10,9 +10,9 @@ import (
 
 // Pom is a java pom file parser
 type Pom struct {
-	name     string
-	path     string
-	doc      *xmlquery.Node
+	name string
+	path string
+	doc  *xmlquery.Node
 }
 
 // Open a pomfile based on path

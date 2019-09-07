@@ -14,7 +14,7 @@ func TestGetVersion(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			versionMain = tt.want
+			Main = tt.want
 			if got := GetVersion(); got != tt.want {
 				t.Errorf("GetVersion() = %v, want %v", got, tt.want)
 			}
@@ -34,7 +34,7 @@ func TestGetBuild(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			versionBuild = tt.want
+			Build = tt.want
 			if got := GetBuild(); got != tt.want {
 				t.Errorf("GetBuild() = %v, want %v", got, tt.want)
 			}
@@ -85,8 +85,8 @@ func TestDisplayVersion(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			versionBuild = tt.build
-			versionMain = tt.version
+			Build = tt.build
+			Main = tt.version
 			if got := DisplayVersion(tt.args.v, tt.args.m); got != tt.want {
 				t.Errorf("DisplayVersion() = %v, want %v", got, tt.want)
 			}

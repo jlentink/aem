@@ -8,8 +8,8 @@ import (
 )
 
 type commandBash struct {
-	verbose       bool
-	instanceName  string
+	verbose      bool
+	instanceName string
 }
 
 func (c *commandBash) setup() *cobra.Command {

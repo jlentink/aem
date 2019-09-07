@@ -1,7 +1,7 @@
 package objects
 
 const (
-	serviceName         = `aemCLI`
+	serviceName = `aemCLI`
 )
 
 // Cnf Active config instance

@@ -38,6 +38,7 @@ func getConfigAndInstance(i string) (*objects.Config, *objects.Instance, string,
 	aem.Cnf = cnf
 	return cnf, currentInstance, ``, nil
 }
+
 //nolint
 func getConfigAndInstanceOrGroup(i, g string) (*objects.Config, []objects.Instance, string, error) {
 	if len(g) > 0 {
