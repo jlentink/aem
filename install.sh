@@ -32,7 +32,7 @@ else
   cd /tmp
   mkdir -p ${BINDIR}
   curl -sL https://github.com/jlentink/aem/releases/download/${VERSION}/linux-v${VERSION}.tgz --output /tmp/linux-v${VERSION}.tgz
-  tar -zxf /tmp/linux-v${version}.tgz
+  tar -zxf /tmp/linux-v${VERSION}.tgz
   echo "Placing aemCLI bineary in ${BINDIR}"
   mv -f /tmp/aem ${BINDIR}
 fi
