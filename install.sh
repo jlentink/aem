@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BINDIR=${BINDIR:-~/bin}
-VERSION=${VERSION:-1.0.0rc6}
+VERSION=${VERSION:-1.0.0rc5}
 
 while getopts "b:v:" opt; do
   case ${opt} in

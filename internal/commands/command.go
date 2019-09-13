@@ -18,6 +18,7 @@ import (
 const (
 	ExitNormal = 0
 	ExitError  = 1
+	HomeDirFile = ".aem"
 )
 
 // Command internal interface for commands
@@ -117,14 +118,16 @@ func CheckConfigExists() (bool, error) {
 	return true, nil
 }
 
+// ReadRegisteredProjects reads aem file to find registered projects
 func ReadRegisteredProjects(homedir string) objects.Projects {
 	projects := objects.Projects{}
-	if project.Exists(homedir + "/.aem") {
-		toml.DecodeFile(homedir+"/.aem", &projects)
+	if project.Exists(homedir + "/" + HomeDirFile) {
+		toml.DecodeFile(homedir+"/" + HomeDirFile, &projects)
 	}
 	return projects
 }
 
+// ConfigCheckListProjects Check for config and list projects if needed
 func ConfigCheckListProjects() {
 	b, err := CheckConfigExists()
 	if err != nil {
@@ -182,12 +185,12 @@ func RegisterProject() {
 	projects.Project = append(projects.Project, objects.ProjectRegistered{Name: cnf.ProjectName, Path: cwd})
 
 	buf := new(bytes.Buffer)
-	err = toml.NewEncoder(buf).Encode(projects);
-	if  err != nil {
+	err = toml.NewEncoder(buf).Encode(projects)
+	if err != nil {
 		return
 	}
 
-	err = ioutil.WriteFile(homedir+"/.aem", buf.Bytes(), 0644)
+	err = ioutil.WriteFile(homedir+"/" + HomeDirFile, buf.Bytes(), 0644)
 	if err != nil {
 		return
 	}

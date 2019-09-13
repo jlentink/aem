@@ -77,7 +77,7 @@ func normalizeString(input string) string {
 }
 
 // HomeDir returns user home's dir
-func HomeDir() (string, error){
+func HomeDir() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
 		return "", err
