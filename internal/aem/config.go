@@ -50,6 +50,7 @@ func GetConfig() (*objects.Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not decode config file: %s", err.Error())
 	}
+
 	Cnf = &cnf
 	objects.Cnf = &cnf
 	return &cnf, nil

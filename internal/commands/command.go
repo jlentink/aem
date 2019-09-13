@@ -1,17 +1,24 @@
 package commands
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/BurntSushi/toml"
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/objects"
+	"github.com/jlentink/aem/internal/cli/project"
+	"github.com/jlentink/aem/internal/output"
 	"github.com/jlentink/aem/internal/sliceutil"
 	"github.com/spf13/cobra"
+	"io/ioutil"
+	"os"
 )
 
 // Exit codes for AEM
 const (
 	ExitNormal = 0
 	ExitError  = 1
+	HomeDirFile = ".aem"
 )
 
 // Command internal interface for commands
@@ -95,6 +102,98 @@ func getConfigAndGroupWithRoles(i string, r []string) (*objects.Config, []object
 	}
 	aem.Cnf = cnf
 	return cnf, currentInstance, ``, nil
+}
+
+// CheckConfigExists is the configuration file available
+func CheckConfigExists() (bool, error) {
+	p, err := project.GetConfigFileLocation()
+	if err != nil {
+		return false, fmt.Errorf("could not get config file location: %s", err)
+	}
+
+	if !project.Exists(p) {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// ReadRegisteredProjects reads aem file to find registered projects
+func ReadRegisteredProjects(homedir string) objects.Projects {
+	projects := objects.Projects{}
+	if project.Exists(homedir + "/" + HomeDirFile) {
+		toml.DecodeFile(homedir+"/" + HomeDirFile, &projects)
+	}
+	return projects
+}
+
+// ConfigCheckListProjects Check for config and list projects if needed
+func ConfigCheckListProjects() {
+	b, err := CheckConfigExists()
+	if err != nil {
+		output.Print(output.NORMAL, "Error while searching for config file.\n")
+		output.Printf(output.VERBOSE, "error: %s", err.Error())
+		os.Exit(ExitError)
+	}
+
+	if !b {
+		output.Print(output.NORMAL, "No config file in the current directory.\n")
+		p, err := project.HomeDir()
+		if err != nil {
+			output.Print(output.NORMAL, "Could not get the home dir.\n")
+			os.Exit(ExitError)
+		}
+
+		projects := ReadRegisteredProjects(p)
+		if len(p) > 0 {
+			output.Print(output.NORMAL, "You have the following projects on registered.\n")
+			output.Print(output.NORMAL, "Switch to the project location to start using the tool\n\n")
+
+			for _, project := range projects.Project {
+				fmt.Printf(" * %s - %s\n", project.Name, project.Path)
+			}
+			output.Print(output.NORMAL, "\n")
+		}
+		os.Exit(ExitError)
+	}
+}
+
+// RegisterProject in homedir
+func RegisterProject() {
+	homedir, err := project.HomeDir()
+	if err != nil {
+		return
+	}
+
+	projects := ReadRegisteredProjects(homedir)
+	cnf, err := getConfig()
+	if err != nil {
+		return
+	}
+
+	cwd, err := project.GetWorkDir()
+	if err != nil {
+		return
+	}
+
+	for _, cProject := range projects.Project {
+		if cProject.Name == cnf.ProjectName && cProject.Path == cwd {
+			return
+		}
+	}
+
+	projects.Project = append(projects.Project, objects.ProjectRegistered{Name: cnf.ProjectName, Path: cwd})
+
+	buf := new(bytes.Buffer)
+	err = toml.NewEncoder(buf).Encode(projects)
+	if err != nil {
+		return
+	}
+
+	err = ioutil.WriteFile(homedir+"/" + HomeDirFile, buf.Bytes(), 0644)
+	if err != nil {
+		return
+	}
 }
 
 // GetInstancesAndConfig gets config and configuration for instance or group

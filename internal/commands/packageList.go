@@ -31,6 +31,9 @@ func (c *commandPackageList) setup() *cobra.Command {
 func (c *commandPackageList) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
 	output.SetVerbose(c.verbose)
+
+	ConfigCheckListProjects()
+	RegisterProject()
 }
 
 func (c *commandPackageList) run(cmd *cobra.Command, args []string) {

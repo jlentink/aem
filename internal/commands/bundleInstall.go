@@ -35,6 +35,9 @@ func (c *commandBundleInstall) setup() *cobra.Command {
 func (c *commandBundleInstall) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
 	output.SetVerbose(c.verbose)
+
+	ConfigCheckListProjects()
+	RegisterProject()
 }
 
 func (c *commandBundleInstall) run(cmd *cobra.Command, args []string) {
