@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 BINDIR=${BINDIR:-~/bin}
-VERSION=1.0.0rc5
+VERSION=${VERSION:-1.0.0rc5}
 
-while getopts "b:" opt; do
+while getopts "b:v:" opt; do
   case ${opt} in
     b )
       BINDIR="${OPTARG}"
