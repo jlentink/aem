@@ -29,6 +29,9 @@ func (c *commandPassword) setup() *cobra.Command {
 func (c *commandPassword) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
 	output.SetVerbose(c.verbose)
+
+	ConfigCheckListProjects()
+	RegisterProject()
 }
 
 func (c *commandPassword) run(cmd *cobra.Command, args []string) {

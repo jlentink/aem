@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/afero"
 	"io"
 	"os"
+	"os/user"
 	"regexp"
 )
 
@@ -73,6 +74,15 @@ func filesystem() afero.Fs {
 func normalizeString(input string) string {
 	r, _ := regexp.Compile(`(\s|\W)`)
 	return r.ReplaceAllString(input, `-`)
+}
+
+// HomeDir returns user home's dir
+func HomeDir() (string, error){
+	usr, err := user.Current()
+	if err != nil {
+		return "", err
+	}
+	return usr.HomeDir, nil
 }
 
 // Exists tell if a file exists

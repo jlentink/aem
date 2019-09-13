@@ -38,6 +38,9 @@ func (c *commandOakConsole) setup() *cobra.Command {
 func (c *commandOakConsole) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
 	output.SetVerbose(verbose)
+
+	ConfigCheckListProjects()
+	RegisterProject()
 }
 
 func (c *commandOakConsole) run(cmd *cobra.Command, args []string) {
