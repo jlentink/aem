@@ -9,15 +9,15 @@ import (
 )
 
 type commandProjects struct {
-	verbose      bool
+	verbose bool
 }
 
 func (c *commandProjects) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "projects",
-		Short:   "List know projects",
-		PreRun:  c.preRun,
-		Run:     c.run,
+		Use:    "projects",
+		Short:  "List know projects",
+		PreRun: c.preRun,
+		Run:    c.run,
 	}
 	return cmd
 }

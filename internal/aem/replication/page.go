@@ -44,11 +44,11 @@ func pageAction(i *objects.Instance, path, command string) ([]byte, error) {
 func ActivateTree(i *objects.Instance, path string, ignoreDeactivated, onlyModified bool) ([]byte, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writer.WriteField("cmd", "activate")											// nolint: errcheck
-	writer.WriteField("ignoredeactivated", fmt.Sprintf("%t", ignoreDeactivated))	// nolint: errcheck
-	writer.WriteField("onlymodified", fmt.Sprintf("%t", onlyModified))				// nolint: errcheck
-	writer.WriteField("path", path)														// nolint: errcheck
-	writer.Close()																					// nolint: errcheck
+	writer.WriteField("cmd", "activate")                                         // nolint: errcheck
+	writer.WriteField("ignoredeactivated", fmt.Sprintf("%t", ignoreDeactivated)) // nolint: errcheck
+	writer.WriteField("onlymodified", fmt.Sprintf("%t", onlyModified))           // nolint: errcheck
+	writer.WriteField("path", path)                                              // nolint: errcheck
+	writer.Close()                                                               // nolint: errcheck
 
 	pw, err := i.GetPassword()
 	if err != nil {

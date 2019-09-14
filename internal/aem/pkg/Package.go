@@ -96,11 +96,11 @@ func constructInstallBody(pkgLocation string, install, force bool) (*bytes.Buffe
 		return nil, "", err
 	}
 
-	part.Write(fileContent)                                   			// nolint: errcheck
+	part.Write(fileContent)                                   // nolint: errcheck
 	writer.WriteField("name", pkgName)                        // nolint: errcheck
 	writer.WriteField("force", strconv.FormatBool(force))     // nolint: errcheck
 	writer.WriteField("install", strconv.FormatBool(install)) // nolint: errcheck
-	writer.Close()                                            			// nolint: errcheck
+	writer.Close()                                            // nolint: errcheck
 
 	return body, writer.FormDataContentType(), nil
 }

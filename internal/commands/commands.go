@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	verbose  bool
-	Project string
+	verbose bool
+	// Project - Global set project
+	Project  string
 	commands = []Command{
 		&commandVersion{},
 		&commandInit{},

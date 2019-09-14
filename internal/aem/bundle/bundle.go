@@ -172,7 +172,7 @@ func constructInstallBody(bundlePath, level string) (*bytes.Buffer, string, erro
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField(bundleFormActionField, bundleInstall) // nolint: errcheck
-	writer.WriteField("bundlestartlevel", level)  // nolint: errcheck
+	writer.WriteField("bundlestartlevel", level)            // nolint: errcheck
 
 	part, _ := writer.CreateFormFile("bundlefile", filepath.Base(bundlePath))
 	fileContent, err := ioutil.ReadFile(bundlePath)
@@ -181,7 +181,7 @@ func constructInstallBody(bundlePath, level string) (*bytes.Buffer, string, erro
 	}
 
 	part.Write(fileContent) // nolint: errcheck
-	writer.Close() // nolint: errcheck
+	writer.Close()          // nolint: errcheck
 
 	return body, writer.FormDataContentType(), nil
 }
