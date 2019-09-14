@@ -12,7 +12,7 @@ func WriteTextFile(path, content string) (int, error) {
 	f, err := Create(path)
 
 	if err == nil {
-		defer f.Close()
+		defer f.Close() // nolint: errcheck
 		bytes, err = f.WriteString(content)
 	}
 	return bytes, err

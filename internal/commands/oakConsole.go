@@ -65,6 +65,6 @@ func (c *commandOakConsole) run(cmd *cobra.Command, args []string) {
 	if c.metrics {
 		oakArgs = append(oakArgs, "--metrics")
 	}
-	oak.Execute(path, aem.Cnf.OakOptions, oakArgs)
+	oak.Execute(path, aem.Cnf.OakOptions, oakArgs) // nolint: errcheck
 
 }

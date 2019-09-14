@@ -51,7 +51,7 @@ func OpenPackage(location string) (*Manifest, error) {
 			if err != nil {
 				return nil, err
 			}
-			defer manifest.Close()
+			defer manifest.Close() // nolint: errcheck
 			return openManifest(manifest)
 		}
 	}

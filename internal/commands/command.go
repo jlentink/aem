@@ -17,8 +17,8 @@ import (
 
 // Exit codes for AEM
 const (
-	ExitNormal = 0
-	ExitError  = 1
+	ExitNormal  = 0
+	ExitError   = 1
 	HomeDirFile = ".aem"
 )
 
@@ -123,12 +123,12 @@ func CheckConfigExists() (bool, error) {
 func ReadRegisteredProjects(homedir string) objects.Projects {
 	projects := objects.Projects{}
 	if project.Exists(homedir + "/" + HomeDirFile) {
-		toml.DecodeFile(homedir+"/" + HomeDirFile, &projects)
+		toml.DecodeFile(homedir+"/"+HomeDirFile, &projects) // nolint: errcheck
 	}
 	return projects
 }
 
-func changeProjectDir(projectName string){
+func changeProjectDir(projectName string) {
 	homedir, err := project.HomeDir()
 	if err != nil {
 		return
@@ -219,15 +219,16 @@ func RegisterProject() {
 	WriteRegisterFile(projects, homedir)
 
 }
+
 // WriteRegisterFile writes project in project registry file
-func WriteRegisterFile(projects objects.Projects, homedir string){
+func WriteRegisterFile(projects objects.Projects, homedir string) {
 	buf := new(bytes.Buffer)
 	err := toml.NewEncoder(buf).Encode(projects)
 	if err != nil {
 		return
 	}
 
-	err = ioutil.WriteFile(homedir+"/" + HomeDirFile, buf.Bytes(), 0644)
+	err = ioutil.WriteFile(homedir+"/"+HomeDirFile, buf.Bytes(), 0644)
 	if err != nil {
 		return
 	}

@@ -71,7 +71,7 @@ linters-settings:
 
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
-    exclude: /path/to/file.txt
+    exclude: ./excluding-functions.txt
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -243,8 +243,3 @@ issues:
   # Default is false.
   new: false
 
-  # Show only new issues created after git revision `REV`
-  new-from-rev: REV
-
-  # Show only new issues created in git patch with set file path.
-  new-from-patch: golangresult.diff

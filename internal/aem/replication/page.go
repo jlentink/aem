@@ -27,9 +27,9 @@ func Deactivate(i *objects.Instance, path string) ([]byte, error) {
 func pageAction(i *objects.Instance, path, command string) ([]byte, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writer.WriteField("path", path)
-	writer.WriteField("cmd", command)
-	writer.Close()
+	writer.WriteField("path", path)   // nolint: errcheck
+	writer.WriteField("cmd", command) // nolint: errcheck
+	writer.Close()                    // nolint: errcheck
 
 	pw, err := i.GetPassword()
 	if err != nil {
@@ -44,11 +44,11 @@ func pageAction(i *objects.Instance, path, command string) ([]byte, error) {
 func ActivateTree(i *objects.Instance, path string, ignoreDeactivated, onlyModified bool) ([]byte, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writer.WriteField("cmd", "activate")
-	writer.WriteField("ignoredeactivated", fmt.Sprintf("%t", ignoreDeactivated))
-	writer.WriteField("onlymodified", fmt.Sprintf("%t", onlyModified))
-	writer.WriteField("path", path)
-	writer.Close()
+	writer.WriteField("cmd", "activate")											// nolint: errcheck
+	writer.WriteField("ignoredeactivated", fmt.Sprintf("%t", ignoreDeactivated))	// nolint: errcheck
+	writer.WriteField("onlymodified", fmt.Sprintf("%t", onlyModified))				// nolint: errcheck
+	writer.WriteField("path", path)														// nolint: errcheck
+	writer.Close()																					// nolint: errcheck
 
 	pw, err := i.GetPassword()
 	if err != nil {

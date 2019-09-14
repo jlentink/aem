@@ -36,7 +36,11 @@ func (c *commandInit) run(cmd *cobra.Command, args []string) {
 	}
 
 	output.Printf(output.NORMAL, "Writing sample file.")
-	aem.WriteConfigFile()
+	_, err := aem.WriteConfigFile()
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not write config file. (%s)", err.Error())
+		os.Exit(ExitError)
+	}
 	os.Exit(ExitNormal)
 
 }

@@ -54,7 +54,7 @@ func (pr *progressReporter) report(progress int64) {
 		if pr.bar == nil {
 			pr.initProgressBar()
 		}
-		pr.bar.Add64(progress)
+		pr.bar.Add64(progress) // nolint: errcheck
 	} else {
 		fmt.Printf("\r%s... %s complete\r", pr.label, humanize.Bytes(uint64(pr.progress)))
 	}

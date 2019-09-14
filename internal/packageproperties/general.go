@@ -30,7 +30,7 @@ func Open(location string) (*Properties, error) {
 			if err != nil {
 				return nil, err
 			}
-			defer properties.Close()
+			defer properties.Close() // nolint: errcheck
 			return parseProperties(properties)
 		}
 	}

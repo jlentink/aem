@@ -54,9 +54,11 @@ func Stop(i objects.Instance) error {
 	}
 
 	if strings.ToLower(runtime.GOOS) == "windows" {
-		winerr := stopWindows(pid, runPath)
-		project.Remove(pidPath)
-		return winerr
+		err = stopWindows(pid, runPath)
+		if err != nil {
+			return err
+		}
+		return project.Remove(pidPath)
 	}
 
 	err = stopNix(pid, runPath)
@@ -68,9 +70,8 @@ func Stop(i objects.Instance) error {
 	for retry <= 180 {
 		err = Signal(pid, runPath)
 		if err != nil {
-			project.Remove(pidPath)
 			fmt.Print("\n")
-			return nil
+			return project.Remove(pidPath)
 		}
 		fmt.Print(".")
 		time.Sleep(1 * time.Second)

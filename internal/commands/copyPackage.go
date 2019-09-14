@@ -64,7 +64,11 @@ func (c *commandCopyPackage) run(cmd *cobra.Command, args []string) {
 	} else {
 		dp = c.downloadSearch(f)
 		output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
-		pkg.Download(f, dp)
+		_, err = pkg.Download(f, dp)
+		if err != nil {
+			output.Printf(output.NORMAL, "Could not download package from %s: %s", f.Name, err.Error())
+			os.Exit(ExitError)
+		}
 	}
 
 	p, err := project.GetLocationForPackage(dp)

@@ -30,5 +30,5 @@ func (c *commandBash) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandBash) run(cmd *cobra.Command, args []string) {
-	rootCmd.GenBashCompletion(os.Stdout)
+	rootCmd.GenBashCompletion(os.Stdout) // nolint: errcheck
 }

@@ -107,7 +107,10 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
 		i := i
 		switch a.Kind() {
 		case pom.Bundle:
-			bundle.Install(&i, a.CompletePath(), "20")
+			err = bundle.Install(&i, a.CompletePath(), "20")
+			if err != nil {
+				output.Printf(output.NORMAL, "%s\n", err)
+			}
 		case pom.Package:
 			resp, err := pkg.Upload(i, a.CompletePath(), true, true)
 			if err != nil {
@@ -127,7 +130,7 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
 
 func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) {
 	if c.forceBuild {
-		aem.BuildProject()
+		aem.BuildProject() // nolint: errcheck
 	}
 
 	var success, failed = 0, 0

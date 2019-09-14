@@ -1,7 +1,9 @@
 package commands
 
 import (
+	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var (
@@ -51,5 +53,9 @@ func Execute() {
 	for _, cmd := range commands {
 		rootCmd.AddCommand(cmd.setup())
 	}
-	rootCmd.Execute()
+	err := rootCmd.Execute()
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not execute root command.\n")
+		os.Exit(ExitError)
+	}
 }

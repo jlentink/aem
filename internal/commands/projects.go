@@ -10,7 +10,6 @@ import (
 
 type commandProjects struct {
 	verbose      bool
-	instanceName string
 }
 
 func (c *commandProjects) setup() *cobra.Command {

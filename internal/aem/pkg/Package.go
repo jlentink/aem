@@ -96,11 +96,11 @@ func constructInstallBody(pkgLocation string, install, force bool) (*bytes.Buffe
 		return nil, "", err
 	}
 
-	part.Write(fileContent)
-	writer.WriteField("name", pkgName)
-	writer.WriteField("force", strconv.FormatBool(force))
-	writer.WriteField("install", strconv.FormatBool(install))
-	writer.Close()
+	part.Write(fileContent)                                   			// nolint: errcheck
+	writer.WriteField("name", pkgName)                        // nolint: errcheck
+	writer.WriteField("force", strconv.FormatBool(force))     // nolint: errcheck
+	writer.WriteField("install", strconv.FormatBool(install)) // nolint: errcheck
+	writer.Close()                                            			// nolint: errcheck
 
 	return body, writer.FormDataContentType(), nil
 }
@@ -151,13 +151,19 @@ func Download(i *objects.Instance, pkg *objects.Package) (*objects.Package, erro
 		http.DisableSSLValidation()
 	}
 
-	project.CreateDirForPackage(pkg)
+	_, err := project.CreateDirForPackage(pkg)
+	if err != nil {
+		return nil, err
+	}
 	p, err := project.GetLocationForPackage(pkg)
 	if err != nil {
 		return nil, err
 	}
 
-	http.DownloadFile(p, i.URLString()+pkg.Path, i.Username, i.GetPasswordSimple(), true)
+	_, err = http.DownloadFile(p, i.URLString()+pkg.Path, i.Username, i.GetPasswordSimple(), true)
+	if err != nil {
+		return nil, err
+	}
 
 	return pkg, nil
 }
