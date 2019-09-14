@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 // Exit codes for AEM
@@ -127,8 +128,33 @@ func ReadRegisteredProjects(homedir string) objects.Projects {
 	return projects
 }
 
+func changeProjectDir(projectName string){
+	homedir, err := project.HomeDir()
+	if err != nil {
+		return
+	}
+	projects := ReadRegisteredProjects(homedir)
+	for _, cProject := range projects.Project {
+		if strings.ToLower(cProject.Name) == strings.ToLower(projectName) {
+			err := os.Chdir(cProject.Path)
+			if err != nil {
+				output.Printf(output.NORMAL, "Could not change to  project folder: %s.\n", err.Error())
+				os.Exit(ExitError)
+			}
+			return
+		}
+	}
+	output.Printf(output.NORMAL, "Could not find project: %s.\n", projectName)
+	os.Exit(ExitError)
+}
+
 // ConfigCheckListProjects Check for config and list projects if needed
 func ConfigCheckListProjects() {
+
+	if Project != "" {
+		changeProjectDir(Project)
+	}
+
 	b, err := CheckConfigExists()
 	if err != nil {
 		output.Print(output.NORMAL, "Error while searching for config file.\n")
@@ -176,16 +202,27 @@ func RegisterProject() {
 		return
 	}
 
-	for _, cProject := range projects.Project {
+	for i, cProject := range projects.Project {
 		if cProject.Name == cnf.ProjectName && cProject.Path == cwd {
+			return
+		}
+
+		if cProject.Name == cnf.ProjectName && cProject.Path != cwd {
+			projects.Project[i].Path = cwd
+			WriteRegisterFile(projects, homedir)
 			return
 		}
 	}
 
 	projects.Project = append(projects.Project, objects.ProjectRegistered{Name: cnf.ProjectName, Path: cwd})
 
+	WriteRegisterFile(projects, homedir)
+
+}
+// WriteRegisterFile writes project in project registry file
+func WriteRegisterFile(projects objects.Projects, homedir string){
 	buf := new(bytes.Buffer)
-	err = toml.NewEncoder(buf).Encode(projects)
+	err := toml.NewEncoder(buf).Encode(projects)
 	if err != nil {
 		return
 	}
@@ -194,6 +231,7 @@ func RegisterProject() {
 	if err != nil {
 		return
 	}
+
 }
 
 // GetInstancesAndConfig gets config and configuration for instance or group

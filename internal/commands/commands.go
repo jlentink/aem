@@ -6,6 +6,7 @@ import (
 
 var (
 	verbose  bool
+	Project string
 	commands = []Command{
 		&commandVersion{},
 		&commandInit{},
@@ -38,6 +39,7 @@ var (
 		&commandOakConsole{},
 		&commandReplicationPage{},
 		&commandActivateTree{},
+		&commandProjects{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}
 )
@@ -45,6 +47,7 @@ var (
 // Execute init commands
 func Execute() {
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().StringVarP(&Project, "project", "", "", "Run command for project. (if not current working director)")
 	for _, cmd := range commands {
 		rootCmd.AddCommand(cmd.setup())
 	}
