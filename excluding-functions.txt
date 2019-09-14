@@ -1,0 +1,2 @@
+github.com/jlentink/aem/internal/output.Printf
+github.com/jlentink/aem/internal/output.Print

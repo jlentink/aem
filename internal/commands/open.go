@@ -52,14 +52,13 @@ func (c *commandOpen) run(cmd *cobra.Command, args []string) {
 	switch runtime.GOOS {
 	case "windows":
 		cmd := exec.Command("rundll32", "url.dll,FileProtocolHandler", aem.URLString(i))
-		cmd.Start()
+		cmd.Start() // nolint: errcheck
 	case "darwin":
 		cmd := exec.Command("open", aem.URLString(i))
-		cmd.Start()
+		cmd.Start() // nolint: errcheck
 	case "linux":
 		cmd := exec.Command("xdg-open", aem.URLString(i))
-		cmd.Start()
-
+		cmd.Start() // nolint: errcheck
 	default:
 		fmt.Printf("unsuported operating systen %s", runtime.GOOS)
 	}

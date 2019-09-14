@@ -49,7 +49,11 @@ func (c *commandPackageDownload) run(cmd *cobra.Command, args []string) {
 	if len(c.packageName) > 0 {
 		c.downloadByName(i)
 	} else {
-		c.downloadSearch(i)
+		err := c.downloadSearch(i)
+		if err != nil {
+			output.Printf(output.NORMAL, "Could not download package. %s", err.Error())
+			os.Exit(ExitError)
+		}
 	}
 }
 
@@ -62,7 +66,7 @@ func (c *commandPackageDownload) downloadByName(i *objects.Instance) {
 	}
 }
 
-func (c *commandPackageDownload) downloadSearch(i *objects.Instance) {
+func (c *commandPackageDownload) downloadSearch(i *objects.Instance) error {
 	pkgs, err := pkg.PackageList(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not retrieve list from server %s", err.Error())
@@ -102,8 +106,9 @@ func (c *commandPackageDownload) downloadSearch(i *objects.Instance) {
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
-		return
+		return err
 	}
 
-	pkg.Download(i, &pkgs[in])
+	_, err = pkg.Download(i, &pkgs[in])
+	return err
 }

@@ -116,7 +116,7 @@ func TCPPortOpen(port int) bool {
 	if err != nil {
 		return true
 	}
-	defer l.Close()
+	defer l.Close() // nolint: errcheck
 	return false
 }
 
@@ -138,7 +138,10 @@ func Unpack(i objects.Instance, version *objects.AemJar) error {
 				return err
 			}
 		}
-		project.CreateInstanceDir(i)
+		_, err := project.CreateInstanceDir(i)
+		if err != nil {
+			return err
+		}
 		return project.Rename(unpackPath, runPath)
 	}
 
@@ -188,8 +191,7 @@ func Start(i objects.Instance, forGround bool) error {
 	}
 	pidFile, _ := project.GetPidFileLocation(i)
 	fmt.Printf("Starting AEM with (pid: %d)\n", cmd.Process.Pid)
-	ioutil.WriteFile(pidFile, []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
-	return nil
+	return ioutil.WriteFile(pidFile, []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
 }
 
 // SyncPackages Sync the packages in the install dir

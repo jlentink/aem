@@ -126,6 +126,7 @@ func Install(i *objects.Instance, bundlePath string, level string) error {
 	if !aem.Cnf.ValidateSSL {
 		http.DisableSSLValidation()
 	}
+
 	output.Printf(output.NORMAL, "\U0001F69A %s - %s\n", i.Name, path.Base(bundlePath))
 	if _, err := os.Stat(bundlePath); os.IsNotExist(err) {
 		return fmt.Errorf("could not find bundle: %s", bundlePath)
@@ -170,8 +171,8 @@ func Delete(i *objects.Instance) {
 func constructInstallBody(bundlePath, level string) (*bytes.Buffer, string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writer.WriteField(bundleFormActionField, bundleInstall)
-	writer.WriteField("bundlestartlevel", level)
+	writer.WriteField(bundleFormActionField, bundleInstall) // nolint: errcheck
+	writer.WriteField("bundlestartlevel", level)  // nolint: errcheck
 
 	part, _ := writer.CreateFormFile("bundlefile", filepath.Base(bundlePath))
 	fileContent, err := ioutil.ReadFile(bundlePath)
@@ -179,8 +180,8 @@ func constructInstallBody(bundlePath, level string) (*bytes.Buffer, string, erro
 		return nil, "", err
 	}
 
-	part.Write(fileContent)
-	writer.Close()
+	part.Write(fileContent) // nolint: errcheck
+	writer.Close() // nolint: errcheck
 
 	return body, writer.FormDataContentType(), nil
 }

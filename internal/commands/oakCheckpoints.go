@@ -55,6 +55,6 @@ func (c *commandOakCheckpoints) run(cmd *cobra.Command, args []string) {
 	oak.SetDefaultVersion(aem.Cnf.OakVersion)
 	path, _ := oak.Get(i.GetVersion(), aem.Cnf.OakVersion)
 	oakArgs := []string{"checkpoints", instancePath + oak.RepoPath}
-	oak.Execute(path, aem.Cnf.OakOptions, oakArgs)
+	oak.Execute(path, aem.Cnf.OakOptions, oakArgs) // nolint: errcheck
 
 }

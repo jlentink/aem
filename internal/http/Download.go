@@ -24,7 +24,7 @@ func downloadSize(req *http.Request) (uint64, error) {
 		output.Print(output.VERBOSE, "unable to create http client\n")
 		return 0, errors.New("unable to create http client")
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() // nolint: errcheck
 
 	if resp.StatusCode != http.StatusOK {
 		req.Method = method
@@ -59,7 +59,7 @@ func DownloadFileWithURL(destination string, uri *url.URL, forceDownload bool) (
 	if err != nil {
 		return 0, err
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() // nolint: errcheck
 
 	fmt.Printf("Downloading: %s (%s)\n", uri.Path, humanize.Bytes(fs))
 	counter := &progressReporter{r: resp.Body, totalSize: fs, label: "Downloading"}
@@ -69,7 +69,7 @@ func DownloadFileWithURL(destination string, uri *url.URL, forceDownload bool) (
 		return 0, err
 	}
 
-	defer out.Close()
+	defer out.Close() // nolint: errcheck
 	_, err = io.Copy(out, counter)
 
 	if err != nil {

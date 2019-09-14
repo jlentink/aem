@@ -1,11 +1,14 @@
 package commands
 
 import (
+	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var (
 	verbose  bool
+	Project string
 	commands = []Command{
 		&commandVersion{},
 		&commandInit{},
@@ -38,6 +41,7 @@ var (
 		&commandOakConsole{},
 		&commandReplicationPage{},
 		&commandActivateTree{},
+		&commandProjects{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}
 )
@@ -45,8 +49,13 @@ var (
 // Execute init commands
 func Execute() {
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().StringVarP(&Project, "project", "", "", "Run command for project. (if not current working director)")
 	for _, cmd := range commands {
 		rootCmd.AddCommand(cmd.setup())
 	}
-	rootCmd.Execute()
+	err := rootCmd.Execute()
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not execute root command.\n")
+		os.Exit(ExitError)
+	}
 }
