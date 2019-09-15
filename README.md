@@ -5,6 +5,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/jlentink/aem)](https://goreportcard.com/report/github.com/jlentink/aem)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
+
 **This tool is work in progress**<br />
 *If you find any bugs or miss any feature feel free to pitch in or create a ticket so the issue can be resolved quickly or the new feature can be added.*
 
@@ -92,6 +93,7 @@ The command line tool is broken up in different sub-commands. The commands can b
       package-rebuild    package rebuild
       package-upload     Upload package to aem
       passwords          Set passwords into your keychain
+      projects           List known projects
       pull-content       Pull content in from instance via packages
       setup-check        Check if all needed binaries are available for all functionality
       start              Start Adobe Experience Manager instance
@@ -116,7 +118,7 @@ Create a bash completion script for to use on your system.<br />
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 
@@ -132,7 +134,7 @@ Creates a config file. The config file allows you to define the instances used d
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 
@@ -159,7 +161,7 @@ start is compatible with the start and stop scripts provided by Adobe.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### stop
@@ -176,7 +178,7 @@ stop is compatible with the start and stop scripts provided by Adobe.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### pull-content
 Download the content packages defined in the configuration file and upload them to an instance of your choosing. Handy to sync content to developer instances during the project.
@@ -195,7 +197,7 @@ Download the content packages defined in the configuration file and upload them 
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
     
 ### passwords
 You don't want to store passwords in a git repository for secure development. Although the tool allows you to define passwords in the configuration file there is an option to safely store the passwords in the key-ring (password managers eg. OSX key-chain) of the operating system. Use the passwords command to populate or update the stored passwords.
@@ -212,7 +214,20 @@ You don't want to store passwords in a git repository for secure development. Al
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
+
+### Projects
+shown the known projects.
+
+    Usage:
+      aem projects [flags]
+    
+    Flags:
+      -h, --help   help for projects
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
 
 ### system-information or sysinfo
 Display information about an instance. This feature is only available from AEM 6.4 or newer.
@@ -233,7 +248,7 @@ Display information about an instance. This feature is only available from AEM 6
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### package-list
 List the packages installed on an instance of your choosing.
@@ -250,7 +265,7 @@ List the packages installed on an instance of your choosing.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### package-rebuild
 Rebuild a package on an instance of your choosing.
@@ -265,7 +280,7 @@ Rebuild a package on an instance of your choosing.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### package-download
 Download a package from any instance defined in the configuration file
@@ -283,7 +298,7 @@ Download a package from any instance defined in the configuration file
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### package-copy
 Copy a package from one instance to another. The destination can be a group to easily install to all members of a group or a single target.
@@ -299,7 +314,7 @@ Copy a package from one instance to another. The destination can be a group to e
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)      
+      -P, --project string   Run command for project. (if not current working directory)      
 	  
 ### package-install
 Install a package you have locally to one instance or to a complete group.
@@ -315,7 +330,7 @@ The name of the package will be extracted from the manifest in the package
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
     
 ### bundle-list
 List all bundles on an instance.
@@ -332,7 +347,7 @@ List all bundles on an instance.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### bundle-start
 Start a bundle based by its symbolic name
@@ -351,7 +366,7 @@ Start a bundle based by its symbolic name
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### bundle-stop
@@ -371,7 +386,7 @@ Stop a bundle based on it's symbolic name
 
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### bundle-install
@@ -392,7 +407,7 @@ Install a bundle based on it's symbolic name
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### log
@@ -413,7 +428,7 @@ See the log file for an instance running locally. Use -f to follow the log file 
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 ### replication-page
 Activate or deactivate a page. use the page path to define which page to activate.
@@ -431,7 +446,7 @@ Activate or deactivate a page. use the page path to define which page to activat
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### activate-tree 
@@ -450,7 +465,7 @@ Activate a piece of the tree. use the path to define which part.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### open
@@ -465,7 +480,7 @@ Open a browser to the instance of your choosing.
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### oak-check
@@ -486,7 +501,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 
@@ -509,7 +524,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 ### oak-compact
@@ -530,7 +545,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
 	
 	Global Flags:
 	  -v, --verbose   verbose output
-      --project string   Run command for project. (if not current working directory)
+      -P, --project string   Run command for project. (if not current working directory)
 
 
 
@@ -554,7 +569,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
     
     Global Flags:
       -v, --verbose   verbose output
-          --project string   Run command for project. (if not current working directory)  
+      -P, --project string   Run command for project. (if not current working directory)  
 
 
 ### oak-explore
@@ -574,7 +589,7 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
       -o, --oak string    Define version of oak-run to use
     
     Global Flags:
-          --project string   Run command for project. (if not current working director)
+      -P, --project string   Run command for project. (if not current working director)
       -v, --verbose          verbose output
      
 ### vlt-copy (needs fix)

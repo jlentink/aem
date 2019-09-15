@@ -50,7 +50,7 @@ var (
 // Execute init commands
 func Execute() {
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
-	rootCmd.PersistentFlags().StringVarP(&Project, "project", "", "", "Run command for project. (if not current working directory)")
+	rootCmd.PersistentFlags().StringVarP(&Project, "project", "P", "", "Run command for project. (if not current working directory)")
 	for _, cmd := range commands {
 		rootCmd.AddCommand(cmd.setup())
 	}
