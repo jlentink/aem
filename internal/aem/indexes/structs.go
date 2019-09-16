@@ -1,15 +1,17 @@
 package indexes
 
 const (
-	indexes = "/crx/server/crx.default/jcr:root/oak:index.1.json"
+	indexes    = "/crx/server/crx.default/jcr:root/oak:index.1.json"
 	reindexUrl = "/oak:index/%s"
 )
 
+// IndexList List of AEM indexes
 type IndexList struct {
 	JcrPrimaryType string   `json:":jcr:primaryType"`
 	JcrMixinTypes  []string `json:"jcr:mixinTypes"`
 }
 
+// Index AEM index
 type Index struct {
 	Name          string   `json:"name"`
 	Info          string   `json:"info"`

@@ -14,7 +14,7 @@ import (
 type commandReindex struct {
 	verbose      bool
 	instanceName string
-	index string
+	index        string
 }
 
 func (c *commandReindex) setup() *cobra.Command {
@@ -46,8 +46,8 @@ func (c *commandReindex) run(cmd *cobra.Command, args []string) {
 	}
 
 	if c.index == "" {
-		searchIndexes, err := indexes.GetIndexes(i)
-		if err != nil {
+		searchIndexes, indexErr := indexes.GetIndexes(i)
+		if indexErr != nil {
 			output.Printf(output.NORMAL, "Error retrieving indexes. (%s)", err.Error())
 			os.Exit(ExitError)
 		}
@@ -60,7 +60,11 @@ func (c *commandReindex) run(cmd *cobra.Command, args []string) {
 		c.index = index.Name
 	}
 
-	indexes.Reindex(i, c.index)
+	err = indexes.Reindex(i, c.index)
+	if err != nil {
+		output.Printf(output.NORMAL, "Error sending reindex. (%s)", err)
+		os.Exit(ExitError)
+	}
 
 }
 
@@ -82,7 +86,6 @@ func (c *commandReindex) searchIndex(indexesList []*indexes.Index) *indexes.Inde
 {{ "Info:" | faint }}	{{ .Info }}
 `,
 	}
-
 
 	searcher := func(input string, index int) bool {
 		cIndex := indexesList[index]

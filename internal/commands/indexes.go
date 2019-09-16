@@ -16,10 +16,10 @@ type commandIndexes struct {
 
 func (c *commandIndexes) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "indexes",
-		Short:   "Show indexes on instance",
-		PreRun:  c.preRun,
-		Run:     c.run,
+		Use:    "indexes",
+		Short:  "Show indexes on instance",
+		PreRun: c.preRun,
+		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	return cmd

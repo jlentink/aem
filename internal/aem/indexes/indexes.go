@@ -26,6 +26,7 @@ func getStringArrayValue(result gjson.Result, path string) []string {
 	return []string{result.Get(path).String()}
 }
 
+// GetIndexes retrieves the indexes from a aem instance
 func GetIndexes(instance *objects.Instance) ([]*Index, error) {
 
 	pw, err := instance.GetPassword()
@@ -45,7 +46,7 @@ func GetIndexes(instance *objects.Instance) ([]*Index, error) {
 	result := gjson.ParseBytes(resp)
 	indexes := make([]*Index, 0)
 	rMap := result.Map()
-	for k, _ := range rMap {
+	for k := range rMap {
 		cResult := result.Get(k)
 		if cResult.Type == gjson.JSON {
 			isIndex := cResult.Get("jcr:primaryType")
@@ -65,6 +66,7 @@ func GetIndexes(instance *objects.Instance) ([]*Index, error) {
 	return indexes, nil
 }
 
+// Reindex start reindex of indexed on aem instance
 func Reindex(instance *objects.Instance, index string) error {
 	pw, err := instance.GetPassword()
 	if err != nil {
