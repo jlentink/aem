@@ -8,6 +8,7 @@ require (
 	github.com/alecthomas/units v0.0.0-20190717042225-c3de453c63f4 // indirect
 	github.com/antchfx/xmlquery v1.0.0
 	github.com/antchfx/xpath v1.0.0 // indirect
+	github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23
 	github.com/danieljoos/wincred v1.0.2 // indirect
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920
 	github.com/dustin/go-humanize v1.0.0
@@ -26,6 +27,7 @@ require (
 	github.com/schollz/progressbar/v2 v2.13.2
 	github.com/spf13/afero v1.1.2
 	github.com/spf13/cobra v0.0.5
+	github.com/tidwall/gjson v1.3.2
 	github.com/zalando/go-keyring v0.0.0-20190531073407-f65c47520c89
 	golang.org/x/crypto v0.0.0-20190829043050-9756ffdc2472 // indirect
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
