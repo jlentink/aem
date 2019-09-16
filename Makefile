@@ -72,6 +72,9 @@ endif
 	@cd build/osx/ && zip ../../osx-v${BUILT_VERSION}.zip aem README.md
 
 windows:
-	env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ./build/windows/aem.exe
-	@cp README.md ./build/windows/
-	@cd build/windows/ && zip ../../windows-v${BUILT_VERSION}.zip aem.exe README.md
+	env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ./build/windows.64/aem.exe
+	@cp README.md ./build/windows.64/
+	@cd build/windows.64/ && zip ../../windows-v${BUILT_VERSION}.amd64.zip aem.exe README.md
+	env GOOS=windows GOARCH=386 go build ${LDFLAGS} -o ./build/windows.32/aem.exe
+	@cp README.md ./build/windows.32/
+	@cd build/windows.32/ && zip ../../windows-v${BUILT_VERSION}.amd32.zip aem.exe README.md

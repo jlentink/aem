@@ -69,13 +69,15 @@ func DownloadFileWithURL(destination string, uri *url.URL, forceDownload bool) (
 		return 0, err
 	}
 
-	defer out.Close() // nolint: errcheck
 	_, err = io.Copy(out, counter)
-
 	if err != nil {
 		return 0, err
 	}
 
+	err = out.Close()
+	if err != nil {
+		return 0, err
+	}
 	err = project.Rename(destination+".tmp", destination)
 	if err != nil {
 		fmt.Print("\n")
