@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/user"
 	"regexp"
+	"runtime"
+	"strings"
 )
 
 const (
@@ -54,6 +56,14 @@ func appendSlash(path string) string {
 	return path
 }
 
+func pathSeparator(path string) string {
+	if strings.ToLower(runtime.GOOS) != "windows" {
+		return path
+	}
+
+	return strings.ReplaceAll(path, "/", "\\")
+}
+
 // RemoveSlash Removes slash from end of path
 func RemoveSlash(path string) string {
 	if len(path) == 1 && path == `/` || len(path) == 0 {
@@ -95,9 +105,11 @@ func Exists(path string) bool {
 
 // Rename file
 func Rename(source, destination string) error {
+	source = pathSeparator(source)
+	destination = pathSeparator(destination)
 	err := fs.Rename(source, destination)
 	if err != nil {
-		err = fmt.Errorf("could not rename directory from %s to %s", source, destination)
+		err = fmt.Errorf("could not rename directory from %s to %s (%s)", source, destination, err)
 	}
 	return err
 }
