@@ -43,6 +43,8 @@ var (
 		&commandReplicationPage{},
 		&commandActivateTree{},
 		&commandProjects{},
+		&commandIndexes{},
+		&commandReindex{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}
 )

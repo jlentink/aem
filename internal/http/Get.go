@@ -16,6 +16,10 @@ func GetPlain(uri string, username string, password string) ([]byte, error) {
 		return nil, err
 	}
 
+	if username != "" || password != "" {
+		URL.User = url.UserPassword(username, password)
+	}
+
 	return Get(URL)
 }
 
@@ -26,12 +30,19 @@ func GetPlainWithHeaders(uri string, username string, password string, header []
 		return nil, err
 	}
 
+	if username != "" || password != "" {
+		URL.User = url.UserPassword(username, password)
+	}
+
 	return GetWithHeaders(URL, header)
 }
 
 // GetWithHeaders Do a get request with url.URL
 func GetWithHeaders(uri *url.URL, header []Header) ([]byte, error) {
-	req, _ := http.NewRequest(http.MethodGet, URLToURLString(uri), nil)
+	req, err := http.NewRequest(http.MethodGet, URLToURLString(uri), nil)
+	if err != nil {
+		return nil, err
+	}
 	for _, h := range header {
 		req.Header.Add(h.Key, h.Value)
 	}
