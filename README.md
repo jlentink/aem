@@ -77,6 +77,8 @@ The command line tool is broken up in different sub-commands. The commands can b
       bundle-stop        Stop bundle
       deploy             Deploy to server(s)
       help               Help about any command
+      indexes            Show indexes on instance
+      indexes-reindex    Reindex index on instance      
       init               Init new project in current directory
       invalidate         Invalidate path's on dispatcher
       log                List error log or application log
@@ -591,6 +593,39 @@ The oak jar will be placed in the bin folder under instance and downloaded if it
     Global Flags:
       -P, --project string   Run command for project. (if not current working director)
       -v, --verbose          verbose output
+
+### indexes
+Show indexes on instances
+
+    Usage:
+      aem indexes [flags]
+    
+    Flags:
+      -h, --help          help for indexes
+      -n, --name string   Instance to stop (default "local-author")
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
+
+### indexes-reindex
+Reindex one of the AEM indexes
+
+    Usage:
+      aem indexes-reindex [flags]
+    
+    Aliases:
+      indexes-reindex, reindex
+    
+    Flags:
+      -h, --help           help for indexes-reindex
+      -i, --index string   Index to reindex
+      -n, --name string    Instance to stop (default "local-author")
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
+
      
 ### vlt-copy (needs fix)
 Copy content from one instance to the other. Set in the config under `vltSyncPaths` the paths your
