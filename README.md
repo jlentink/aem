@@ -683,6 +683,22 @@ or execute the following commands
     
     echo "source ~/.bash-completion/aem-completion.bash" >> ~/.bashrc
 
+### Zsh
+The generated completion script should be put somewhere in your $fpath named _aem.
+    Usage:
+      aem zsh-completion [flags]
+    
+    Aliases:
+      zsh-completion, zsh
+    
+    Flags:
+      -h, --help   help for zsh-completion
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
+
+
 
 Or replace the last line with the following if you use [zshell](https://sourceforge.net/p/zsh/code/ci/master/tree/)
 
