@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/cobra"
 	"os"
@@ -9,7 +8,6 @@ import (
 
 type commandBash struct {
 	verbose      bool
-	instanceName string
 }
 
 func (c *commandBash) setup() *cobra.Command {
@@ -20,7 +18,6 @@ func (c *commandBash) setup() *cobra.Command {
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
-	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	return cmd
 }
 
