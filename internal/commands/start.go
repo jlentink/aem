@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/output"
@@ -59,10 +60,28 @@ func (c *commandStart) run(cmd *cobra.Command, args []string) {
 	for _, currentInstance := range instances {
 		currentInstance := currentInstance
 		if aem.PidExists(currentInstance) && !c.ignorePid {
-			p, _ := project.GetPidFileLocation(currentInstance)
-			output.Printf(output.NORMAL, "Pid already in place. AEM properly already running. (%s)", p)
-			os.Exit(ExitError)
 
+			prompt := &survey.Confirm{
+				Message: "Do you want to ignore the PID file.",
+				Help: "A existing PID file is found. This could be caused by already running instance or " +
+					"an improper shutdown.",
+			}
+			err = survey.AskOne(prompt, &c.ignorePid)
+			if err != nil {
+				if err.Error() == "interrupt" {
+					output.Printf(output.NORMAL, "Program interrupted. (CTRL+C)")
+					os.Exit(ExitError)
+				}
+				output.Printf(output.NORMAL, "Unexpected error: %s", err.Error())
+				os.Exit(ExitError)
+			}
+
+			if !c.ignorePid {
+				p, _ := project.GetPidFileLocation(currentInstance)
+				output.Printf(output.NORMAL, "Pid already in place. AEM properly already running. (%s)", p)
+				os.Exit(ExitError)
+
+			}
 		}
 
 		if aem.TCPPortOpen(currentInstance.Port) {

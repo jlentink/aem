@@ -3,6 +3,7 @@ module github.com/jlentink/aem
 go 1.12
 
 require (
+	github.com/AlecAivazis/survey/v2 v2.0.4
 	github.com/BurntSushi/toml v0.3.1
 	github.com/alecthomas/gometalinter v3.0.0+incompatible // indirect
 	github.com/alecthomas/units v0.0.0-20190717042225-c3de453c63f4 // indirect
