@@ -26,6 +26,11 @@ lint:
 golintci:
 	golangci-lint run
 
+brew:
+	GO111MODULE="on"
+	GOPATH=$(shell pwd)/vendor
+	go get
+	go build
 
 card:
 	goreportcard-cli -v -t 100
