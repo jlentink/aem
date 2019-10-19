@@ -1,0 +1,27 @@
+name = "Extend a core component"
+description = "Component extending a Core component (https://github.com/adobe/aem-core-wcm-components)"
+destination = "ui.apps/src/main/content/jcr_root/apps/{{.project}}/components/content"
+version = "1.0.0"
+
+[[fields]]
+name = "id"
+question = "Component id"
+help = "What is the component id to use"
+type = "input"
+default = "C-01"
+
+[[fields]]
+name = "version"
+question = "What is the version for this component"
+help = "Versioning for components"
+type = "input"
+default = "v1"
+
+[[fields]]
+name = "corecomponent"
+question = "Which core component to extend"
+help = "More infomation at https://github.com/adobe/aem-core-wcm-components"
+type = "select"
+options = ["Text", "Title", "Image", "Download", "Embed", "Experience Fragment", "Teaser", "Button", "List",
+           "Content Fragment", "Content Fragment List", "Separator", "Sharing"]
+default = "b"

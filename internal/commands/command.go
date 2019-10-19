@@ -135,7 +135,7 @@ func changeProjectDir(projectName string) {
 	}
 	projects := ReadRegisteredProjects(homedir)
 	for _, cProject := range projects.Project {
-		if strings.ToLower(cProject.Name) == strings.ToLower(projectName) {
+		if strings.EqualFold(cProject.Name, projectName) {
 			err := os.Chdir(cProject.Path)
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not change to  project folder: %s.\n", err.Error())

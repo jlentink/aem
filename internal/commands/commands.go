@@ -46,6 +46,7 @@ var (
 		&commandIndexes{},
 		&commandReindex{},
 		&commandZsh{},
+		&commandGenerate{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}
 )

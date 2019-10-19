@@ -38,6 +38,15 @@ Latest prebuild version can be found [here](https://github.com/jlentink/aem/rele
 
 Or use the following OSX/Linux oneliner to install:
 
+#### using home brew (OSX only)
+
+Check out the amazing [Homebrew](https://brew.sh/) and when you have homebrew installed use the following commands to install
+
+
+	brew tap jlentink/aem
+	brew install aem-cli
+
+
 
 #### install to /usr/local/bin
 `curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash -s -- -b /usr/local/bin`
@@ -47,6 +56,8 @@ Or use the following OSX/Linux oneliner to install:
 
 #### install to other location
 `curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash -s -- -b YOUR_LOCATION`
+
+
 
 
 

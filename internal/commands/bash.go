@@ -7,7 +7,7 @@ import (
 )
 
 type commandBash struct {
-	verbose      bool
+	verbose bool
 }
 
 func (c *commandBash) setup() *cobra.Command {

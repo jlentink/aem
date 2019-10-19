@@ -7,7 +7,7 @@ import (
 )
 
 type commandZsh struct {
-	verbose      bool
+	verbose bool
 }
 
 func (c *commandZsh) setup() *cobra.Command {
