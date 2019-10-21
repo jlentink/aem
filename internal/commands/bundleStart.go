@@ -17,9 +17,8 @@ type commandBundleStart struct {
 
 func (c *commandBundleStart) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "bundle-start",
+		Use:     "start",
 		Short:   "Start bundle",
-		Aliases: []string{"bstart"},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}

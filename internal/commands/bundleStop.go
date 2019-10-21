@@ -17,9 +17,8 @@ type commandBundelStop struct {
 
 func (c *commandBundelStop) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "bundle-stop",
+		Use:     "stop",
 		Short:   "Stop bundle",
-		Aliases: []string{"bstop"},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}

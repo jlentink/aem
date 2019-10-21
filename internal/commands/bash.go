@@ -12,9 +12,8 @@ type commandBash struct {
 
 func (c *commandBash) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "bash-completion",
+		Use:     "bash",
 		Short:   "Generate bash completion for aemCLI",
-		Aliases: []string{"bash"},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}

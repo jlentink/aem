@@ -15,13 +15,14 @@ type commandPackageInstall struct {
 
 func (c *commandPackageInstall) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "package-install",
+		Use:    "install",
 		Short:  "Install uploaded package",
 		PreRun: c.preRun,
 		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to rebuild package on")
 	cmd.Flags().StringVarP(&c.packageName, "package", "p", ``, "Package to rebuild")
+	cmd.MarkFlagRequired("name")
 	return cmd
 }
 

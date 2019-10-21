@@ -12,7 +12,7 @@ type commandZsh struct {
 
 func (c *commandZsh) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "zsh-completion",
+		Use:     "zsh",
 		Short:   "Generate zsh completion for aemCLI",
 		Aliases: []string{"zsh"},
 		PreRun:  c.preRun,

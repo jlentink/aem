@@ -19,9 +19,8 @@ type commandBundleInstall struct {
 
 func (c *commandBundleInstall) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "bundle-install",
+		Use:     "install",
 		Short:   "Install bundle",
-		Aliases: []string{"binstall"},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}

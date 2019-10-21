@@ -18,13 +18,14 @@ type commandPackageList struct {
 
 func (c *commandPackageList) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "package-list",
+		Use:     "list",
 		Short:   "List packages",
-		Aliases: []string{"plist"},
+		Aliases: []string{},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
+	cmd.MarkFlagRequired("name")
 	return cmd
 }
 

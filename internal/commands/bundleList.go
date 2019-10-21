@@ -16,9 +16,8 @@ type commandBundleList struct {
 
 func (c *commandBundleList) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "bundle-list",
+		Use:     "list",
 		Short:   "List bundles",
-		Aliases: []string{"blist"},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}

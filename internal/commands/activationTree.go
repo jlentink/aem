@@ -19,7 +19,7 @@ type commandActivateTree struct {
 
 func (c *commandActivateTree) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "activate-tree",
+		Use:    "tree",
 		Short:  "Activate Tree",
 		PreRun: c.preRun,
 		Run:    c.run,

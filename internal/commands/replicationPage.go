@@ -19,7 +19,7 @@ type commandReplicationPage struct {
 
 func (c *commandReplicationPage) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "replication-page",
+		Use:    "page",
 		Short:  "Activate / Deactivate page",
 		PreRun: c.preRun,
 		Run:    c.run,

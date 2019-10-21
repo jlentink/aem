@@ -19,8 +19,8 @@ type commandPackageUpload struct {
 
 func (c *commandPackageUpload) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "package-upload",
-		Aliases: []string{"pupload", "pup"},
+		Use:     "upload",
+		Aliases: []string{"up"},
 		Short:   "Upload package to aem",
 		PreRun:  c.preRun,
 		Run:     c.run,

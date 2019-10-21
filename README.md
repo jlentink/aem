@@ -79,7 +79,11 @@ Place the executable in for example `"C:\Program files\aem"` and follow the [tut
 The command line tool is broken up in different sub-commands. The commands can be used by typing `aem <command>` eg. `aem start` All the possible commands are listed below. Every command has the option to request help on the specifications of that commands. eg. `aem start -h`
 
 
+Usage:
+  aem [command]
+
     Available Commands:
+      activate-tree      Activate Tree
       bash-completion    Generate bash completion for aemCLI
       build              Build application
       bundle-install     Install bundle
@@ -87,10 +91,11 @@ The command line tool is broken up in different sub-commands. The commands can b
       bundle-start       Start bundle
       bundle-stop        Stop bundle
       deploy             Deploy to server(s)
+      generate           Generate code block
       help               Help about any command
       indexes            Show indexes on instance
-      indexes-reindex    Reindex index on instance      
-      init               Init new project in current directory
+      indexes-reindex    Reindex index on instance
+      init               Init new project
       invalidate         Invalidate path's on dispatcher
       log                List error log or application log
       oak-check          Run oak check
@@ -106,13 +111,16 @@ The command line tool is broken up in different sub-commands. The commands can b
       package-rebuild    package rebuild
       package-upload     Upload package to aem
       passwords          Set passwords into your keychain
-      projects           List known projects
+      projects           List know projects
       pull-content       Pull content in from instance via packages
+      replication-page   Activate / Deactivate page
       setup-check        Check if all needed binaries are available for all functionality
       start              Start Adobe Experience Manager instance
       stop               stop Adobe Experience Manager instance
       system-information Get system information from Adobe Experience Manager instance
       version            Show version of aemcli
+      zsh-completion     Generate zsh completion for aemCLI
+
 
 ### bash-completion
 Create a bash completion script for to use on your system.<br />
@@ -422,6 +430,60 @@ Install a bundle based on it's symbolic name
 	  -v, --verbose   verbose output
       -P, --project string   Run command for project. (if not current working directory)
 
+### deploy
+Deploy artifacts to aem server. Or deploy and build artifacts
+
+    Deploy to server(s)
+    
+    Usage:
+      aem deploy [flags]
+    
+    Flags:
+      -a, --artifact string   Deploy one a single artifact
+      -b, --build             Build before deploy
+      -g, --group string      Group to deploy to
+      -h, --help              help for deploy
+      -n, --name string       Instance to deploy to (default "local-author")
+      -p, --password string   Overwrite password to use if not using the one from config file
+      -u, --username string   Overwrite username to use if not using the one from config file
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
+
+### Generate
+Generate a component based on templates. Which can be completely customized per project.
+
+    Generate code block
+    
+    Usage:
+      aem generate [flags]
+      aem generate [command]
+    
+    Available Commands:
+      init        Write default templates to disk
+    
+    Flags:
+      -h, --help   help for generate
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
+    
+    Use "aem generate [command] --help" for more information about a command.
+
+### [Generate] init
+Write default templates to disk. So that they can be picked-up 
+    
+    Usage:
+      aem generate init [flags]
+    
+    Flags:
+      -h, --help   help for init
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
 
 ### log
 See the log file for an instance running locally. Use -f to follow the log file for more log information coming in. use CTRL+c to stop following the log file.
@@ -733,7 +795,6 @@ Enable to start automaticly at boot with:
 
 * [Getopt](https://github.com/pborman/getopt/tree/master/v2) - For command line parsing
 * [Go-pretty](github.com/jedib0t/go-pretty/table) - For table printing
-* [Logrus](https://github.com/sirupsen/logrus) - For logging
 * [Afero](https://github.com/spf13/afero) - For FileSystem Abstraction
 * [Progressbar](https://github.com/schollz/progressbar) - For progress bar printing
 * [Go-humanize](https://github.com/dustin/go-humanize) - Formatters for units to human friendly sizes
@@ -741,7 +802,6 @@ Enable to start automaticly at boot with:
 * [Cobra](https://github.com/spf13/cobra) - Commandline library
 * [TOML](https://github.com/BurntSushi/toml) - TOML parser for Golang with reflection.
 * [Tail](https://github.com/hpcloud/tail) - For tailing files
-* [Aemsync](https://github.com/gavoja/aemsync) - Syncing files to the JCR
 * [Survey](https://github.com/AlecAivazis/survey) - For console survey
 * [Go-colortext](https://github.com/daviddengcn/go-colortext) - Color text printing
 
