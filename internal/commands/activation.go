@@ -26,6 +26,7 @@ func (c *commandActivation) setup() *cobra.Command {
 	commands = []Command{
 		&commandReplicationPage{},
 		&commandActivateTree{},
+		&commandInvalidate{},
 	}
 	for _, cmd := range commands {
 		c.cmd.AddCommand(cmd.setup())
@@ -42,5 +43,5 @@ func (c *commandActivation) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandActivation) run(cmd *cobra.Command, args []string) {
-	cmd.Help()
+	c.cmd.Help()
 }

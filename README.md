@@ -46,19 +46,16 @@ Check out the amazing [Homebrew](https://brew.sh/) and when you have homebrew in
 	brew tap jlentink/aem
 	brew install aem-cli
 
+### Other methods
 
-
-#### install to /usr/local/bin
+##### install to /usr/local/bin
 `curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash -s -- -b /usr/local/bin`
 
-#### install to ~/bin
+##### install to ~/bin
 `curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash`
 
-#### install to other location
+##### install to other location
 `curl -sfL https://raw.githubusercontent.com/jlentink/aem/master/install.sh | bash -s -- -b YOUR_LOCATION`
-
-
-
 
 
 Example install locations.
@@ -79,69 +76,321 @@ Place the executable in for example `"C:\Program files\aem"` and follow the [tut
 The command line tool is broken up in different sub-commands. The commands can be used by typing `aem <command>` eg. `aem start` All the possible commands are listed below. Every command has the option to request help on the specifications of that commands. eg. `aem start -h`
 
 
-Usage:
-  aem [command]
-
-    Available Commands:
-      activate-tree      Activate Tree
-      bash-completion    Generate bash completion for aemCLI
-      build              Build application
-      bundle-install     Install bundle
-      bundle-list        List bundles
-      bundle-start       Start bundle
-      bundle-stop        Stop bundle
-      deploy             Deploy to server(s)
-      generate           Generate code block
-      help               Help about any command
-      indexes            Show indexes on instance
-      indexes-reindex    Reindex index on instance
-      init               Init new project
-      invalidate         Invalidate path's on dispatcher
-      log                List error log or application log
-      oak-check          Run oak check
-      oak-checkpoints    Run oak checkpoints
-      oak-compact        Run oak compact
-      oak-console        Run oak console
-      oak-explorer       Run oak explorer
-      open               Open URL for Adobe Experience Manager instance in browser
-      package-copy       Copy packages from one instance to another
-      package-download   List packages
-      package-install    Install uploaded package
-      package-list       List packages
-      package-rebuild    package rebuild
-      package-upload     Upload package to aem
-      passwords          Set passwords into your keychain
-      projects           List know projects
-      pull-content       Pull content in from instance via packages
-      replication-page   Activate / Deactivate page
-      setup-check        Check if all needed binaries are available for all functionality
-      start              Start Adobe Experience Manager instance
-      stop               stop Adobe Experience Manager instance
-      system-information Get system information from Adobe Experience Manager instance
-      version            Show version of aemcli
-      zsh-completion     Generate zsh completion for aemCLI
-
-
-### bash-completion
-Create a bash completion script for to use on your system.<br />
-**E.g: aem bash > aem-completion.bash**
-
-
 	Usage:
-	  aem bash-completion [flags]
+	  aem [command]
 	
-	Aliases:
-	  bash-completion, bash
+	Available Commands:
+	  activation         Activation commands
+	  build              Build application
+	  bundle             Bundle commands
+	  deploy             Deploy to server(s)
+	  generate           Generate code block
+	  help               Help about any command
+	  indexes            index commands
+	  init               Init new project
+	  invalidate         Invalidate path's on dispatcher
+	  log                List error log or application log
+	  oak                Oak commands
+	  open               Open URL for Adobe Experience Manager instance in browser
+	  package            Package commands
+	  passwords          Set passwords into your keychain
+	  projects           List know projects
+	  pull-content       Pull content in from instance via packages
+	  setup-check        Check if all needed binaries are available for all functionality
+	  shell              Shell completion commands
+	  start              Start Adobe Experience Manager instance
+	  stop               stop Adobe Experience Manager instance
+	  system-information Get system information from Adobe Experience Manager instance
+	  version            Show version of aemcli
 	
 	Flags:
-	  -h, --help          help for bash-completion
-	  -n, --name string   Instance to stop (default "local-author")
+	  -h, --help             help for aem
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### activation
+Activation commands for (de)activation a page or a tree.
+
+	Activation commands
+	
+	Usage:
+	  aem activation [flags]
+	  aem activation [command]
+	
+	Available Commands:
+	  page        Activate / Deactivate page
+	  tree        Activate Tree
+	
+	Flags:
+	  -h, --help   help for activation
 	
 	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+	  
+### activation invalidate 
+Invalidate path's on dispatcher
+
+Usage:
+  aem activation invalidate [flags]
+
+Aliases:
+  invalidate, flush
+
+Flags:
+  -g, --group string   Instance group to sent invalidate to
+  -h, --help           help for invalidate
+  -n, --name string    Instance to sent invalidate to
+  -p, --path string    Package to rebuild
+
+Global Flags:
+  -P, --project string   Run command for project. (if not current working directory)
+  -v, --verbose          verbose output
+
+### activation page 
+Activate / Deactivate page on instance
+
+	Usage:
+	  aem activation page [flags]
+	
+	Flags:
+	  -a, --activate       Activate page
+	  -d, --deactivate     Deactivate
+	  -g, --group string   Instance group to (de)activate page on
+	  -h, --help           help for page
+	  -n, --name string    Instance to (de)activate page on (default "local-author")
+	  -p, --path string    Path to (de)activate
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### activation tree 
+Activate tree
+
+	Usage:
+	  aem activation tree [flags]
+	
+	Flags:
+	  -g, --group string         Instance group to (de)activate page on
+	  -h, --help                 help for tree
+	  -d, --ignore-deactivated   Ignore Deactivated
+	  -n, --name string          Instance to (de)activate page on (default "local-author")
+	  -o, --only-modified        Only Modified
+	  -p, --path string          Path to (de)activate
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
 
 
+### build
+Build application using the maven pom file
+
+	Usage:
+	  aem build [flags]
+	
+	Flags:
+	  -h, --help   help for build
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+ 
+### bundle
+All commands available for bundles
+
+	Usage:
+	  aem bundle [flags]
+	  aem bundle [command]
+	
+	Available Commands:
+	  install     Install bundle
+	  list        List bundles
+	  start       Start bundle
+	  stop        Stop bundle
+	
+	Flags:
+	  -h, --help   help for bundle
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### bundle install
+Install bundle on instance
+
+	Usage:
+	  aem bundle install [flags]
+	
+	Flags:
+	  -b, --bundle string   Instance group to install bundle on
+	  -g, --group string    Instance group to install bundle on
+	  -h, --help            help for install
+	  -l, --level string    Bundle start level (default "20")
+	  -n, --name string     Instance to install bundle on (default "local-author")
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+	
+### bundle list
+List bundles on instance
+
+	Usage:
+	  aem bundle list [flags]
+	
+	Flags:
+	  -h, --help          help for list
+	  -n, --name string   Instance to list bundles off (default "local-author")
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+
+### bundle start
+
+Start bundle on an aem instance
+
+	Usage:
+	  aem bundle start [flags]
+	
+	Flags:
+	  -b, --bundle string   Instance group to install bundle on
+	  -g, --group string    Instance group to install bundle on
+	  -h, --help            help for start
+	  -n, --name string     Instance to install bundle on (default "local-author")
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### bundle stop
+Stop bundle on an aem instance
+
+	Usage:
+	  aem bundle stop [flags]
+	
+	Flags:
+	  -b, --bundle string   Instance group to install bundle on
+	  -g, --group string    Instance group to install bundle on
+	  -h, --help            help for stop
+	  -n, --name string     Instance to install bundle on (default "local-author")
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### deploy
+Deploy (or deploy and build) to server(s)
+
+	Usage:
+	  aem deploy [flags]
+	
+	Flags:
+	  -a, --artifact string   Deploy one a single artifact
+	  -b, --build             Build before deploy
+	  -g, --group string      Group to deploy to
+	  -h, --help              help for deploy
+	  -n, --name string       Instance to deploy to (default "local-author")
+	  -p, --password string   Overwrite password to use if not using the one from config file
+	  -u, --username string   Overwrite username to use if not using the one from config file
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### generate
+Generate code block based on templates. Every template or filename can have a variable. Variables are defined as {{.variablename}}. Altering the case typing can be done via following functions:
+
+* CC - camelCase
+* UC - UPPER CASE
+* LC - lower case
+* PC - PascalCase
+* SC - snake_case
+* KC - kabab-case
+* TC - Title case
+
+More documentation on templates can be found [here](https://golang.org/pkg/text/template/).
+
+		
+		Usage:
+		  aem generate [flags]
+		  aem generate [command]
+			
+		Available Commands:
+		  init        Write default templates to disk
+			
+		Flags:
+		  -h, --help   help for generate
+			
+		Global Flags:
+		  -P, --project string   Run command for project. (if not current working directory)
+		  -v, --verbose          verbose output
+
+### generate init
+Write default templates to disk for usage and customization
+
+	Usage:
+	  aem generate init [flags]
+	
+	Flags:
+	  -h, --help   help for init
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### indexes
+Index commands
+
+	Usage:
+	  aem indexes [flags]
+	  aem indexes [command]
+	
+	Available Commands:
+	  indexes     Show indexes on instance
+	  list        Reindex index on instance
+	
+	Flags:
+	  -h, --help   help for indexes
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### indexes indexes
+Show indexes on instance
+
+Usage:
+  aem indexes indexes [flags]
+
+Flags:
+  -h, --help          help for indexes
+  -n, --name string   Instance to stop (default "local-author")
+
+Global Flags:
+  -P, --project string   Run command for project. (if not current working directory)
+  -v, --verbose          verbose output
+
+### indexes reindex
+Reindex index on instance
+
+	Usage:
+	  aem indexes list [flags]
+	
+	Aliases:
+	  list, reindex
+	
+	Flags:
+	  -h, --help           help for list
+	  -i, --index string   Index to reindex
+	  -n, --name string    Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
 
 ### init
 Creates a config file. The config file allows you to define the instances used during the project. (E.g. local author, local dev etc...)
@@ -157,9 +406,381 @@ Creates a config file. The config file allows you to define the instances used d
 	  -v, --verbose   verbose output
       -P, --project string   Run command for project. (if not current working directory)
 
-
-
 In the config, you can also define the packages you want to install at boot as for the location of the AEM jar to download for the project.
+
+### log
+See the log file for an instance running locally. Use -f to follow the log file for more log information coming in. use CTRL+c to stop following the log file.
+
+	Usage:
+	  aem log [flags]
+	
+	Aliases:
+	  log, logs
+	
+	Flags:
+	  -f, --follow        Actively follow lines when they come in
+	  -h, --help          help for log
+	      --list          List available log files
+	  -l, --log string    Which file(s) to follow (default "error.log")
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+     -P, --project string   Run command for project. (if not current working directory)
+
+### oak
+Oak commands
+
+	Usage:
+	  aem oak [flags]
+	  aem oak [command]
+	
+	Available Commands:
+	  check       Run oak check
+	  checkpoints Run oak checkpoints
+	  compact     Run oak compact
+	  console     Run oak console
+	  explorer    Run oak explorer
+	
+	Flags:
+	  -h, --help   help for oak
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+
+### oak check 
+Run oak check
+
+	Usage:
+	  aem oak check [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for check
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### oak checkpoints
+Run oak checkpoints
+
+	Usage:
+	  aem oak checkpoints [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for checkpoints
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### oak compact
+Run oak compact
+Run oak-run check on instance. Check the FileStore for inconsistencies. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+
+	Usage:
+	  aem oak compact [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for compact
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### oak console
+Run oak console
+Run oak-run check on instance. Check the FileStore for inconsistencies. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+	Usage:
+	  aem oak console [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for console
+	  -m, --metrics       Enables metrics based statistics collection
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	  -w, --read-write    Connect to repository in read-write mode
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+### oak explorer
+Run oak explorer
+Run oak-run check on instance. Check the FileStore for inconsistencies. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
+
+Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
+When you wan't to define a specific version use the ```--oak```. 
+The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
+
+
+	Usage:
+	  aem oak explorer [flags]
+	
+	Flags:
+	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
+	  -h, --help          help for explorer
+	  -n, --name string   Instance to stop (default "local-author")
+	  -o, --oak string    Define version of oak-run to use
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+
+
+### open
+Open a browser to the instance of your choosing.
+
+	Usage:
+	  aem open [instance name] [flags]
+	
+	Flags:
+	  -h, --help          help for open
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)
+
+### package
+Package commands
+
+	Usage:
+	  aem package [flags]
+	  aem package [command]
+	
+	Available Commands:
+	  copy        Copy packages from one instance to another
+	  download    Download packages
+	  install     Install uploaded package
+	  list        List packages
+	  rebuild     package rebuild
+	  upload      Upload package to aem
+	
+	Flags:
+	  -h, --help   help for package
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+### package list
+List the packages installed on an instance of your choosing.
+
+	Usage:
+	  aem package list [flags]
+	
+	Aliases:
+	  package-list, plist
+	
+	Flags:
+	  -h, --help          help for package-list
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)
+
+### package rebuild
+Rebuild a package on an instance of your choosing.
+
+	Usage:
+	  aem package rebuild [flags]
+	
+	Flags:
+	  -h, --help             help for package-rebuild
+	  -n, --name string      Instance to rebuild package on (default "local-author")
+	  -p, --package string   Package to rebuild
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)
+
+### package download
+Download a package from any instance defined in the configuration file
+
+	Usage:
+	  aem package download [flags]
+	
+	Flags:
+	  -h, --help             help for package-download
+	  -n, --name string      Instance to stop (default "local-author")
+	  -p, --package string   Package name. E.g: name, name:1.0.0
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)
+
+### package copy
+Copy a package from one instance to another. The destination can be a group to easily install to all members of a group or a single target.
+
+	Usage:
+	  aem package copy [flags]
+	
+	Flags:
+	  -f, --from string      Instance to copy from
+	  -h, --help             help for package-copy
+	  -p, --package string   Package to copy
+	  -t, --to string        Destination Instance
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)      
+	  
+### package install
+Install a package you have locally to one instance or to a complete group.
+The name of the package will be extracted from the manifest in the package
+
+	Usage:
+	  aem package install [flags]
+	
+	Flags:
+	  -h, --help             help for package-install
+	  -n, --name string      Instance to rebuild package on (default "local-author")
+	  -p, --package string   Package to rebuild
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)
+
+    
+### passwords
+You don't want to store passwords in a git repository for secure development. Although the tool allows you to define passwords in the configuration file there is an option to safely store the passwords in the key-ring (password managers eg. OSX key-chain) of the operating system. Use the passwords command to populate or update the stored passwords.
+
+	Usage:
+	  aem passwords [flags]
+	
+	Aliases:
+	  passwords, password, passwd
+	
+	Flags:
+	  -h, --help          help for passwords
+	  -n, --name string   Update specific instance
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+      -P, --project string   Run command for project. (if not current working directory)
+      
+### Projects
+shown the known projects from previous use. These projects can be triggered from everywhere using `-P` `--project` with every command
+
+    Usage:
+      aem projects [flags]
+    
+    Flags:
+      -h, --help   help for projects
+    
+    Global Flags:
+      -P, --project string   Run command for project. (if not current working directory)
+      -v, --verbose          verbose output
+
+### pull-content
+Download the content packages defined in the configuration file and upload them to an instance of your choosing. Handy to sync content to developer instances during the project.
+
+	Usage:
+	  aem pull-content [flags]
+	
+	Aliases:
+	  pull-content, cpull
+	
+	Flags:
+	  -b, --build         Build before download
+	  -f, --from string   Instance to copy from
+	  -h, --help          help for pull-content
+	  -t, --to string     Destination Instance (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+     -P, --project string   Run command for project. (if not current working directory)
+     
+### setup-check
+Check if all needed binaries are available for all functionality
+
+Usage:
+  aem setup-check [flags]
+
+Aliases:
+  setup-check, setup
+
+Flags:
+  -h, --help   help for setup-check
+
+Global Flags:
+  -P, --project string   Run command for project. (if not current working directory)
+  -v, --verbose          verbose output
+      
+### shell
+Shell completion commands
+
+	Usage:
+	  aem shell [flags]
+	  aem shell [command]
+	
+	Available Commands:
+	  bash        Generate bash completion for aemCLI
+	  zsh         Generate zsh completion for aemCLI
+	
+	Flags:
+	  -h, --help   help for shell
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
+      
+### shell bash
+Create a bash completion script for to use on your system.<br />
+**E.g: aem bash > aem-completion.bash**
+
+
+	Usage:
+	  aem shell bash[flags]
+		
+	Flags:
+	  -h, --help          help for bash-completion
+	  -n, --name string   Instance to stop (default "local-author")
+	
+	Global Flags:
+	  -v, --verbose   verbose output
+     -P, --project string   Run command for project. (if not current working directory)
+
+### shell zsh
+Create a zsh completion script for to use on your system.<br />
+**E.g: aem zsh > aem-completion.bash**
+
+
+	Usage:
+	  aem shell zsh [flags]
+	
+	Aliases:
+	  zsh, zsh
+	
+	Flags:
+	  -h, --help   help for zsh
+	
+	Global Flags:
+	  -P, --project string   Run command for project. (if not current working directory)
+	  -v, --verbose          verbose output
 
 ### start
 when using the start command is used it will download all files needed that are defined in the config file and automatically installed. Files removed from the configuration will be removed from disk so that AEM will automatically deinstall them on the next start.
@@ -201,55 +822,6 @@ stop is compatible with the start and stop scripts provided by Adobe.
 	  -v, --verbose   verbose output
       -P, --project string   Run command for project. (if not current working directory)
 
-### pull-content
-Download the content packages defined in the configuration file and upload them to an instance of your choosing. Handy to sync content to developer instances during the project.
-
-	Usage:
-	  aem pull-content [flags]
-	
-	Aliases:
-	  pull-content, cpull
-	
-	Flags:
-	  -b, --build         Build before download
-	  -f, --from string   Instance to copy from
-	  -h, --help          help for pull-content
-	  -t, --to string     Destination Instance (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-    
-### passwords
-You don't want to store passwords in a git repository for secure development. Although the tool allows you to define passwords in the configuration file there is an option to safely store the passwords in the key-ring (password managers eg. OSX key-chain) of the operating system. Use the passwords command to populate or update the stored passwords.
-
-	Usage:
-	  aem passwords [flags]
-	
-	Aliases:
-	  passwords, password, passwd
-	
-	Flags:
-	  -h, --help          help for passwords
-	  -n, --name string   Update specific instance
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### Projects
-shown the known projects.
-
-    Usage:
-      aem projects [flags]
-    
-    Flags:
-      -h, --help   help for projects
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working directory)
-      -v, --verbose          verbose output
-
 ### system-information or sysinfo
 Display information about an instance. This feature is only available from AEM 6.4 or newer.
 
@@ -271,448 +843,6 @@ Display information about an instance. This feature is only available from AEM 6
 	  -v, --verbose   verbose output
       -P, --project string   Run command for project. (if not current working directory)
 
-### package-list
-List the packages installed on an instance of your choosing.
-
-	Usage:
-	  aem package-list [flags]
-	
-	Aliases:
-	  package-list, plist
-	
-	Flags:
-	  -h, --help          help for package-list
-	  -n, --name string   Instance to stop (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### package-rebuild
-Rebuild a package on an instance of your choosing.
-
-	Usage:
-	  aem package-rebuild [flags]
-	
-	Flags:
-	  -h, --help             help for package-rebuild
-	  -n, --name string      Instance to rebuild package on (default "local-author")
-	  -p, --package string   Package to rebuild
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### package-download
-Download a package from any instance defined in the configuration file
-
-	Usage:
-	  aem package-download [flags]
-	
-	Aliases:
-	  package-download, pdownload, pdown
-	
-	Flags:
-	  -h, --help             help for package-download
-	  -n, --name string      Instance to stop (default "local-author")
-	  -p, --package string   Package name. E.g: name, name:1.0.0
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### package-copy
-Copy a package from one instance to another. The destination can be a group to easily install to all members of a group or a single target.
-
-	Usage:
-	  aem package-copy [flags]
-	
-	Flags:
-	  -f, --from string      Instance to copy from
-	  -h, --help             help for package-copy
-	  -p, --package string   Package to copy
-	  -t, --to string        Destination Instance
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)      
-	  
-### package-install
-Install a package you have locally to one instance or to a complete group.
-The name of the package will be extracted from the manifest in the package
-
-	Usage:
-	  aem package-install [flags]
-	
-	Flags:
-	  -h, --help             help for package-install
-	  -n, --name string      Instance to rebuild package on (default "local-author")
-	  -p, --package string   Package to rebuild
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-    
-### bundle-list
-List all bundles on an instance.
-
-	Usage:
-	  aem bundle-list [flags]
-	
-	Aliases:
-	  bundle-list, blist
-	
-	Flags:
-	  -h, --help          help for bundle-list
-	  -n, --name string   Instance to list bundles off (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### bundle-start
-Start a bundle based by its symbolic name
-
-	Usage:
-	  aem bundle-start [flags]
-	
-	Aliases:
-	  bundle-start, bstart
-	
-	Flags:
-	  -b, --bundle string   Instance group to install bundle on
-	  -g, --group string    Instance group to install bundle on
-	  -h, --help            help for bundle-start
-	  -n, --name string     Instance to install bundle on (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-### bundle-stop
-Stop a bundle based on it's symbolic name
-
-	Usage:
-	  aem bundle-stop [flags]
-	
-	Aliases:
-	  bundle-stop, bstop
-	
-	Flags:
-	  -b, --bundle string   Instance group to install bundle on
-	  -g, --group string    Instance group to install bundle on
-	  -h, --help            help for bundle-stop
-	  -n, --name string     Instance to install bundle on (default "local-author")
-
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-### bundle-install
-Install a bundle based on it's symbolic name
-
-	Usage:
-	  aem bundle-install [flags]
-	
-	Aliases:
-	  bundle-install, binstall
-	
-	Flags:
-	  -b, --bundle string   Instance group to install bundle on
-	  -g, --group string    Instance group to install bundle on
-	  -h, --help            help for bundle-install
-	  -l, --level string    Bundle start level (default "20")
-	  -n, --name string     Instance to install bundle on (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### deploy
-Deploy artifacts to aem server. Or deploy and build artifacts
-
-    Deploy to server(s)
-    
-    Usage:
-      aem deploy [flags]
-    
-    Flags:
-      -a, --artifact string   Deploy one a single artifact
-      -b, --build             Build before deploy
-      -g, --group string      Group to deploy to
-      -h, --help              help for deploy
-      -n, --name string       Instance to deploy to (default "local-author")
-      -p, --password string   Overwrite password to use if not using the one from config file
-      -u, --username string   Overwrite username to use if not using the one from config file
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working directory)
-      -v, --verbose          verbose output
-
-### Generate
-Generate a component based on templates. Which can be completely customized per project.
-
-    Generate code block
-    
-    Usage:
-      aem generate [flags]
-      aem generate [command]
-    
-    Available Commands:
-      init        Write default templates to disk
-    
-    Flags:
-      -h, --help   help for generate
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working directory)
-      -v, --verbose          verbose output
-    
-    Use "aem generate [command] --help" for more information about a command.
-
-### [Generate] init
-Write default templates to disk. So that they can be picked-up 
-    
-    Usage:
-      aem generate init [flags]
-    
-    Flags:
-      -h, --help   help for init
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working directory)
-      -v, --verbose          verbose output
-
-### log
-See the log file for an instance running locally. Use -f to follow the log file for more log information coming in. use CTRL+c to stop following the log file.
-
-	Usage:
-	  aem log [flags]
-	
-	Aliases:
-	  log, logs
-	
-	Flags:
-	  -f, --follow        Actively follow lines when they come in
-	  -h, --help          help for log
-	      --list          List available log files
-	  -l, --log string    Which file(s) to follow (default "error.log")
-	  -n, --name string   Instance to stop (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-### replication-page
-Activate or deactivate a page. use the page path to define which page to activate.
-
-	Usage:
-	  aem replication-page [flags]
-	
-	Flags:
-	  -a, --activate       Activate page
-	  -d, --deactivate     Deactivate
-	  -g, --group string   Instance group to (de)activate page on
-	  -h, --help           help for replication-page
-	  -n, --name string    Instance to (de)activate page on (default "local-author")
-	  -p, --path string    Path to (de)activate
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-### activate-tree 
-Activate a piece of the tree. use the path to define which part.
-
-	Usage:
-	  aem activate-tree [flags]
-	
-	Flags:
-	  -g, --group string         Instance group to (de)activate page on
-	  -h, --help                 help for activate-tree
-	  -d, --ignore-deactivated   Ignore Deactivated
-	  -n, --name string          Instance to (de)activate page on (default "local-author")
-	  -o, --only-modified        Only Modified
-	  -p, --path string          Path to (de)activate
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-### open
-Open a browser to the instance of your choosing.
-
-	Usage:
-	  aem open [instance name] [flags]
-	
-	Flags:
-	  -h, --help          help for open
-	  -n, --name string   Instance to stop (default "local-author")
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-### oak-check
-Run oak-run check on instance. Check the FileStore for inconsistencies. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
-
-Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
-When you wan't to define a specific version use the ```--oak```. 
-The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
-
-	Usage:
-	  aem oak-check [flags]
-	
-	Flags:
-	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-	  -h, --help          help for oak-check
-	  -n, --name string   Instance to stop (default "local-author")
-	  -o, --oak string    Define version of oak-run to use
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-
-### oak-checkpoints
-Run oak-run checkpoints on instance. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
-
-Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
-When you wan't to define a specific version use the ```--oak```. 
-The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
-
-
-	Usage:
-	  aem oak-checkpoints [flags]
-	
-	Flags:
-	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-	  -h, --help          help for oak-checkpoints
-	  -n, --name string   Instance to stop (default "local-author")
-	  -o, --oak string    Define version of oak-run to use
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-### oak-compact
-Run oak-run offline compaction on instance. Manage checkpoints. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
-
-Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
-When you wan't to define a specific version use the ```--oak```. 
-The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
-
-	Usage:
-	  aem oak-compact [flags]
-	
-	Flags:
-	  -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-	  -h, --help          help for oak-compact
-	  -n, --name string   Instance to stop (default "local-author")
-	  -o, --oak string    Define version of oak-run to use
-	
-	Global Flags:
-	  -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)
-
-
-
-### oak-console
-Run oak-run console on instance. Start an interactive console. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
-
-Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
-When you wan't to define a specific version use the ```--oak```. 
-The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
-
-    Usage:
-      aem oak-console [flags]
-    
-    Flags:
-      -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-      -h, --help          help for oak-console
-      -m, --metrics       Enables metrics based statistics collection
-      -n, --name string   Instance to stop (default "local-author")
-      -o, --oak string    Define version of oak-run to use
-      -w, --read-write    Connect to repository in read-write mode
-    
-    Global Flags:
-      -v, --verbose   verbose output
-      -P, --project string   Run command for project. (if not current working directory)  
-
-
-### oak-explore
-Run oak-run explore on instance. Starts a GUI browser based on java swing. More information see [Oak-run](https://github.com/apache/jackrabbit-oak/tree/trunk/oak-run).
-
-Use ```--aem``` to define which AEM version you are running this against and aem cli will set the corresponding oak-run version. 
-When you wan't to define a specific version use the ```--oak```. 
-The oak jar will be placed in the bin folder under instance and downloaded if it not exists yet.
-
-    Usage:
-      aem oak-explorer [flags]
-    
-    Flags:
-      -a, --aem string    Version of AEM to use oak-run on. (use matching AEM version of oak-run)
-      -h, --help          help for oak-explorer
-      -n, --name string   Instance to stop (default "local-author")
-      -o, --oak string    Define version of oak-run to use
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working director)
-      -v, --verbose          verbose output
-
-### indexes
-Show indexes on instances
-
-    Usage:
-      aem indexes [flags]
-    
-    Flags:
-      -h, --help          help for indexes
-      -n, --name string   Instance to stop (default "local-author")
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working directory)
-      -v, --verbose          verbose output
-
-### indexes-reindex
-Reindex one of the AEM indexes
-
-    Usage:
-      aem indexes-reindex [flags]
-    
-    Aliases:
-      indexes-reindex, reindex
-    
-    Flags:
-      -h, --help           help for indexes-reindex
-      -i, --index string   Index to reindex
-      -n, --name string    Instance to stop (default "local-author")
-    
-    Global Flags:
-      -P, --project string   Run command for project. (if not current working directory)
-      -v, --verbose          verbose output
-
-     
-### vlt-copy (needs fix)
-Copy content from one instance to the other. Set in the config under `vltSyncPaths` the paths your
-want to copy or provide a path via `-p` or `--path`. Prepend the path with an exclamation mark (!) to do
-an recursive copy.
-
-
-Available options:
-
-    -f, --from=value  Instance to data from
-    -p, --path=value  Use path instead of configuration paths
-    -t, --to=value    Instance to data to (default: local-author)
-    -v, --verbose     Enable verbose
- 
 
 ### version
 Output the current version of the aem command line interface you are using.
@@ -752,14 +882,14 @@ or execute the following commands
  
 
     mkdir ~/.bash-completion
-    cp aem-completion.bash ~/.bash-completion/aem-completion.bash
+    aem shell bash > ~/.bash-completion/aem-completion.bash
     
     echo "source ~/.bash-completion/aem-completion.bash" >> ~/.bashrc
 
 ### Zsh
 The generated completion script should be put somewhere in your $fpath named _aem.
     Usage:
-      aem zsh-completion [flags]
+      aem shell zsh [flags]
     
     Aliases:
       zsh-completion, zsh

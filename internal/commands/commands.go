@@ -23,7 +23,6 @@ var (
 		&commandDeploy{},
 		&commandBuild{},
 		&commandPullContent{},
-		&commandInvalidate{},
 		&commandPassword{},
 		&commandBundle{},
 		&commandPackage{},
