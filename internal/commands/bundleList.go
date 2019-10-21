@@ -16,10 +16,10 @@ type commandBundleList struct {
 
 func (c *commandBundleList) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "list",
-		Short:   "List bundles",
-		PreRun:  c.preRun,
-		Run:     c.run,
+		Use:    "list",
+		Short:  "List bundles",
+		PreRun: c.preRun,
+		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to list bundles off")
 	return cmd

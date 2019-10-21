@@ -6,11 +6,8 @@ import (
 )
 
 type commandShellCompletion struct {
-	verbose      bool
-	instanceName string
-	aemVersion   string
-	oakVersion   string
-	cmd          *cobra.Command
+	verbose bool
+	cmd     *cobra.Command
 }
 
 func (c *commandShellCompletion) setup() *cobra.Command {
@@ -21,7 +18,6 @@ func (c *commandShellCompletion) setup() *cobra.Command {
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
-
 
 	commands = []Command{
 		&commandZsh{},
@@ -42,5 +38,5 @@ func (c *commandShellCompletion) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandShellCompletion) run(cmd *cobra.Command, args []string) {
-	cmd.Help()
+	cmd.Help() // nolint: errcheck
 }

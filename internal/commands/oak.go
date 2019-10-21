@@ -6,11 +6,8 @@ import (
 )
 
 type commandOak struct {
-	verbose      bool
-	instanceName string
-	aemVersion   string
-	oakVersion   string
-	cmd          *cobra.Command
+	verbose bool
+	cmd     *cobra.Command
 }
 
 func (c *commandOak) setup() *cobra.Command {
@@ -21,7 +18,6 @@ func (c *commandOak) setup() *cobra.Command {
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
-
 
 	commands = []Command{
 		&commandOakCheck{},
@@ -45,5 +41,5 @@ func (c *commandOak) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandOak) run(cmd *cobra.Command, args []string) {
-	cmd.Help()
+	cmd.Help() // nolint: errcheck
 }

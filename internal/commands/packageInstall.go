@@ -22,7 +22,7 @@ func (c *commandPackageInstall) setup() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to rebuild package on")
 	cmd.Flags().StringVarP(&c.packageName, "package", "p", ``, "Package to rebuild")
-	cmd.MarkFlagRequired("name")
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

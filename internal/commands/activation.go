@@ -6,11 +6,8 @@ import (
 )
 
 type commandActivation struct {
-	verbose      bool
-	instanceName string
-	aemVersion   string
-	oakVersion   string
-	cmd          *cobra.Command
+	verbose bool
+	cmd     *cobra.Command
 }
 
 func (c *commandActivation) setup() *cobra.Command {
@@ -21,7 +18,6 @@ func (c *commandActivation) setup() *cobra.Command {
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
-
 
 	commands = []Command{
 		&commandReplicationPage{},
@@ -43,5 +39,5 @@ func (c *commandActivation) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandActivation) run(cmd *cobra.Command, args []string) {
-	c.cmd.Help()
+	c.cmd.Help() // nolint: errcheck
 }

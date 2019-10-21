@@ -19,10 +19,10 @@ type commandBundleInstall struct {
 
 func (c *commandBundleInstall) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "install",
-		Short:   "Install bundle",
-		PreRun:  c.preRun,
-		Run:     c.run,
+		Use:    "install",
+		Short:  "Install bundle",
+		PreRun: c.preRun,
+		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to install bundle on")
 	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Instance group to install bundle on")

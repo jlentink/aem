@@ -31,7 +31,7 @@ func (c *commandOakConsole) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.oakVersion, "oak", "o", ``, "Define version of oak-run to use")
 	cmd.Flags().BoolVarP(&c.writeMode, "read-write", "w", false, "Connect to repository in read-write mode")
 	cmd.Flags().BoolVarP(&c.metrics, "metrics", "m", false, "Enables metrics based statistics collection")
-	cmd.MarkFlagRequired("name")
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

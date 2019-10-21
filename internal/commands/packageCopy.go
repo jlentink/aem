@@ -29,8 +29,8 @@ func (c *commandPackageCopy) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceName, "from", "f", ``, "Instance to copy from")
 	cmd.Flags().StringVarP(&c.toInstanceName, "to", "t", ``, "Destination Instance")
 	cmd.Flags().StringVarP(&c.cPackage, "package", "p", ``, "Package to copy")
-	cmd.MarkFlagRequired("from")
-	cmd.MarkFlagRequired("to")
+	cmd.MarkFlagRequired("from") // nolint: errcheck
+	cmd.MarkFlagRequired("to")   // nolint: errcheck
 	return cmd
 }
 

@@ -25,7 +25,7 @@ func (c *commandPackageList) setup() *cobra.Command {
 		Run:     c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
-	cmd.MarkFlagRequired("name")
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

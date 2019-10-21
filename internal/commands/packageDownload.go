@@ -28,7 +28,7 @@ func (c *commandPackageDownload) setup() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	cmd.Flags().StringVarP(&c.packageName, "package", "p", ``, "Package name. E.g: name, name:1.0.0")
-	cmd.MarkFlagRequired("name")
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

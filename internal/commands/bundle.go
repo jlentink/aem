@@ -6,11 +6,8 @@ import (
 )
 
 type commandBundle struct {
-	verbose      bool
-	instanceName string
-	aemVersion   string
-	oakVersion   string
-	cmd          *cobra.Command
+	verbose bool
+	cmd     *cobra.Command
 }
 
 func (c *commandBundle) setup() *cobra.Command {
@@ -21,7 +18,6 @@ func (c *commandBundle) setup() *cobra.Command {
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
-
 
 	commands = []Command{
 		&commandBundleList{},
@@ -44,5 +40,5 @@ func (c *commandBundle) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandBundle) run(cmd *cobra.Command, args []string) {
-	cmd.Help()
+	cmd.Help() // nolint: errcheck
 }

@@ -6,11 +6,8 @@ import (
 )
 
 type commandIndex struct {
-	verbose      bool
-	instanceName string
-	aemVersion   string
-	oakVersion   string
-	cmd          *cobra.Command
+	verbose bool
+	cmd     *cobra.Command
 }
 
 func (c *commandIndex) setup() *cobra.Command {
@@ -21,7 +18,6 @@ func (c *commandIndex) setup() *cobra.Command {
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
-
 
 	commands = []Command{
 		&commandIndexes{},
@@ -42,5 +38,5 @@ func (c *commandIndex) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandIndex) run(cmd *cobra.Command, args []string) {
-	cmd.Help()
+	cmd.Help() // nolint: errcheck
 }
