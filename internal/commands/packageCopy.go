@@ -12,16 +12,16 @@ import (
 	"strings"
 )
 
-type commandCopyPackage struct {
+type commandPackageCopy struct {
 	verbose        bool
 	instanceName   string
 	toInstanceName string
 	cPackage       string
 }
 
-func (c *commandCopyPackage) setup() *cobra.Command {
+func (c *commandPackageCopy) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "package-copy",
+		Use:    "copy",
 		Short:  "Copy packages from one instance to another",
 		PreRun: c.preRun,
 		Run:    c.run,
@@ -29,10 +29,12 @@ func (c *commandCopyPackage) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceName, "from", "f", ``, "Instance to copy from")
 	cmd.Flags().StringVarP(&c.toInstanceName, "to", "t", ``, "Destination Instance")
 	cmd.Flags().StringVarP(&c.cPackage, "package", "p", ``, "Package to copy")
+	cmd.MarkFlagRequired("from") // nolint: errcheck
+	cmd.MarkFlagRequired("to")   // nolint: errcheck
 	return cmd
 }
 
-func (c *commandCopyPackage) preRun(cmd *cobra.Command, args []string) {
+func (c *commandPackageCopy) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
 	output.SetVerbose(c.verbose)
 
@@ -40,7 +42,7 @@ func (c *commandCopyPackage) preRun(cmd *cobra.Command, args []string) {
 	RegisterProject()
 }
 
-func (c *commandCopyPackage) run(cmd *cobra.Command, args []string) {
+func (c *commandPackageCopy) run(cmd *cobra.Command, args []string) {
 	_, f, errorString, err := getConfigAndInstance(c.instanceName)
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
@@ -85,7 +87,7 @@ func (c *commandCopyPackage) run(cmd *cobra.Command, args []string) {
 	output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 }
 
-func (c *commandCopyPackage) downloadSearch(i *objects.Instance) *objects.Package {
+func (c *commandPackageCopy) downloadSearch(i *objects.Instance) *objects.Package {
 	pkgs, err := pkg.PackageList(*i)
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not retrieve list from server %s", err.Error())

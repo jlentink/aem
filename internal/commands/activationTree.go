@@ -19,7 +19,7 @@ type commandActivateTree struct {
 
 func (c *commandActivateTree) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "activate-tree",
+		Use:    "tree",
 		Short:  "Activate Tree",
 		PreRun: c.preRun,
 		Run:    c.run,
@@ -29,6 +29,7 @@ func (c *commandActivateTree) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.path, "path", "p", ``, "Path to (de)activate")
 	cmd.Flags().BoolVarP(&c.ignoreDeactivate, "ignore-deactivated", "d", false, "Ignore Deactivated")
 	cmd.Flags().BoolVarP(&c.onlyModified, "only-modified", "o", false, "Only Modified")
+	cmd.MarkFlagRequired("path") // nolint: errcheck
 	return cmd
 }
 

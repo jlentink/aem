@@ -15,21 +15,23 @@ type commandReplicationPage struct {
 	path          string
 	activate      bool
 	deactivate    bool
+	cmd           *cobra.Command
 }
 
 func (c *commandReplicationPage) setup() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:    "replication-page",
+	c.cmd = &cobra.Command{
+		Use:    "page",
 		Short:  "Activate / Deactivate page",
 		PreRun: c.preRun,
 		Run:    c.run,
 	}
-	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to (de)activate page on")
-	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Instance group to (de)activate page on")
-	cmd.Flags().StringVarP(&c.path, "path", "p", ``, "Path to (de)activate")
-	cmd.Flags().BoolVarP(&c.activate, "activate", "a", false, "Activate page")
-	cmd.Flags().BoolVarP(&c.deactivate, "deactivate", "d", false, "Deactivate")
-	return cmd
+	c.cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to (de)activate page on")
+	c.cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Instance group to (de)activate page on")
+	c.cmd.Flags().StringVarP(&c.path, "path", "p", ``, "Path to (de)activate")
+	c.cmd.Flags().BoolVarP(&c.activate, "activate", "a", false, "Activate page")
+	c.cmd.Flags().BoolVarP(&c.deactivate, "deactivate", "d", false, "Deactivate")
+	c.cmd.MarkFlagRequired("path") // nolint: errcheck
+	return c.cmd
 }
 
 func (c *commandReplicationPage) preRun(cmd *cobra.Command, args []string) {

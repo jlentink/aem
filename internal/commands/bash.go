@@ -7,16 +7,15 @@ import (
 )
 
 type commandBash struct {
-	verbose      bool
+	verbose bool
 }
 
 func (c *commandBash) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "bash-completion",
-		Short:   "Generate bash completion for aemCLI",
-		Aliases: []string{"bash"},
-		PreRun:  c.preRun,
-		Run:     c.run,
+		Use:    "bash",
+		Short:  "Generate bash completion for aemCLI",
+		PreRun: c.preRun,
+		Run:    c.run,
 	}
 	return cmd
 }

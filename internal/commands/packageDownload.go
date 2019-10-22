@@ -20,14 +20,15 @@ type commandPackageDownload struct {
 
 func (c *commandPackageDownload) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "package-download",
-		Short:   "List packages",
-		Aliases: []string{"pdownload", "pdown"},
+		Use:     "download",
+		Short:   "Download packages",
+		Aliases: []string{"down"},
 		PreRun:  c.preRun,
 		Run:     c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	cmd.Flags().StringVarP(&c.packageName, "package", "p", ``, "Package name. E.g: name, name:1.0.0")
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

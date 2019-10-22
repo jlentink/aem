@@ -18,7 +18,7 @@ type commandOakExplore struct {
 
 func (c *commandOakExplore) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "oak-explorer",
+		Use:     "explorer",
 		Aliases: []string{},
 		Short:   "Run oak explorer",
 		PreRun:  c.preRun,
@@ -27,7 +27,7 @@ func (c *commandOakExplore) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	cmd.Flags().StringVarP(&c.aemVersion, "aem", "a", ``, "Version of AEM to use oak-run on. (use matching AEM version of oak-run)")
 	cmd.Flags().StringVarP(&c.oakVersion, "oak", "o", ``, "Define version of oak-run to use")
-
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

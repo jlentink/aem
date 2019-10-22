@@ -15,13 +15,14 @@ type commandPackageRebuild struct {
 
 func (c *commandPackageRebuild) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "package-rebuild",
+		Use:    "rebuild",
 		Short:  "package rebuild",
 		PreRun: c.preRun,
 		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to rebuild package on")
 	cmd.Flags().StringVarP(&c.packageName, "package", "p", ``, "Package to rebuild")
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

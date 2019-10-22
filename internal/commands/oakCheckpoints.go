@@ -18,7 +18,7 @@ type commandOakCheckpoints struct {
 
 func (c *commandOakCheckpoints) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "oak-checkpoints",
+		Use:     "checkpoints",
 		Aliases: []string{},
 		Short:   "Run oak checkpoints",
 		PreRun:  c.preRun,
@@ -27,7 +27,7 @@ func (c *commandOakCheckpoints) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	cmd.Flags().StringVarP(&c.aemVersion, "aem", "a", ``, "Version of AEM to use oak-run on. (use matching AEM version of oak-run)")
 	cmd.Flags().StringVarP(&c.oakVersion, "oak", "o", ``, "Define version of oak-run to use")
-
+	cmd.MarkFlagRequired("name") // nolint: errcheck
 	return cmd
 }
 

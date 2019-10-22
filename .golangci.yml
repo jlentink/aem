@@ -159,7 +159,7 @@ linters-settings:
 
     # which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
     disabled-checks:
-      - regexpmust
+
 
     # enable multiple checks by tags, run `gl_debug=gocritic golangci-lint` run to see all tags and checks.
     # empty list by default. see https://github.com/go-critic/go-critic#usage -> section "tags".

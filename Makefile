@@ -57,7 +57,13 @@ coverage:
 scan:
 	/usr/local/sonar-scanner/bin/sonar-scanner
 
-build: linux osx windows
+build: packr linux osx windows packr-clean
+
+packr:
+	packr2
+
+packr-clean:
+	packr2 clean
 
 linux:
 	env GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ./build/linux/aem

@@ -27,6 +27,7 @@ func (c *commandInvalidate) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", ``, "Instance to sent invalidate to")
 	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Instance group to sent invalidate to")
 	cmd.Flags().StringVarP(&c.path, "path", "p", ``, "Package to rebuild")
+	cmd.MarkFlagRequired("path") // nolint: errcheck
 	return cmd
 }
 

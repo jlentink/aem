@@ -19,8 +19,8 @@ type commandPackageUpload struct {
 
 func (c *commandPackageUpload) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "package-upload",
-		Aliases: []string{"pupload", "pup"},
+		Use:     "upload",
+		Aliases: []string{"up"},
 		Short:   "Upload package to aem",
 		PreRun:  c.preRun,
 		Run:     c.run,
@@ -30,6 +30,8 @@ func (c *commandPackageUpload) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.path, "package", "p", ``, "Path to package")
 	cmd.Flags().BoolVarP(&c.force, "force", "f", false, "Force upload")
 	cmd.Flags().BoolVarP(&c.install, "install", "i", false, "Install package")
+	cmd.MarkFlagRequired("package")          // nolint: errcheck
+	cmd.MarkFlagFilename("package", "*.zip") // nolint: errcheck
 	return cmd
 }
 
