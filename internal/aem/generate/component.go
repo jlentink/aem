@@ -30,6 +30,12 @@ type Component struct {
 }
 
 func (c *Component) renderField(field *ComponentField) error {
+
+	defaultValue, err := ParseTemplate(field.Default, c.ValueMap)
+	if err != nil {
+		defaultValue = field.Default
+	}
+
 	switch field.Type {
 	case "select":
 		value := ""
@@ -37,7 +43,7 @@ func (c *Component) renderField(field *ComponentField) error {
 			Options: field.Options,
 			Message: field.Question,
 			Help:    field.Help,
-			Default: field.Default,
+			Default: defaultValue,
 		}
 		err := survey.AskOne(prompt, &value)
 		field.Value = value
@@ -47,7 +53,7 @@ func (c *Component) renderField(field *ComponentField) error {
 		prompt := &survey.Input{
 			Message: field.Question,
 			Help:    field.Help,
-			Default: field.Default,
+			Default: defaultValue,
 		}
 		err := survey.AskOne(prompt, &value)
 		field.Value = value
@@ -58,7 +64,10 @@ func (c *Component) renderField(field *ComponentField) error {
 }
 
 func (c *Component) requestInput() error {
-	c.ValueMap = make(map[string]string)
+	if c.ValueMap == nil {
+		c.ValueMap = make(map[string]string)
+	}
+	c.ValueMap["name"] = c.Name
 	for i := range c.Fields {
 		err := c.renderField(&c.Fields[i])
 		if err != nil {
@@ -66,7 +75,6 @@ func (c *Component) requestInput() error {
 		}
 		c.ValueMap[c.Fields[i].Name] = c.Fields[i].Value
 	}
-	c.ValueMap["name"] = c.Name
 	return nil
 }
 

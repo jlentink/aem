@@ -92,6 +92,7 @@ func (c *commandGenerate) run(cmd *cobra.Command, args []string) {
 	}
 	err = survey.AskOne(promptDestination, &destinationPath)
 	validateSurveyError(err)
+	component.ValueMap = map[string]string{"project": aem.Cnf.ProjectName}
 	component.Destination = destinationPath
 	err = component.Generate()
 	if err != nil {
