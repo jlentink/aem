@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/aem/pkg"
 	"github.com/jlentink/aem/internal/cli/project"
@@ -16,7 +17,7 @@ type commandPackageCopy struct {
 	verbose        bool
 	instanceName   string
 	toInstanceName string
-	cPackage       string
+	cPackage       []string
 }
 
 func (c *commandPackageCopy) setup() *cobra.Command {
@@ -27,10 +28,9 @@ func (c *commandPackageCopy) setup() *cobra.Command {
 		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "from", "f", ``, "Instance to copy from")
-	cmd.Flags().StringVarP(&c.toInstanceName, "to", "t", ``, "Destination Instance")
-	cmd.Flags().StringVarP(&c.cPackage, "package", "p", ``, "Package to copy")
+	cmd.Flags().StringVarP(&c.toInstanceName, "to", "t", aem.GetDefaultInstanceName(), "Destination Instance")
+	cmd.Flags().StringArrayVarP(&c.cPackage, "package", "p", []string{}, "Package to copy")
 	cmd.MarkFlagRequired("from") // nolint: errcheck
-	cmd.MarkFlagRequired("to")   // nolint: errcheck
 	return cmd
 }
 
@@ -55,36 +55,44 @@ func (c *commandPackageCopy) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-	var dp *objects.Package
+
+	dp := make([]*objects.Package, 0)
 	if len(c.cPackage) > 0 {
 		output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
-		dp, err = pkg.DownloadWithName(f, c.cPackage)
-		if err != nil {
-			output.Printf(output.NORMAL, "Could not download package from %s: %s", f.Name, err.Error())
-			os.Exit(ExitError)
+		for _, cPackage := range c.cPackage{
+			po, err := pkg.DownloadWithName(f, cPackage)
+			dp = append(dp, po)
+			if err != nil {
+				output.Printf(output.NORMAL, "Could not download package from %s: %s", f.Name, err.Error())
+				os.Exit(ExitError)
+			}
+
 		}
 	} else {
-		dp = c.downloadSearch(f)
+		po := c.downloadSearch(f)
+		dp = append(dp, po)
 		output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
-		_, err = pkg.Download(f, dp)
+		_, err = pkg.Download(f, po)
 		if err != nil {
 			output.Printf(output.NORMAL, "Could not download package from %s: %s", f.Name, err.Error())
 			os.Exit(ExitError)
 		}
 	}
 
-	p, err := project.GetLocationForPackage(dp)
-	if err != nil {
-		output.Printf(output.NORMAL, "Getting package location ended up in an error: %s", err.Error())
-		os.Exit(ExitError)
-	}
+	for _, po := range dp {
+		p, err := project.GetLocationForPackage(po)
+		if err != nil {
+			output.Printf(output.NORMAL, "Getting package location ended up in an error: %s", err.Error())
+			os.Exit(ExitError)
+		}
 
-	crx, err := pkg.Upload(*t, p, true, true)
-	if err != nil {
-		output.Printf(output.NORMAL, "Issue while coping package: %s", err.Error())
-		os.Exit(ExitError)
+		crx, err := pkg.Upload(*t, p, true, true)
+		if err != nil {
+			output.Printf(output.NORMAL, "Issue while coping package: %s", err.Error())
+			os.Exit(ExitError)
+		}
+		output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 	}
-	output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
 }
 
 func (c *commandPackageCopy) downloadSearch(i *objects.Instance) *objects.Package {

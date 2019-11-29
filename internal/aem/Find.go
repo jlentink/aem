@@ -20,6 +20,13 @@ func GetByName(n string, i []objects.Instance) (*objects.Instance, error) {
 		if n == instance.Name {
 			return &instance, nil
 		}
+		if len(instance.Aliases) > 0 {
+			for _, alias := range instance.Aliases {
+				if n == alias {
+					return &instance, nil
+				}
+			}
+		}
 	}
 	return nil, fmt.Errorf("instance %s is not defined", n)
 }
