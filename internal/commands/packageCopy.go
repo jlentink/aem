@@ -60,10 +60,10 @@ func (c *commandPackageCopy) run(cmd *cobra.Command, args []string) {
 	if len(c.cPackage) > 0 {
 		output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
 		for _, cPackage := range c.cPackage{
-			po, err := pkg.DownloadWithName(f, cPackage)
+			po, ierr := pkg.DownloadWithName(f, cPackage)
 			dp = append(dp, po)
-			if err != nil {
-				output.Printf(output.NORMAL, "Could not download package from %s: %s", f.Name, err.Error())
+			if ierr != nil {
+				output.Printf(output.NORMAL, "Could not download package from %s: %s", f.Name, ierr.Error())
 				os.Exit(ExitError)
 			}
 

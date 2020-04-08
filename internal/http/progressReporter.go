@@ -43,7 +43,7 @@ func (pr *progressReporter) Read(p []byte) (int, error) {
 }
 
 func (pr *progressReporter) Write(p []byte) (int, error) {
-	fmt.Printf("sdsa %v", pr.totalSize)
+	//fmt.Printf("sdsa %v", pr.totalSize)
 	n, err := pr.w.Write(p)
 	pr.report(int64(n))
 	return n, err

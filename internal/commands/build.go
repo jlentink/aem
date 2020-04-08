@@ -8,7 +8,8 @@ import (
 )
 
 type commandBuild struct {
-	verbose bool
+	verbose         bool
+	productionBuild bool
 }
 
 func (c *commandBuild) setup() *cobra.Command {
@@ -20,11 +21,15 @@ func (c *commandBuild) setup() *cobra.Command {
 		Run:     c.run,
 	}
 
+	cmd.Flags().BoolVarP(&c.productionBuild, "production-build", "B", false,
+		"Flush after deploy")
+
 	return cmd
 }
 
 func (c *commandBuild) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
+
 	output.SetVerbose(verbose)
 
 	ConfigCheckListProjects()
@@ -34,5 +39,5 @@ func (c *commandBuild) preRun(cmd *cobra.Command, args []string) {
 func (c *commandBuild) run(cmd *cobra.Command, args []string) {
 	getConfig()        // nolint: errcheck
 	aem.GetConfig()    // nolint: errcheck
-	aem.BuildProject() // nolint: errcheck
+	aem.BuildProject(c.productionBuild) // nolint: errcheck
 }

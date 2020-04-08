@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/bundle"
+	"github.com/jlentink/aem/internal/aem/dispatcher"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/aem/pkg"
 	"github.com/jlentink/aem/internal/cli/project"
@@ -14,13 +15,15 @@ import (
 )
 
 type commandDeploy struct {
-	verbose       bool
-	instanceName  string
-	instanceGroup string
-	forceBuild    bool
-	username      string
-	password      string
-	artifact      string
+	verbose         bool
+	instanceName    string
+	instanceGroup   string
+	forceBuild      bool
+	username        string
+	password        string
+	artifact        string
+	flush           bool
+	productionBuild bool
 }
 
 func (c *commandDeploy) setup() *cobra.Command {
@@ -44,6 +47,10 @@ func (c *commandDeploy) setup() *cobra.Command {
 		"Overwrite password to use if not using the one from config file")
 	cmd.Flags().StringVarP(&c.artifact, "artifact", "a", "",
 		"Deploy one a single artifact")
+	cmd.Flags().BoolVarP(&c.flush, "flush", "f", true,
+		"Flush after deploy")
+	cmd.Flags().BoolVarP(&c.productionBuild, "production-build", "B", false,
+		"Flush after deploy")
 
 	return cmd
 }
@@ -57,6 +64,7 @@ func (c *commandDeploy) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandDeploy) run(cmd *cobra.Command, args []string) {
+	var status = true
 	_, is, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName,
 		c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
 	if err != nil {
@@ -82,24 +90,40 @@ func (c *commandDeploy) run(cmd *cobra.Command, args []string) {
 	}
 
 	if c.artifact == "" {
-		c.deployAllPackages(is, p)
+		status = c.deployAllPackages(is, p)
+	} else {
+		status = c.deployModule(is, p)
 	}
 
-	c.deployModule(is, p)
+	if status && c.flush {
+		_, fis, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName,
+			c.instanceGroup, []string{aem.RoleDispatcher})
+		if err != nil {
+			output.Printf(output.NORMAL, errorString, err.Error())
+			os.Exit(ExitError)
+		}
+		c.invalidateCache(fis)
+	}
 }
 
-func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
+func (c *commandDeploy) invalidateCache(is []objects.Instance) {
+	status := dispatcher.InvalidateAll(is, aem.Cnf.InvalidatePaths)
+	if false == status {
+		os.Exit(ExitError)
+	}
+}
+func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 	a, err := p.GetArtifactByName(c.artifact)
 	if err != nil {
 		output.Printf(output.NORMAL, "%s", err.Error())
-		os.Exit(ExitError)
+		return false
 	}
 
 	if c.forceBuild {
-		err = aem.BuildModuleProject(a.BasePath)
+		err = aem.BuildModuleProject(a.BasePath, c.productionBuild)
 		if err != nil {
 			output.Printf(output.NORMAL, "build failed: %s", err.Error())
-			os.Exit(ExitError)
+			return false
 		}
 	}
 
@@ -123,14 +147,15 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) {
 			}
 		default:
 			output.Printf(output.NORMAL, "Unknown package type. %s", a.Packaging)
-			os.Exit(ExitError)
+			return false
 		}
 	}
+	return true
 }
 
-func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) {
+func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) bool {
 	if c.forceBuild {
-		aem.BuildProject() // nolint: errcheck
+		aem.BuildProject(c.productionBuild) // nolint: errcheck
 	}
 
 	var success, failed = 0, 0
@@ -166,8 +191,9 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) {
 		"=============================================================\n"+
 		"  Install Summary: %d Success, %d Failed\n"+
 		"=============================================================\n", success, failed)
+
 	if failed > 0 {
-		os.Exit(ExitError)
+		return false
 	}
-	os.Exit(ExitNormal)
+	return true
 }
