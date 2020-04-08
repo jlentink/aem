@@ -40,7 +40,7 @@ func (c *commandDeploy) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", "",
 		"Group to deploy to")
 	cmd.Flags().BoolVarP(&c.forceBuild, "build", "b", false,
-		"Build before deploy")
+		"Build SNAPSHOT before deploy")
 	cmd.Flags().StringVarP(&c.username, "username", "u", "",
 		"Overwrite username to use if not using the one from config file")
 	cmd.Flags().StringVarP(&c.password, "password", "p", "",
@@ -50,7 +50,7 @@ func (c *commandDeploy) setup() *cobra.Command {
 	cmd.Flags().BoolVarP(&c.flush, "flush", "f", true,
 		"Flush after deploy")
 	cmd.Flags().BoolVarP(&c.productionBuild, "production-build", "B", false,
-		"Flush after deploy")
+		"Build versioned before deploy")
 
 	return cmd
 }

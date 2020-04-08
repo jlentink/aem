@@ -9,7 +9,7 @@ import (
 // Instance for aem instance
 type Instance struct {
 	Name            string   `toml:"name"`
-	Aliases         []string `toml:"aliases"`
+	Aliases         []string `toml:"alias"`
 	Group           string   `toml:"group"`
 	Debug           bool     `toml:"debug"`
 	Protocol        string   `toml:"proto"`
