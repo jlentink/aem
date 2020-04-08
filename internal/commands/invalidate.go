@@ -26,8 +26,7 @@ func (c *commandInvalidate) setup() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", ``, "Instance to sent invalidate to")
 	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Instance group to sent invalidate to")
-	cmd.Flags().StringVarP(&c.path, "path", "p", ``, "Package to rebuild")
-	cmd.MarkFlagRequired("path") // nolint: errcheck
+	cmd.Flags().StringVarP(&c.path, "path", "p", ``, "Path to flush")
 	return cmd
 }
 
@@ -66,15 +65,5 @@ func (c *commandInvalidate) run(cmd *cobra.Command, args []string) {
 		aem.Cnf.InvalidatePaths = []string{c.path}
 	}
 
-	for _, instance := range instances {
-		instance := instance
-		for _, p := range aem.Cnf.InvalidatePaths {
-			output.Printf(output.NORMAL, "\U0001F5D1 Invalidating: %s (%s)\n", p, instance.Name)
-			err := dispatcher.Invalidate(&instance, p)
-			if err != nil {
-				output.Printf(output.NORMAL, "Could not invalidate path: %s\n", err.Error())
-				os.Exit(ExitError)
-			}
-		}
-	}
+	dispatcher.InvalidateAll(instances, aem.Cnf.InvalidatePaths)
 }

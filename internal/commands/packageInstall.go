@@ -10,7 +10,7 @@ import (
 type commandPackageInstall struct {
 	verbose      bool
 	instanceName string
-	packageName  string
+	packageName  []string
 }
 
 func (c *commandPackageInstall) setup() *cobra.Command {
@@ -21,8 +21,7 @@ func (c *commandPackageInstall) setup() *cobra.Command {
 		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to rebuild package on")
-	cmd.Flags().StringVarP(&c.packageName, "package", "p", ``, "Package to rebuild")
-	cmd.MarkFlagRequired("name") // nolint: errcheck
+	cmd.Flags().StringArrayVarP(&c.packageName, "package", "p", []string{}, "Package to install (allowed multiple)")
 	return cmd
 }
 
@@ -46,5 +45,8 @@ func (c *commandPackageInstall) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitNormal)
 	}
 
-	installPackage(i, c.packageName)
+	for _, packageName := range c.packageName {
+		installPackage(i, packageName)
+	}
+
 }

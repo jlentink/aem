@@ -3,7 +3,7 @@ package commands
 import (
 	"bufio"
 	"fmt"
-	"github.com/jlentink/aem/internal/aem/objects"
+	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/cobra"
 	"os"
@@ -12,6 +12,7 @@ import (
 type commandPassword struct {
 	verbose      bool
 	instanceName string
+	instanceGroup string
 }
 
 func (c *commandPassword) setup() *cobra.Command {
@@ -23,6 +24,7 @@ func (c *commandPassword) setup() *cobra.Command {
 		Run:     c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", ``, "Update specific instance")
+	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Group to install package on")
 	return cmd
 }
 
@@ -41,14 +43,13 @@ func (c *commandPassword) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-	if len(c.instanceName) > 0 {
-		_, i, errorString, err := getConfigAndInstance(c.instanceName)
-		if err != nil {
-			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(ExitError)
-		}
-		cnf.Instances = []objects.Instance{*i}
+	_, i, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
+	if err != nil {
+		output.Printf(output.NORMAL, errorString, err.Error())
+		os.Exit(ExitError)
 	}
+	cnf.Instances = i
+
 
 	if !cnf.KeyRing {
 		output.Printf(output.NORMAL, "keyring is disabled. use passwords from the aem.toml file.")

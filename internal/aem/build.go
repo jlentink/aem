@@ -43,18 +43,24 @@ func replaceGitHash(suffix string) (string, error) {
 }
 
 // SetBuildVersion sets
-func SetBuildVersion() error {
-	suffix, err := replaceGitHash(Cnf.VersionSuffix)
-	if err != nil {
-		return err
+func SetBuildVersion(productionBuild bool) error {
+	versionSuffix := ""
+	if productionBuild {
+		var err error
+		versionSuffix, err = replaceGitHash(Cnf.VersionSuffix)
+		if err != nil {
+			return err
+		}
+	} else {
+		versionSuffix = "-SNAPSHOT"
 	}
 
 	workPath, _ := project.GetWorkDir()
-	cmd := exec.Command("mvn", "versions:set", "-DnewVersion="+Cnf.Version+suffix)
+	cmd := exec.Command("mvn", "versions:set", "-DnewVersion="+Cnf.Version+versionSuffix, "-DallowSnapshots=true")
 	cmd.Dir = workPath
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		return err
 	}
@@ -62,10 +68,10 @@ func SetBuildVersion() error {
 }
 
 // BuildProject kicks of the project build
-func BuildProject() error {
+func BuildProject(productionBuild bool) error {
 	workPath, _ := project.GetWorkDir()
 
-	err := SetBuildVersion()
+	err := SetBuildVersion(productionBuild)
 	if err != nil {
 		return err
 	}
@@ -82,8 +88,8 @@ func BuildProject() error {
 }
 
 // BuildModuleProject build project module
-func BuildModuleProject(p string) error {
-	err := SetBuildVersion()
+func BuildModuleProject(p string, productionBuild bool) error {
+	err := SetBuildVersion(productionBuild)
 	if err != nil {
 		return err
 	}
