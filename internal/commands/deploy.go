@@ -64,7 +64,7 @@ func (c *commandDeploy) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandDeploy) run(cmd *cobra.Command, args []string) {
-	var status = true
+	var status bool
 	_, is, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName,
 		c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
 	if err != nil {
@@ -108,7 +108,7 @@ func (c *commandDeploy) run(cmd *cobra.Command, args []string) {
 
 func (c *commandDeploy) invalidateCache(is []objects.Instance) {
 	status := dispatcher.InvalidateAll(is, aem.Cnf.InvalidatePaths)
-	if false == status {
+	if !status {
 		os.Exit(ExitError)
 	}
 }
@@ -192,8 +192,5 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 		"  Install Summary: %d Success, %d Failed\n"+
 		"=============================================================\n", success, failed)
 
-	if failed > 0 {
-		return false
-	}
-	return true
+	return failed <= 0
 }

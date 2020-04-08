@@ -35,10 +35,10 @@ func Invalidate(i *objects.Instance, path string) error {
 
 func InvalidateAll(is []objects.Instance, p []string) bool {
 	var status = true
-	for _, i := range is {
+	for idx, i := range is {
 		for _, path := range p {
 			output.Printf(output.NORMAL, "\U0001F5D1 Invalidating: %s (%s)\n", path, i.Name)
-			err := Invalidate(&i, path)
+			err := Invalidate(&is[idx], path)
 			if err != nil {
 				output.Printf(output.NORMAL, "Could not invalidate path: %s\n", err.Error())
 				status = false
