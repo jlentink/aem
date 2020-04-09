@@ -18,7 +18,7 @@ clean:
 code-test: golintci
 
 get:
-	echo "get"
+	go get -u github.com/gobuffalo/packr/packr
 
 lint:
 	golint -set_exit_status ./...
