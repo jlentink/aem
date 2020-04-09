@@ -195,6 +195,8 @@ issues:
   # excluded by default patterns execute `golangci-lint run --help`
   exclude:
     - abcdef
+    - "not declared by package utf8"
+    - "unicode/utf8/utf8.go"
 
   # excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
