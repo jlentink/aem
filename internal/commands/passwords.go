@@ -10,8 +10,8 @@ import (
 )
 
 type commandPassword struct {
-	verbose      bool
-	instanceName string
+	verbose       bool
+	instanceName  string
 	instanceGroup string
 }
 
@@ -49,7 +49,6 @@ func (c *commandPassword) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 	cnf.Instances = i
-
 
 	if !cnf.KeyRing {
 		output.Printf(output.NORMAL, "keyring is disabled. use passwords from the aem.toml file.")

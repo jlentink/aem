@@ -55,11 +55,10 @@ func (c *commandPackageCopy) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-
 	dp := make([]*objects.Package, 0)
 	if len(c.cPackage) > 0 {
 		output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
-		for _, cPackage := range c.cPackage{
+		for _, cPackage := range c.cPackage {
 			po, ierr := pkg.DownloadWithName(f, cPackage)
 			dp = append(dp, po)
 			if ierr != nil {

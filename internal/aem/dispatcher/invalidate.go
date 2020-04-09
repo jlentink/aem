@@ -33,6 +33,7 @@ func Invalidate(i *objects.Instance, path string) error {
 	return nil
 }
 
+// InvalidateAll sent invalidate to all dispatchers
 func InvalidateAll(is []objects.Instance, p []string) bool {
 	var status = true
 	for idx, i := range is {
