@@ -24,7 +24,7 @@ Use cases:
 Let me know what you think. happy AEM-ing.
 
 ## Getting Started
-Build the project from scratch (needs go >= v1.11.4) or download the prebuild binary available for your operating system.
+Build the project from scratch (needs go >= v1.14.1) or download the prebuild binary available for your operating system.
 
 Prebuild versions are:
 
