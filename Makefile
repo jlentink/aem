@@ -4,7 +4,7 @@ BUILT_VERSION=1.0.0rc11
 LDFLAGS=-ldflags "-X github.com/jlentink/aem/internal/version.Build=${BUILT_HASH} -X github.com/jlentink/aem/internal/version.Main=${BUILT_VERSION} -w -s"
 TRAVISBUILD?=off
 
-all: l clean get test code-test coverage build
+all: clean get test code-test coverage build
 
 clean:
 	@-rm test-report.out
