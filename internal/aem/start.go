@@ -2,6 +2,7 @@ package aem
 
 import (
 	"fmt"
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/http"
@@ -238,6 +239,32 @@ func cleanupPackages(p string, c objects.Config) error {
 		}
 	}
 	return nil
+}
+
+// PidHandler Handle pid or stop
+func PidHandler(ignorePid bool, i objects.Instance) bool {
+	prompt := &survey.Confirm{
+		Message: "Do you want to ignore the PID file.",
+		Help: "A existing PID file is found. This could be caused by already running instance or " +
+			"an improper shutdown.",
+	}
+	err := survey.AskOne(prompt, &ignorePid)
+	if err != nil {
+		if err.Error() == "interrupt" {
+			output.Printf(output.NORMAL, "Program interrupted. (CTRL+C)")
+			return false
+		}
+		output.Printf(output.NORMAL, "Unexpected error: %s", err.Error())
+		return false
+	}
+
+	if !ignorePid {
+		p, _ := project.GetPidFileLocation(i)
+		output.Printf(output.NORMAL, "Pid already in place. AEM properly already running. (%s)", p)
+		return false
+
+	}
+	return true
 }
 
 // PidExists Does the pid exists?

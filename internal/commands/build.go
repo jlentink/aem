@@ -37,7 +37,7 @@ func (c *commandBuild) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandBuild) run(cmd *cobra.Command, args []string) {
-	getConfig()        // nolint: errcheck
-	aem.GetConfig()    // nolint: errcheck
+	getConfig()                         // nolint: errcheck
+	aem.GetConfig()                     // nolint: errcheck
 	aem.BuildProject(c.productionBuild) // nolint: errcheck
 }

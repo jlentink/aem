@@ -42,7 +42,6 @@ var _ = func() error {
 		b.SetResolver("content-component/{{LC .id}}-{{KC .name}}/{{LC .version}}/{{LC .id}}-{{KC .name}}/{{LC .id}}-{{SC .name}}.html", packr.Pointer{ForwardBox: gk, ForwardPath: "64c16b5db20797cd424edf710185ee0c"})
 		b.SetResolver("extend-core-components/.content.xml", packr.Pointer{ForwardBox: gk, ForwardPath: "07826bcba63b61772df6e519914ca7cb"})
 		b.SetResolver("extend-core-components/settings.toml", packr.Pointer{ForwardBox: gk, ForwardPath: "cf36fe40d645ba7e8b67656f82e1f171"})
-		}()
-
+	}()
 	return nil
 }()
