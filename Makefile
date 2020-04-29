@@ -23,6 +23,8 @@ get:
 lint:
 	golint -set_exit_status ./...
 
+linting: golintci card
+
 golintci:
 	golangci-lint run
 
