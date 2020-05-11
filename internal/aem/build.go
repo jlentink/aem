@@ -81,6 +81,7 @@ func BuildProject(productionBuild bool) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
+
 	if err != nil {
 		return err
 	}

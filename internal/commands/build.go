@@ -3,6 +3,7 @@ package commands
 import (
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/output"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -37,7 +38,11 @@ func (c *commandBuild) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandBuild) run(cmd *cobra.Command, args []string) {
-	getConfig()                         // nolint: errcheck
-	aem.GetConfig()                     // nolint: errcheck
-	aem.BuildProject(c.productionBuild) // nolint: errcheck
+	getConfig()     // nolint: errcheck
+	aem.GetConfig() // nolint: errcheck
+	err := aem.BuildProject(c.productionBuild)
+	if err != nil {
+		output.Printf(output.NORMAL, "\U0000274C Build failed...")
+		os.Exit(1)
+	}
 }
