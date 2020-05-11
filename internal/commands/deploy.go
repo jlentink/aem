@@ -122,7 +122,7 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 	if c.forceBuild {
 		err = aem.BuildModuleProject(a.BasePath, c.productionBuild)
 		if err != nil {
-			output.Printf(output.NORMAL, "build failed: %s", err.Error())
+			output.Printf(output.NORMAL, "\U0000274C build failed: %s", err.Error())
 			return false
 		}
 	}
@@ -155,7 +155,11 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 
 func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) bool {
 	if c.forceBuild {
-		aem.BuildProject(c.productionBuild) // nolint: errcheck
+		err := aem.BuildProject(c.productionBuild) // nolint: errcheck
+		if err != nil {
+			output.Printf(output.NORMAL, "\U0000274C Build failed...")
+			os.Exit(1)
+		}
 	}
 
 	var success, failed = 0, 0
