@@ -18,6 +18,7 @@ type Artifact struct {
 	ID        string
 	Version   string
 	Packaging string
+	Parent    string
 }
 
 // CompletePath complete path to artifact
@@ -47,5 +48,9 @@ func (a *Artifact) Filename() string {
 	default:
 		return fmt.Sprintf("%s-%s.unkown", a.ID, a.Version)
 	}
+}
 
+// PakageName returns the package name
+func (a *Artifact) PakageName() string {
+	return a.ID
 }

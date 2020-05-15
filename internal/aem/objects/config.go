@@ -14,6 +14,7 @@ type Config struct {
 	Version            string     `toml:"version"`
 	VersionSuffix      string     `toml:"version-suffix"`
 	Packages           []string   `toml:"commandPullContent"`
+	PackagesExcluded   []string   `toml:"packageExclude"`
 	Command            string     `toml:"command,omitempty"`
 	CommandArgs        []string   `toml:"command,omitempty"`
 	DefaultInstance    string     `toml:"defaultInstance"`

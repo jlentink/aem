@@ -43,12 +43,14 @@ func (c *commandPassword) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-	_, i, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
-	if err != nil {
-		output.Printf(output.NORMAL, errorString, err.Error())
-		os.Exit(ExitError)
+	if c.instanceName != "" && c.instanceGroup != "" {
+		_, i, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
+		if err != nil {
+			output.Printf(output.NORMAL, errorString, err.Error())
+			os.Exit(ExitError)
+		}
+		cnf.Instances = i
 	}
-	cnf.Instances = i
 
 	if !cnf.KeyRing {
 		output.Printf(output.NORMAL, "keyring is disabled. use passwords from the aem.toml file.")
