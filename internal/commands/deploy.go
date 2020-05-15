@@ -12,6 +12,7 @@ import (
 	"github.com/jlentink/aem/internal/pom"
 	"github.com/spf13/cobra"
 	"os"
+	"regexp"
 )
 
 type commandDeploy struct {
@@ -99,7 +100,7 @@ func (c *commandDeploy) run(cmd *cobra.Command, args []string) {
 		_, fis, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName,
 			c.instanceGroup, []string{aem.RoleDispatcher})
 		if err != nil {
-			output.Printf(output.NORMAL, errorString, err.Error())
+			output.Printf(output.NORMAL, errorString)
 			os.Exit(ExitError)
 		}
 		c.invalidateCache(fis)
@@ -152,7 +153,18 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 	}
 	return true
 }
-
+func (c *commandDeploy) stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+		matched, _ := regexp.MatchString(b, a)
+		if matched {
+			return true
+		}
+	}
+	return false
+}
 func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) bool {
 	if c.forceBuild {
 		err := aem.BuildProject(c.productionBuild) // nolint: errcheck
@@ -177,17 +189,20 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 
 		fmt.Printf("Deploying to %s\n", i.Name)
 		for _, artifact := range artifacts {
-			fmt.Printf("\r%s\n", artifact.Filename())
-			resp, err := pkg.Upload(i, artifact.CompletePath(), true, true)
-			if resp != nil {
-				success++
-				fmt.Printf("Status: \U00002705\n")
-				output.Printf(output.VERBOSE, "%s\n", resp.Response.Data.Log)
-			}
-			if err != nil {
-				fmt.Printf("Status: \U0000274C\n")
-				failed++
-				output.Printf(output.NORMAL, "%s\n", err)
+			//aem.Cnf.PackagesExcluded
+			if !c.stringInSlice(artifact.PakageName(), aem.Cnf.PackagesExcluded) {
+				fmt.Printf("\r%s\n", artifact.Filename())
+				resp, err := pkg.Upload(i, artifact.CompletePath(), true, true)
+				if resp != nil {
+					success++
+					fmt.Printf("Status: \U00002705\n")
+					output.Printf(output.VERBOSE, "%s\n", resp.Response.Data.Log)
+				}
+				if err != nil {
+					fmt.Printf("Status: \U0000274C\n")
+					failed++
+					output.Printf(output.NORMAL, "%s\n", err)
+				}
 			}
 		}
 	}
