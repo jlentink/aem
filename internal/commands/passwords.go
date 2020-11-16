@@ -43,7 +43,7 @@ func (c *commandPassword) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-	if c.instanceName != "" && c.instanceGroup != "" {
+if c.instanceName != "" || c.instanceGroup != "" {
 		_, i, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.instanceGroup, []string{aem.RoleAuthor, aem.RolePublisher})
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())

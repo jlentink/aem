@@ -23,7 +23,7 @@ func CreateBinDir() (string, error) {
 
 //CreateInstanceDir Create dir for instance
 func CreateInstanceDir(instance objects.Instance) (string, error) {
-	instanceDir, err := getInstanceDirLocation(instance)
+	instanceDir, err := GetInstanceDirLocation(instance)
 	if err != nil {
 		return ``, err
 	}
@@ -73,6 +73,17 @@ func CreateDirForPackage(aemPackage *objects.Package) (string, error) {
 		return ``, err
 	}
 
+	if exists, _ := afero.Exists(fs, path); !exists {
+		err := fs.MkdirAll(path, 0755)
+		if err != nil {
+			return ``, fmt.Errorf("could not create pkg dir (%s)", path)
+		}
+	}
+	return path, nil
+}
+
+// CreateDirForPackage creates a dir for package struct
+func CreateDir(path string) (string, error) {
 	if exists, _ := afero.Exists(fs, path); !exists {
 		err := fs.MkdirAll(path, 0755)
 		if err != nil {

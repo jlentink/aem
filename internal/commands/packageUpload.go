@@ -52,9 +52,12 @@ func (c *commandPackageUpload) run(cmd *cobra.Command, args []string) {
 
 	for _, instance := range i {
 		output.Printf(output.NORMAL, "\U0001F4A8 Uploading %s to: %s (install %t, force: %t)\n", c.path, instance.Name, c.install, c.force)
-		crx, err := pkg.Upload(instance, c.path, c.install, c.force)
+		crx, htmlBody, err := pkg.Upload(instance, c.path, c.install, c.force)
 		if err != nil {
 			output.Printf(output.NORMAL, "\U0000274C %s\n", err.Error())
+			if len(htmlBody) > 0 {
+				output.Printf(output.NORMAL, "%s\n", htmlBody);
+			}
 			os.Exit(ExitError)
 		}
 		output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)

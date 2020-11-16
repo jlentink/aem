@@ -10,6 +10,7 @@ import (
 
 type commandBuild struct {
 	verbose         bool
+	versionOnly		bool
 	productionBuild bool
 }
 
@@ -24,6 +25,8 @@ func (c *commandBuild) setup() *cobra.Command {
 
 	cmd.Flags().BoolVarP(&c.productionBuild, "production-build", "B", false,
 		"Flush after deploy")
+	cmd.Flags().BoolVarP(&c.versionOnly, "version", "V", false,
+		"Don't build version only.")
 
 	return cmd
 }
@@ -40,6 +43,16 @@ func (c *commandBuild) preRun(cmd *cobra.Command, args []string) {
 func (c *commandBuild) run(cmd *cobra.Command, args []string) {
 	getConfig()     // nolint: errcheck
 	aem.GetConfig() // nolint: errcheck
+
+	if c.versionOnly {
+		err := aem.SetBuildVersion(c.productionBuild)
+		if err != nil {
+			output.Printf(output.NORMAL, "\U0000274C Version failed...")
+			os.Exit(1)
+		}
+		os.Exit(0)
+	}
+
 	err := aem.BuildProject(c.productionBuild)
 	if err != nil {
 		output.Printf(output.NORMAL, "\U0000274C Build failed...")

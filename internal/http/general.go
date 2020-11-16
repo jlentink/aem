@@ -23,6 +23,7 @@ const (
 	ServiceName = "aem-cli"
 
 	JarContentType = "application/java-archive"
+	ApplicationFormEncode = "application/x-www-form-urlencoded"
 )
 
 //DisableSSLValidation Disables SSL validation
@@ -33,4 +34,25 @@ func DisableSSLValidation() {
 // URLToURLString  convert the url to string
 func URLToURLString(u *url.URL) string {
 	return fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, u.RequestURI())
+}
+
+func setupPlainToURL(uri string, username string, password string) (*url.URL, error){
+	URL, err := url.Parse(uri)
+
+	if username != "" || password != "" {
+		URL.User = url.UserPassword(username, password)
+
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	if username != "" || password != "" {
+		URL.User = url.UserPassword(username, password)
+
+	}
+	if err != nil {
+		return nil, err
+	}
+	return URL, nil
 }

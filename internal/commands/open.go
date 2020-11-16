@@ -12,6 +12,8 @@ import (
 
 type commandOpen struct {
 	verbose      bool
+	useIp        bool
+	useSSH       bool
 	instanceName string
 }
 
@@ -23,11 +25,14 @@ func (c *commandOpen) setup() *cobra.Command {
 		Run:    c.run,
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
+	cmd.Flags().BoolVarP(&c.useIp, "ip", "i", false, "Show Ip instead of hostname")
+	cmd.Flags().BoolVarP(&c.useSSH, "ssh", "s", false, "Show SSH url")
 	return cmd
 }
 
 func (c *commandOpen) preRun(cmd *cobra.Command, args []string) {
 	c.verbose, _ = cmd.Flags().GetBool("verbose")
+
 	output.SetVerbose(verbose)
 
 	ConfigCheckListProjects()
@@ -44,20 +49,28 @@ func (c *commandOpen) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-	if i.Type == "dispatch" {
-		fmt.Printf("use: ssh %s@%s\n", i.Username, i.Hostname)
+	if i.Type == "dispatch" || c.useSSH {
+		if i.SSHUsername != "" {
+			i.Username = i.SSHUsername
+		}
+		if c.useIp {
+			fmt.Printf("use: ssh %s@%s\n", i.Username, i.IP)
+		} else {
+			fmt.Printf("use: ssh %s@%s\n", i.Username, i.Hostname)
+		}
+
 		return
 	}
 
 	switch runtime.GOOS {
 	case "windows":
-		cmd := exec.Command("rundll32", "url.dll,FileProtocolHandler", aem.URLString(i))
+		cmd := exec.Command("rundll32", "url.dll,FileProtocolHandler", aem.URLString(i, c.useIp))
 		cmd.Start() // nolint: errcheck
 	case "darwin":
-		cmd := exec.Command("open", aem.URLString(i))
+		cmd := exec.Command("open", aem.URLString(i, c.useIp))
 		cmd.Start() // nolint: errcheck
 	case "linux":
-		cmd := exec.Command("xdg-open", aem.URLString(i))
+		cmd := exec.Command("xdg-open", aem.URLString(i, c.useIp))
 		cmd.Start() // nolint: errcheck
 	default:
 		fmt.Printf("unsuported operating systen %s", runtime.GOOS)

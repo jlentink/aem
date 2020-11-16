@@ -2,6 +2,8 @@ package project
 
 import (
 	"fmt"
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/afero"
 	"io"
 	"os"
@@ -159,4 +161,42 @@ func ReadDir(path string) ([]os.FileInfo, error) {
 // happens.
 func Remove(path string) error {
 	return fs.Remove(path)
+}
+
+// RemoveAll removes a directory path and any children it contains. It
+// does not fail if the path does not exist (return nil).
+func RemoveAll(path string) error {
+	return fs.RemoveAll(path)
+}
+
+// IsFile tells you if it is a file
+func IsFile(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return !info.IsDir()
+}
+
+// Confirm ask user for confirmation.
+func Confirm(message, help string, force bool) bool {
+	confirmed := false
+	if force {
+		return true
+	}
+	prompt := &survey.Confirm{
+		Message: message,
+		Help: help,
+	}
+	err := survey.AskOne(prompt, &confirmed)
+	if err != nil {
+		if err.Error() == "interrupt" {
+			output.Printf(output.NORMAL, "Program interrupted. (CTRL+C)")
+			return false
+		}
+		output.Printf(output.NORMAL, "Unexpected error: %s", err.Error())
+		return false
+	}
+
+	return confirmed
 }

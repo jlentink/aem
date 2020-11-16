@@ -4,8 +4,12 @@ import (
 	"bytes"
 	"github.com/BurntSushi/toml"
 	"github.com/jlentink/aem/internal/cli/project"
+	"github.com/jlentink/aem/internal/output"
 	"io/ioutil"
+	"strings"
 )
+
+const projectsFile = "projects.toml"
 
 // Projects Registered projects
 type Projects struct {
@@ -20,21 +24,22 @@ type ProjectRegistered struct {
 
 func RegisteredProjects() []ProjectRegistered {
 	projects := Projects{}
-	if project.Exists(getCacheRoot() + "/projects.toml") {
-		toml.DecodeFile(getCacheRoot() + "/projects.toml", &projects) // nolint: errcheck
+	if project.Exists(getCacheRoot() + "/" + projectsFile) {
+		toml.DecodeFile(getCacheRoot() + "/" + projectsFile, &projects) // nolint: errcheck
 	}
 	return projects.Project
 }
 
-func RegisterPorject(name, path string){
+func RegisterProject(name, path string){
+	Init()
 	mutated := false
 	projects := RegisteredProjects()
-	for _, project := range projects {
-		if project.Name == name && project.Path == path {
+	for index, project := range projects {
+		if strings.ToLower(project.Name) == strings.ToLower(name) && project.Path == path {
 			return
 		}
-		if project.Name == name {
-			project.Path = path
+		if strings.ToLower(project.Name) == strings.ToLower(name) {
+			projects[index].Path = path
 			mutated = true
 		}
 	}
@@ -44,9 +49,15 @@ func RegisterPorject(name, path string){
 		mutated = true
 	}
 
-	if mutated {
-		writeRegisterFile(projects)
-	}
+	writeRegisterFile(projects)
+}
+
+func SetProjectMetaData(project ProjectRegistered, key, value string) {
+
+}
+
+func GetProjectMetaData(project ProjectRegistered, keystring string) {
+
 }
 
 func writeRegisterFile(projects []ProjectRegistered) {
@@ -54,14 +65,15 @@ func writeRegisterFile(projects []ProjectRegistered) {
 	buf := new(bytes.Buffer)
 	err := toml.NewEncoder(buf).Encode(data)
 	if err != nil {
+		output.Printf(output.VERBOSE, "Error encoding projects file: %s", err.Error())
 		return
 	}
 
-	err = ioutil.WriteFile(getCacheRoot() + "/projects.toml", buf.Bytes(), 0644)
+	err = ioutil.WriteFile(getCacheRoot() + "/" + projectsFile, buf.Bytes(), 0644)
 	if err != nil {
+		output.Printf(output.VERBOSE, "Error writing projects file: %s", err.Error())
 		return
 	}
-
 }
 
 

@@ -17,6 +17,8 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/fzipp/gocyclo v0.0.0-20150627053110-6acd4345c835 // indirect
+	github.com/go-git/go-billy/v5 v5.0.0
+	github.com/go-git/go-git/v5 v5.1.0
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 	github.com/go-openapi/strfmt v0.19.2 // indirect
 	github.com/gobuffalo/envy v1.9.0 // indirect
@@ -35,6 +37,8 @@ require (
 	github.com/spf13/afero v1.1.2
 	github.com/spf13/cobra v0.0.7
 	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/viper v1.4.0
+	github.com/thoas/go-funk v0.6.0
 	github.com/tidwall/gjson v1.3.2
 	github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8 // indirect
 	github.com/zalando/go-keyring v0.0.0-20190531073407-f65c47520c89

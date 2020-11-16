@@ -9,15 +9,17 @@ import (
 // Instance for aem instance
 type Instance struct {
 	Name            string   `toml:"name"`
-	Aliases         []string `toml:"alias"`
+	Aliases         []string `toml:"aliases"`
 	Group           string   `toml:"group"`
 	Debug           bool     `toml:"debug"`
 	Protocol        string   `toml:"proto"`
+	IP        		string   `toml:"ip"`
 	Hostname        string   `toml:"hostname"`
 	Port            int      `toml:"port"`
 	Type            string   `toml:"type"`
 	RunMode         string   `toml:"runmode"`
 	Username        string   `toml:"username"`
+	SSHUsername		string 	 `toml:"ssh-username"`
 	Password        string   `toml:"password"`
 	JVMOptions      []string `toml:"jvm-options"`
 	JVMDebugOptions []string `toml:"jvm-debug-options"`
@@ -27,6 +29,11 @@ type Instance struct {
 // URLString for instance
 func (i *Instance) URLString() string {
 	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.Hostname, i.Port)
+}
+
+// URLString for instance
+func (i *Instance) URLIPString() string {
+	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.IP, i.Port)
 }
 
 // GetPassword get password for instance

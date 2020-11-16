@@ -137,7 +137,7 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 				output.Printf(output.NORMAL, "%s\n", err)
 			}
 		case pom.Package:
-			resp, err := pkg.Upload(i, a.CompletePath(), true, true)
+			resp, htmlBody, err := pkg.Upload(i, a.CompletePath(), true, true)
 			if err != nil {
 				fmt.Printf("Status: \U0000274C\n")
 				output.Printf(output.NORMAL, "%s\n", err)
@@ -145,6 +145,9 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 			if resp != nil {
 				fmt.Printf("Status: \U00002705\n")
 				output.Printf(output.VERBOSE, "%s\n", resp.Response.Data.Log)
+				if len(htmlBody) > 0 {
+					output.Printf(output.VERBOSE, "%s\n", htmlBody)
+				}
 			}
 		default:
 			output.Printf(output.NORMAL, "Unknown package type. %s", a.Packaging)
@@ -192,7 +195,7 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 			//aem.Cnf.PackagesExcluded
 			if !c.stringInSlice(artifact.PakageName(), aem.Cnf.PackagesExcluded) {
 				fmt.Printf("\r%s\n", artifact.Filename())
-				resp, err := pkg.Upload(i, artifact.CompletePath(), true, true)
+				resp, HtmlBody, err := pkg.Upload(i, artifact.CompletePath(), true, true)
 				if resp != nil {
 					success++
 					fmt.Printf("Status: \U00002705\n")
@@ -202,6 +205,9 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 					fmt.Printf("Status: \U0000274C\n")
 					failed++
 					output.Printf(output.NORMAL, "%s\n", err)
+					if len(HtmlBody) != 0 {
+						output.Printf(output.NORMAL, "%s\n", HtmlBody)
+					}
 				}
 			}
 		}

@@ -82,7 +82,7 @@ func Reindex(instance *objects.Instance, index string) error {
 	writer.WriteField("reindex", "true") // nolint: errcheck
 	writer.Close()                       // nolint: errcheck
 
-	_, err = http.PostPlain(instance.URLString()+fmt.Sprintf(reindexUrl, index), instance.Username, pw, body)
+	_, _, err = http.PostPlain(instance.URLString()+fmt.Sprintf(reindexUrl, index), instance.Username, pw, body)
 	if err != nil {
 		return err
 	}

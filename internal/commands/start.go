@@ -56,57 +56,8 @@ func (c *commandStart) run(cmd *cobra.Command, args []string) {
 	}
 
 	for _, currentInstance := range instances {
-		currentInstance := currentInstance
-		if aem.PidExists(currentInstance) && !c.ignorePid {
-			if !aem.PidHandler(c.ignorePid, currentInstance) {
-				os.Exit(ExitError)
-			}
-		}
-
-		if aem.TCPPortOpen(currentInstance.Port) {
-			output.Printf(output.NORMAL, "Port already taken by other application (%d)", currentInstance.Port)
-			os.Exit(ExitError)
-		}
-
-		version, err := aem.FindJarVersion(cnf.DefaultVersion, currentInstance.Version, cnf)
+		err := aem.FullStart(currentInstance, c.ignorePid, c.forceDownload, c.foreground, cnf, nil)
 		if err != nil {
-			output.Printf(output.NORMAL, errorString, err.Error())
-			os.Exit(ExitError)
-		}
-
-		_, err = aem.GetJar(c.forceDownload, version)
-		if err != nil {
-			output.Printf(output.NORMAL, err.Error())
-			os.Exit(ExitError)
-		}
-
-		err = aem.Unpack(currentInstance, version)
-		if err != nil {
-			output.Printf(output.NORMAL, "Could not unpack AEM jar (%s)", err.Error())
-			os.Exit(ExitError)
-		}
-
-		_, err = aem.WriteLicense(&currentInstance, cnf)
-		if err != nil {
-			output.Printf(output.NORMAL, "Could not unpack AEM jar (%s)", err.Error())
-			os.Exit(ExitError)
-		}
-
-		_, err = aem.WriteIgnoreFile()
-		if err != nil {
-			output.Print(output.NORMAL, "Could not write ignore file\n")
-			os.Exit(ExitError)
-		}
-
-		err = aem.SyncPackages(currentInstance, *cnf, c.forceDownload)
-		if err != nil {
-			output.Printf(output.NORMAL, "Error while syncing packages. (%s)", err.Error())
-			os.Exit(ExitError)
-		}
-
-		err = aem.Start(currentInstance, c.foreground)
-		if err != nil {
-			output.Printf(output.NORMAL, "Could not unpack start AEM (%s)", err.Error())
 			os.Exit(ExitError)
 		}
 	}

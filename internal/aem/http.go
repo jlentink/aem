@@ -14,7 +14,7 @@ const (
 
 // URL for instance (*url.URL)
 func URL(i *objects.Instance, uri string) (*url.URL, error) {
-	u, err := url.Parse(URLString(i) + uri)
+	u, err := url.Parse(URLString(i, false) + uri)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func URL(i *objects.Instance, uri string) (*url.URL, error) {
 }
 
 // URLString for instance
-func URLString(i *objects.Instance) string {
+func URLString(i *objects.Instance, ip bool) string {
 	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.Hostname, i.Port)
 }
 

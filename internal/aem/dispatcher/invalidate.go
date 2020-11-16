@@ -19,13 +19,14 @@ func Invalidate(i *objects.Instance, path string) error {
 	}
 
 	header := []http.Header{
+		{Key: "Host", Value: i.Hostname},
 		{Key: "CQ-Action", Value: "Activate"},
 		{Key: "Content-Length", Value: "0"},
 		{Key: "Content-Type", Value: "application/octet-stream"},
 		{Key: "CQ-Path", Value: path},
 		{Key: "CQ-Handle", Value: path},
 	}
-	_, err := http.GetPlainWithHeaders(i.URLString()+invalidateURL, i.Username, i.Password, header)
+	_, err := http.GetPlainWithHeaders(i.URLIPString()+invalidateURL, i.Username, i.Password, header)
 	if err != nil {
 		return fmt.Errorf("could not invalidate path: %s", err.Error())
 	}

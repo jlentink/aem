@@ -66,9 +66,12 @@ func (c *commandPullContent) run(cmd *cobra.Command, args []string) {
 			os.Exit(ExitError)
 		}
 
-		crx, err := pkg.Upload(*t, path, true, true)
+		crx, htmlBody, err := pkg.Upload(*t, path, true, true)
 		if err != nil {
 			output.Printf(output.NORMAL, errorString, err.Error())
+			if len(htmlBody) > 0 {
+				output.Printf(output.NORMAL, "%s\n", htmlBody)
+			}
 			os.Exit(ExitError)
 		}
 		output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)

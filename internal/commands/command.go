@@ -145,6 +145,22 @@ func changeProjectDir(projectName string) {
 	os.Exit(ExitError)
 }
 
+func lookupByPath() error {
+	cwd, err := project.GetWorkDir()
+	projects := cachedir.RegisteredProjects()
+	if err != nil {
+		return err
+	}
+
+	for _, p := range projects {
+		if strings.HasPrefix(cwd, p.Path) {
+			err := os.Chdir(p.Path)
+			return err
+		}
+	}
+	return fmt.Errorf("not found")
+}
+
 // ConfigCheckListProjects Check for config and list projects if needed
 func ConfigCheckListProjects() {
 
@@ -160,6 +176,11 @@ func ConfigCheckListProjects() {
 	}
 
 	if !b {
+		err := lookupByPath()
+		if err == nil {
+			return
+		}
+
 		output.Print(output.NORMAL, "No config file in the current directory.\n")
 		p, err := project.HomeDir()
 		if err != nil {

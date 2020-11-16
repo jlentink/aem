@@ -17,6 +17,7 @@ type commandLog struct {
 	listLogs     bool
 	follow       bool
 	log          string
+	buff         int64
 }
 
 func (c *commandLog) setup() *cobra.Command {
@@ -30,6 +31,7 @@ func (c *commandLog) setup() *cobra.Command {
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to stop")
 	cmd.Flags().BoolVarP(&c.listLogs, "list", "", false, "List available log files")
 	cmd.Flags().BoolVarP(&c.follow, "follow", "f", false, "Actively follow lines when they come in")
+	cmd.Flags().Int64VarP(&c.buff, "buffer", "b", 1000, "Buffer to show at the bottom of the file")
 	cmd.Flags().StringVarP(&c.log, "log", "l", "error.log", "Which file(s) to follow")
 	return cmd
 }
@@ -70,7 +72,16 @@ func (c *commandLog) run(cmd *cobra.Command, args []string) {
 	}
 
 	path, _ := project.GetLogDirLocation(*i)
-	t, _ := tail.TailFile(path+c.log, tail.Config{Follow: c.follow})
+
+	if c.buff > 0 {
+		c.buff *= -1
+	}
+
+	location := &tail.SeekInfo{
+		Offset: c.buff,
+		Whence: 2,
+	}
+	t, _ := tail.TailFile(path+c.log, tail.Config{Follow: c.follow, Location: location, Logger: tail.DiscardingLogger})
 	for line := range t.Lines {
 		fmt.Println(line.Text)
 	}

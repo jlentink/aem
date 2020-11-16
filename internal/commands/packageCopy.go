@@ -100,9 +100,12 @@ func (c *commandPackageCopy) run(cmd *cobra.Command, args []string) {
 		for _, toInstance := range t {
 			output.Printf(output.NORMAL, "\U0001F69A %s => %s (install: %t, force: %t)\n",
 				f.Name, toInstance.Name, c.install, c.force)
-			crx, err := pkg.Upload(toInstance, p, c.install, c.force)
+			crx, htmlBody, err := pkg.Upload(toInstance, p, c.install, c.force)
 			if err != nil {
-				output.Printf(output.NORMAL, "Issue while coping package: %s", err.Error())
+				output.Printf(output.NORMAL, "Issue while coping package: %s", htmlBody)
+				if len(htmlBody) > 0 {
+					output.Printf(output.NORMAL, "%s\n", err.Error())
+				}
 				os.Exit(ExitError)
 			}
 			output.Printf(output.VERBOSE, "%s", crx.Response.Data.Log.Text)
