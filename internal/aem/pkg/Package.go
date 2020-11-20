@@ -93,7 +93,21 @@ func GetPackageByNameAndVersion(i objects.Instance, name, version string) (*obje
 	return nil, fmt.Errorf("could not find package")
 }
 
+// GetPackageByNameAndVersion finds a package based on name and version
+func GetPackageByName(i objects.Instance, name string) (*objects.Package, error) {
+	pkgList, err := list(i)
+	if err != nil {
+		return nil, err
+	}
 
+	for _, pkg := range pkgList {
+		if strings.ToLower(pkg.Name) == strings.ToLower(name) {
+			return &pkg, nil
+		}
+	}
+	emptyPkg := objects.Package{}
+	return &emptyPkg, fmt.Errorf("could not find package")
+}
 
 // PackageList return list of packages on instance
 func PackageList(i objects.Instance) ([]objects.Package, error) {
@@ -315,6 +329,11 @@ func RebuildbyName(i *objects.Instance, n string) (*objects.Package, error) {
 	}
 	return nil, fmt.Errorf("could not find package: %s", n)
 
+}
+
+func GetTimeVersion() string {
+	now := time.Now()
+	return fmt.Sprintf("%s.%d", now.Format("20060102"), now.UnixNano())
 }
 
 // Rebuild package on instance
