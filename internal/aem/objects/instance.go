@@ -9,26 +9,27 @@ import (
 
 // Instance for aem instance
 type Instance struct {
-	Name              string   `toml:"name"`
-	Aliases           []string `toml:"aliases"`
-	Group             string   `toml:"group"`
-	Debug             bool     `toml:"debug"`
-	Protocol          string   `toml:"proto"`
-	IP                string   `toml:"ip"`
-	Hostname          string   `toml:"hostname"`
-	Port              int      `toml:"port"`
-	SPort             int      `toml:"secure-port"`
-	DispatcherVersion string   `toml:"dispatcher-version"`
-	Author            string   `toml:"author"`
-	Publisher         string   `toml:"publisher"`
-	Type              string   `toml:"type"`
-	RunMode           string   `toml:"runmode"`
-	Username          string   `toml:"username"`
-	SSHUsername       string   `toml:"ssh-username"`
-	Password          string   `toml:"password"`
-	JVMOptions        []string `toml:"jvm-options"`
-	JVMDebugOptions   []string `toml:"jvm-debug-options"`
-	Version           string   `toml:"version"`
+	Name               string   `toml:"name"`
+	Aliases            []string `toml:"aliases"`
+	Group              string   `toml:"group"`
+	Debug              bool     `toml:"debug"`
+	Protocol           string   `toml:"proto"`
+	IP                 string   `toml:"ip"`
+	Hostname           string   `toml:"hostname"`
+	Port               int      `toml:"port"`
+	SPort              int      `toml:"secure-port"`
+	DispatcherVersion  string   `toml:"dispatcher-version"`
+	DispatcherEndpoint string   `toml:"dispatcher-endpoint"`
+	Author             string   `toml:"author"`
+	Publisher          string   `toml:"publisher"`
+	Type               string   `toml:"type"`
+	RunMode            string   `toml:"runmode"`
+	Username           string   `toml:"username"`
+	SSHUsername        string   `toml:"ssh-username"`
+	Password           string   `toml:"password"`
+	JVMOptions         []string `toml:"jvm-options"`
+	JVMDebugOptions    []string `toml:"jvm-debug-options"`
+	Version            string   `toml:"version"`
 }
 
 // URLString for instance

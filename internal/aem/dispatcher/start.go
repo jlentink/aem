@@ -23,9 +23,15 @@ func Start(i objects.Instance, cnf *objects.Config, forGround bool) error {
 	if err != nil {
 		return err
 	}
+
 	publisher, err := aem.GetByName(i.Publisher, cnf.Instances)
 	if err != nil {
 		return err
+	}
+
+	dispatcherEndpoint := i.DispatcherEndpoint
+	if dispatcherEndpoint == "" {
+		dispatcherEndpoint = "host.docker.internal"
 	}
 
 	fp, err := project.Create(fmt.Sprintf("%s/dispatcher/src/empty.txt", pwd))
@@ -54,14 +60,15 @@ func Start(i objects.Instance, cnf *objects.Config, forGround bool) error {
 		"-v",
 		fmt.Sprintf("%s/dispatcher/src/empty.txt:/usr/local/apache2/conf.modules.d/00-systemd.conf", pwd),
 		"-e",
-		"AUTHOR_IP=host.docker.internal",
+		fmt.Sprintf("AUTHOR_IP=%s", dispatcherEndpoint),
 		"-e",
 		fmt.Sprintf("AUTHOR_PORT=%d", author.Port),
 		"-e",
-		"PUBLISH_IP=host.docker.internal",
+		fmt.Sprintf("PUBLISH_IP=%s", dispatcherEndpoint),
 		"-e",
 		"CRX_FILTER=allow",
-		fmt.Sprintf("-e PUBLISH_PORT=%d", publisher.Port),
+		"-e",
+		fmt.Sprintf("PUBLISH_PORT=%d", publisher.Port),
 		"-e",
 		"AUTHOR_DOCROOT=/var/www/author",
 		"-e",

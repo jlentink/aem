@@ -66,7 +66,8 @@ func (c *commandPullContent) run(cmd *cobra.Command, args []string) {
 		}
 		pd, err := pkg.DownloadWithName(f, cPkg)
 		if err != nil {
-			output.Printf(output.NORMAL, "\U0000274C Issue while fetching content page: %s\n", err.Error())
+			output.Printf(output.NORMAL, "\U0000274C Issue while fetching content package: %s\n", err.Error())
+			os.Exit(ExitError)
 		}
 		path, err := project.GetLocationForPackage(pd)
 		if err != nil {
