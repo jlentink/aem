@@ -54,7 +54,15 @@ func (c *commandPullContent) run(cmd *cobra.Command, args []string) {
 	output.Printf(output.NORMAL, "\U0001F69A %s => %s\n", f.Name, t.Name)
 	for _, cPkg := range cnf.ContentPackages {
 		if c.build {
-			rebuildPackage(f, cPkg)
+			dPkg, err := pkg.GetPackageByName(*f, cnf.ContentBackupName)
+			if dPkg.Name == "" {
+				pkg.Create(*f, cnf.ContentBackupName, cnf.ContentBackupGroup, pkg.GetTimeVersion(), cnf.ContentBackupPaths, true)
+			} else if dPkg.Name != "" {
+				rebuildPackage(f, cPkg)
+			} else if err != nil {
+				output.Printf(output.NORMAL, "Could not build package", err.Error())
+				os.Exit(ExitError)
+			}
 		}
 		pd, err := pkg.DownloadWithName(f, cPkg)
 		if err != nil {
