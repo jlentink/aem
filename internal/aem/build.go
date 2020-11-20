@@ -75,7 +75,7 @@ func SetBuildVersion(productionBuild bool) error {
 }
 
 // BuildProject kicks of the project build
-func BuildProject(productionBuild bool) error {
+func BuildProject(productionBuild, skipTests, skipCheckStyle, skipFrontend bool) error {
 	workPath, _ := project.GetWorkDir()
 
 	err := SetBuildVersion(productionBuild)
@@ -83,7 +83,21 @@ func BuildProject(productionBuild bool) error {
 		return err
 	}
 
-	cmd := exec.Command("mvn", strings.Split(Cnf.BuildCommands, " ")...)
+	buildOptions := strings.Split(Cnf.BuildCommands, " ")
+
+	if skipTests {
+		buildOptions = append(buildOptions, "-DskipTests")
+	}
+
+	if skipCheckStyle {
+		buildOptions = append(buildOptions, "-Dcheckstyle.skip")
+	}
+
+	if skipFrontend {
+		buildOptions = append(buildOptions, "-DskipFrontend=true")
+	}
+
+	cmd := exec.Command("mvn", buildOptions...)
 	cmd.Dir = workPath
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

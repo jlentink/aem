@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/jlentink/aem/internal/aem"
+	"github.com/jlentink/aem/internal/aem/dispatcher"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/cobra"
 	"os"
@@ -49,16 +50,24 @@ func (c *commandStart) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
-	cnf, instances, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.groupName, []string{aem.RoleAuthor, aem.RolePublisher})
+	cnf, instances, errorString, err := getConfigAndInstanceOrGroupWithRoles(c.instanceName, c.groupName, []string{aem.RoleAuthor, aem.RolePublisher, aem.RoleDispatcher})
 	if err != nil {
 		output.Printf(output.NORMAL, errorString, err.Error())
 		os.Exit(ExitError)
 	}
 
 	for _, currentInstance := range instances {
-		err := aem.FullStart(currentInstance, c.ignorePid, c.forceDownload, c.foreground, cnf, nil)
-		if err != nil {
-			os.Exit(ExitError)
+		if currentInstance.InstanceOf([]string{aem.RoleAuthor, aem.RolePublisher}) {
+			err := aem.FullStart(currentInstance, c.ignorePid, c.forceDownload, c.foreground, cnf, nil)
+			if err != nil {
+				os.Exit(ExitError)
+			}
+
+ 		} else if currentInstance.InstanceOf([]string{aem.RoleDispatcher}){
+			err := dispatcher.Start(currentInstance, cnf, c.foreground)
+			if err != nil {
+				os.Exit(ExitError)
+			}
 		}
 	}
 }
