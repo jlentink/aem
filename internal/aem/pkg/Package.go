@@ -15,18 +15,23 @@ import (
 	"github.com/jlentink/aem/internal/packageproperties"
 	"io/ioutil"
 	"mime/multipart"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
-	packageListURL    = "/crx/packmgr/list.jsp"
-	packageUploadURL  = "/crx/packmgr/service.jsp"
-	packageRebuildURL = "/crx/packmgr/service/.json%s?cmd=build"
-	packageInstallURL = "/crx/packmgr/service/.json%s?cmd=install"
+	packageListURL      = "/crx/packmgr/list.jsp"
+	packageUploadURL    = "/crx/packmgr/service.jsp"
+	packageRebuildURL   = "/crx/packmgr/service/.json%s?cmd=build"
+	packageInstallURL   = "/crx/packmgr/service/.json%s?cmd=install"
+	packageCreateURL    = "/crx/packmgr/service/exec.json?cmd=create"
+	packageUpdateURL    = "/crx/packmgr/update.jsp"
+	packagePathTemplate = "{\"root\":\"%s\",\"rules\":[]},"
 )
 
 func list(i objects.Instance) ([]objects.Package, error) {
@@ -72,6 +77,38 @@ func nameVersion(p string) (string, string) {
 	return p, ``
 }
 
+// GetPackageByNameAndVersion finds a package based on name and version
+func GetPackageByNameAndVersion(i objects.Instance, name, version string) (*objects.Package, error) {
+	pkgList, err := list(i)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, pkg := range pkgList {
+		if strings.ToLower(pkg.Name) == strings.ToLower(name) &&
+			pkg.Version == version {
+			return &pkg, nil
+		}
+	}
+	return nil, fmt.Errorf("could not find package")
+}
+
+// GetPackageByNameAndVersion finds a package based on name and version
+func GetPackageByName(i objects.Instance, name string) (*objects.Package, error) {
+	pkgList, err := list(i)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, pkg := range pkgList {
+		if strings.ToLower(pkg.Name) == strings.ToLower(name) {
+			return &pkg, nil
+		}
+	}
+	emptyPkg := objects.Package{}
+	return &emptyPkg, fmt.Errorf("could not find package")
+}
+
 // PackageList return list of packages on instance
 func PackageList(i objects.Instance) ([]objects.Package, error) {
 	return list(i)
@@ -105,34 +142,127 @@ func constructInstallBody(pkgLocation string, install, force bool) (*bytes.Buffe
 	return body, writer.FormDataContentType(), nil
 }
 
+func initCreate(i objects.Instance, name, group, version string) error {
+	if !aem.Cnf.ValidateSSL {
+		http.DisableSSLValidation()
+	}
+
+	pw, err := i.GetPassword()
+	if err != nil {
+		return err
+	}
+
+	data := url.Values{}
+	data.Add("_charset_", "utf-8")
+	data.Add("packageName", name)
+	data.Add("packageVersion", version)
+	data.Add("groupName", group)
+	_, _, err = http.PostFormEncode(i.URLString()+packageCreateURL, i.Username, pw, data)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func updateCreate(i objects.Instance, pkg *objects.Package, name, group, version string, paths []string) error {
+	pw, err := i.GetPassword()
+	if err != nil {
+		return err
+	}
+
+	filter := "["
+	for _, path := range paths {
+		filter += fmt.Sprintf(packagePathTemplate, path)
+	}
+	filter = filter[0:len(filter)-1] + "]"
+
+	data := map[string]string{}
+	data["path"] = fmt.Sprintf(pkg.Path)
+	data["packageName"] = name
+	data["groupName"] = group
+	data["description"] = "AEM-CLI create content backup package."
+	data["filter"] = filter
+	data["version"] = version
+
+	_, _, err = http.PostMultiPart(i.URLString()+packageUpdateURL, i.Username, pw, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Create a package
+func Create(i objects.Instance, name, group, version string, paths []string, build bool) (*objects.Package, error) {
+	err := initCreate(i, name, group, version)
+	if err != nil {
+		return nil, err
+	}
+
+	pkg, err := GetPackageByNameAndVersion(i, name, version)
+	if err != nil {
+		return nil, err
+	}
+
+	err = updateCreate(i, pkg, name, group, version, paths)
+	if err != nil {
+		return nil, err
+	}
+
+	if build {
+		Rebuild(&i, pkg)
+	}
+
+	return pkg, nil
+}
+
+func AwaitBuild(i *objects.Instance, pkg *objects.Package) error {
+	pkgs, err := list(*i)
+	if err != nil {
+		return err
+	}
+	for _, cPkg := range pkgs {
+		if cPkg.Equals(pkg) {
+			if cPkg.BuildCount < 1 {
+				fmt.Print(".")
+				time.Sleep(1 * time.Second)
+				AwaitBuild(i, pkg)
+			}
+		}
+	}
+
+	return nil
+}
+
 // Upload package to instance
-func Upload(i objects.Instance, pkgLocation string, install, force bool) (*objects.CrxResponse, error) {
+func Upload(i objects.Instance, pkgLocation string, install, force bool) (*objects.CrxResponse, string, error) {
 	if !aem.Cnf.ValidateSSL {
 		http.DisableSSLValidation()
 	}
 
 	if _, err := os.Stat(pkgLocation); os.IsNotExist(err) {
-		return nil, fmt.Errorf("could not find package: %s", pkgLocation)
+		return nil, "", fmt.Errorf("could not find package: %s", pkgLocation)
 	}
 	if m, _ := regexp.MatchString(`(?i)(.*).zip$`, pkgLocation); !m {
-		return nil, fmt.Errorf("package should be a zipfile")
+		return nil, "", fmt.Errorf("package should be a zipfile")
 	}
 
 	body, formHeader, err := constructInstallBody(pkgLocation, install, force)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	pw, err := i.GetPassword()
 	if err != nil {
-		return nil, fmt.Errorf("could not get password")
+		return nil, "", fmt.Errorf("could not get password")
 	}
 	resp, err := http.Upload(i.URLString()+packageUploadURL, i.Username, pw, body, []http.Header{{Key: headers.ContentType, Value: formHeader}})
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	if resp.StatusCode >= 400 {
-		return nil, fmt.Errorf("received invalid http status %d - %s", resp.StatusCode, resp.Status)
+		return nil, "", fmt.Errorf("received invalid http status %d - %s", resp.StatusCode, resp.Status)
 	}
 
 	respBody, _ := ioutil.ReadAll(resp.Body)
@@ -140,9 +270,9 @@ func Upload(i objects.Instance, pkgLocation string, install, force bool) (*objec
 	crxResp := objects.CrxResponse{}
 	err = xml.Unmarshal(respBody, &crxResp)
 	if err != nil {
-		return nil, err
+		return nil, string(respBody), err
 	}
-	return &crxResp, nil
+	return &crxResp, "", nil
 }
 
 // Download package from instance
@@ -201,6 +331,11 @@ func RebuildbyName(i *objects.Instance, n string) (*objects.Package, error) {
 
 }
 
+func GetTimeVersion() string {
+	now := time.Now()
+	return fmt.Sprintf("%s.%d", now.Format("20060102"), now.UnixNano())
+}
+
 // Rebuild package on instance
 func Rebuild(i *objects.Instance, pkg *objects.Package) (*objects.Package, error) {
 	if !aem.Cnf.ValidateSSL {
@@ -211,7 +346,7 @@ func Rebuild(i *objects.Instance, pkg *objects.Package) (*objects.Package, error
 	if err != nil {
 		return nil, err
 	}
-	_, err = http.PostPlain(i.URLString()+fmt.Sprintf(packageRebuildURL, pkg.Path), i.Username, pw, nil)
+	_, _, err = http.PostPlain(i.URLString()+fmt.Sprintf(packageRebuildURL, pkg.Path), i.Username, pw, nil)
 
 	return pkg, err
 }
@@ -227,7 +362,7 @@ func Install(i *objects.Instance, pkg *objects.Package) (*objects.Package, error
 		return nil, err
 	}
 
-	_, err = http.PostPlain(i.URLString()+fmt.Sprintf(packageInstallURL, pkg.Path), i.Username, pw, nil)
+	_, _, err = http.PostPlain(i.URLString()+fmt.Sprintf(packageInstallURL, pkg.Path), i.Username, pw, nil)
 
 	return pkg, err
 }

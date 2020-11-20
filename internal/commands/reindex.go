@@ -19,7 +19,7 @@ type commandReindex struct {
 
 func (c *commandReindex) setup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "list",
+		Use:     "index",
 		Short:   "Reindex index on instance",
 		Aliases: []string{"reindex"},
 		PreRun:  c.preRun,

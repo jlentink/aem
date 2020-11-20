@@ -6,6 +6,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/objects"
+	"github.com/jlentink/aem/internal/cli/cachedir"
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/jlentink/aem/internal/sliceutil"
@@ -129,12 +130,8 @@ func ReadRegisteredProjects(homedir string) objects.Projects {
 }
 
 func changeProjectDir(projectName string) {
-	homedir, err := project.HomeDir()
-	if err != nil {
-		return
-	}
-	projects := ReadRegisteredProjects(homedir)
-	for _, cProject := range projects.Project {
+	projects := cachedir.RegisteredProjects()
+	for _, cProject := range projects {
 		if strings.EqualFold(cProject.Name, projectName) {
 			err := os.Chdir(cProject.Path)
 			if err != nil {
@@ -146,6 +143,22 @@ func changeProjectDir(projectName string) {
 	}
 	output.Printf(output.NORMAL, "Could not find project: %s.\n", projectName)
 	os.Exit(ExitError)
+}
+
+func lookupByPath() error {
+	cwd, err := project.GetWorkDir()
+	projects := cachedir.RegisteredProjects()
+	if err != nil {
+		return err
+	}
+
+	for _, p := range projects {
+		if strings.HasPrefix(cwd, p.Path) {
+			err := os.Chdir(p.Path)
+			return err
+		}
+	}
+	return fmt.Errorf("not found")
 }
 
 // ConfigCheckListProjects Check for config and list projects if needed
@@ -163,6 +176,11 @@ func ConfigCheckListProjects() {
 	}
 
 	if !b {
+		err := lookupByPath()
+		if err == nil {
+			return
+		}
+
 		output.Print(output.NORMAL, "No config file in the current directory.\n")
 		p, err := project.HomeDir()
 		if err != nil {
@@ -186,38 +204,15 @@ func ConfigCheckListProjects() {
 
 // RegisterProject in homedir
 func RegisterProject() {
-	homedir, err := project.HomeDir()
-	if err != nil {
-		return
-	}
-
-	projects := ReadRegisteredProjects(homedir)
 	cnf, err := getConfig()
 	if err != nil {
 		return
 	}
-
 	cwd, err := project.GetWorkDir()
 	if err != nil {
 		return
 	}
-
-	for i, cProject := range projects.Project {
-		if cProject.Name == cnf.ProjectName && cProject.Path == cwd {
-			return
-		}
-
-		if cProject.Name == cnf.ProjectName && cProject.Path != cwd {
-			projects.Project[i].Path = cwd
-			WriteRegisterFile(projects, homedir)
-			return
-		}
-	}
-
-	projects.Project = append(projects.Project, objects.ProjectRegistered{Name: cnf.ProjectName, Path: cwd})
-
-	WriteRegisterFile(projects, homedir)
-
+	cachedir.RegisterProject(cnf.ProjectName, cwd)
 }
 
 // WriteRegisterFile writes project in project registry file

@@ -175,6 +175,7 @@ func Start(i objects.Instance, forGround bool) error {
 		"-Dsling.properties=conf/sling.properties")
 
 	cmd := exec.Command("java", javaOptions...)
+	output.Printf(output.VERBOSE, "run java %s", javaOptions)
 	cmd.Dir = runDir
 
 	if !forGround {
@@ -195,20 +196,126 @@ func Start(i objects.Instance, forGround bool) error {
 	return ioutil.WriteFile(pidFile, []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
 }
 
+func FullStart(i objects.Instance, ignorePid, forceDownload, foreground bool, cnf *objects.Config, extraPackages []*objects.Package) error{
+	if PidExists(i) && !ignorePid {
+		if !PidHandler(ignorePid, i) {
+			return fmt.Errorf("could not ignore pid")
+		}
+	}
+
+	if TCPPortOpen(i.Port) {
+		output.Printf(output.NORMAL, "Port already taken by other application (%d)", i.Port)
+		return fmt.Errorf("port is already taken")
+	}
+
+	version, err := FindJarVersion(cnf.DefaultVersion, i.Version, cnf)
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not find Jar", err.Error())
+		return fmt.Errorf("could not find Jar")
+	}
+
+	_, err = GetJar(forceDownload, version)
+	if err != nil {
+		output.Printf(output.NORMAL, err.Error())
+		return fmt.Errorf("could not download Jar")
+	}
+
+	err = Unpack(i, version)
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not unpack AEM jar (%s)", err.Error())
+		return fmt.Errorf("could not unpack AEM jar (%s)", err.Error())
+	}
+
+	_, err = WriteLicense(&i, cnf)
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not write license (%s)", err.Error())
+		return fmt.Errorf("could not write license (%s)", err.Error())
+	}
+
+	_, err = WriteIgnoreFile()
+	if err != nil {
+		output.Print(output.NORMAL, "Could not write ignore file\n")
+		return fmt.Errorf("could not write ignore file")
+	}
+
+	additionalPackages := cnf.AdditionalPackages
+	for _, extraPackage := range extraPackages {
+		p, err := project.GetLocationForPackage(extraPackage)
+		if err != nil {
+			output.Print(output.NORMAL, "Could not add addition packages\n")
+			return fmt.Errorf("could not add addition packages")
+		}
+		additionalPackages = append(additionalPackages, p)
+	}
+
+	err = SyncPackages(i, *cnf, additionalPackages, forceDownload)
+	if err != nil {
+		output.Printf(output.NORMAL, "Error while syncing packages. (%s)", err.Error())
+		return fmt.Errorf("error while syncing packages. (%s)", err.Error())
+	}
+
+	err = Start(i, foreground)
+	if err != nil {
+		output.Printf(output.NORMAL, "Could not unpack start AEM (%s)", err.Error())
+		return fmt.Errorf("could not unpack start AEM (%s)", err.Error())
+	}
+	return nil
+}
+
+func Destroy(i objects.Instance, force bool, cnf objects.Config) error {
+	p, err := project.GetInstanceDirLocation(i)
+	if err != nil {
+		return err
+	}
+	if project.Exists(p) {
+		Stop(i)
+		project.RemoveAll(p)
+	}
+	removeJar(i, cnf)
+	return nil
+}
+
+func removeJar(currentInstance objects.Instance, cnf objects.Config){
+	version, err := FindJarVersion(cnf.DefaultVersion, currentInstance.Version, &cnf)
+	if err != nil {
+		return
+	}
+
+	location, err := project.GetJarFileLocation(version)
+	if err != nil {
+		return
+	}
+
+	project.Remove(location)
+}
+
 // SyncPackages Sync the packages in the install dir
-func SyncPackages(i objects.Instance, c objects.Config, forceDownload bool) error {
+func SyncPackages(i objects.Instance, c objects.Config, additionalPackages []string, forceDownload bool) error {
 	installDir, err := project.CreateInstallDir(i)
 	if err != nil {
 		return err
 	}
-	for _, cPkg := range c.AdditionalPackages {
-		_, err := http.DownloadFile(installDir+path.Base(cPkg), cPkg, ``, ``, forceDownload)
-		if err != nil {
-			return err
+	for _, cPkg := range additionalPackages {
+		if cPkg[0:1] == "/" {
+			project.Copy(cPkg, installDir+path.Base(cPkg))
+		} else {
+			_, err := http.DownloadFile(installDir+path.Base(cPkg), cPkg, ``, ``, forceDownload)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
-	return cleanupPackages(installDir, c)
+	return cleanupPackages(installDir, c, additionalPackages)
+}
+
+func getAdditionalPackageNames(AdditionalPackages []string) []string {
+	list := make([]string, 0)
+	for _, value := range AdditionalPackages {
+		list = append(list, path.Base(value))
+	}
+
+	return list
 }
 
 func getAdditionalPackageList(c objects.Config) []string {
@@ -220,9 +327,9 @@ func getAdditionalPackageList(c objects.Config) []string {
 	return list
 }
 
-func cleanupPackages(p string, c objects.Config) error {
+func cleanupPackages(p string, c objects.Config, AdditionalPackages []string) error {
 	files, err := project.ReadDir(p)
-	pkgList := getAdditionalPackageList(c)
+	pkgList := getAdditionalPackageNames(AdditionalPackages)
 	if err != nil {
 		return err
 	}

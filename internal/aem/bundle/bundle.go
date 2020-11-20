@@ -38,7 +38,7 @@ func List(i *objects.Instance) ([]*Bundle, error) {
 	}
 
 	buf := bytes.NewBufferString(data.Encode())
-	resp, err := http.PostPlainWithHeaders(i.URLString()+bundlesURL, i.Username, pw, buf, []http.Header{
+	resp, _, err := http.PostPlainWithHeaders(i.URLString()+bundlesURL, i.Username, pw, buf, []http.Header{
 		{Key: "Content-Type", Value: "application/x-www-form-urlencoded; charset=UTF-8"},
 	})
 	if err != nil {
@@ -100,7 +100,7 @@ func bundleAction(i *objects.Instance, bundle *Bundle, action string) (*Bundle, 
 	}
 
 	buf := bytes.NewBufferString(data.Encode())
-	resp, err := http.PostPlainWithHeaders(i.URLString()+fmt.Sprintf(bundlePageURL, fmt.Sprintf("%d", bundle.ID)), i.Username, pw, buf, []http.Header{
+	resp, _, err := http.PostPlainWithHeaders(i.URLString()+fmt.Sprintf(bundlePageURL, fmt.Sprintf("%d", bundle.ID)), i.Username, pw, buf, []http.Header{
 		{Key: headers.ContentType, Value: "application/x-www-form-urlencoded; charset=UTF-8"},
 	})
 

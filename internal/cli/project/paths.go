@@ -46,7 +46,7 @@ func GetInstancesDirLocation() (string, error) {
 
 // GetLicenseLocation get license location for instance
 func GetLicenseLocation(instance objects.Instance) (string, error) {
-	path, err := getInstanceDirLocation(instance)
+	path, err := GetInstanceDirLocation(instance)
 	if err != nil {
 		return ``, err
 	}
@@ -70,7 +70,7 @@ func GetUnpackDirLocation() (string, error) {
 	return appendSlash(path) + configAemRunDir, nil
 }
 
-func getInstanceDirLocation(instance objects.Instance) (string, error) {
+func GetInstanceDirLocation(instance objects.Instance) (string, error) {
 	path, err := GetInstancesDirLocation()
 	if err != nil {
 		return ``, err
@@ -80,7 +80,7 @@ func getInstanceDirLocation(instance objects.Instance) (string, error) {
 
 // GetRunDirLocation Get location of the run dir of aem
 func GetRunDirLocation(instance objects.Instance) (string, error) {
-	path, err := getInstanceDirLocation(instance)
+	path, err := GetInstanceDirLocation(instance)
 	if err != nil {
 		return ``, err
 	}

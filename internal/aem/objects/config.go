@@ -40,6 +40,10 @@ type Config struct {
 	BuildCommands      string     `toml:"buildCommand"`
 	ValidateSSL        bool       `toml:"ssl-validate"`
 	InvalidatePaths    []string   `toml:"invalidatePaths"`
+	CloudManagerGit    string     `toml:"cloudManagerGit"`
+	ContentBackupPaths []string   `toml:"contentBackupPaths"`
+	ContentBackupName  string     `toml:"contentBackupName"`
+	ContentBackupGroup string     `toml:"contentBackupGroup"`
 }
 
 // AemJar Descriptive jar

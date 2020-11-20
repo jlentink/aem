@@ -25,6 +25,9 @@ type commandDeploy struct {
 	artifact        string
 	flush           bool
 	productionBuild bool
+	skipTests       bool
+	skipFrontend	bool
+	skipCheckStyle	bool
 }
 
 func (c *commandDeploy) setup() *cobra.Command {
@@ -50,6 +53,12 @@ func (c *commandDeploy) setup() *cobra.Command {
 		"Deploy one a single artifact")
 	cmd.Flags().BoolVarP(&c.flush, "flush", "f", true,
 		"Flush after deploy")
+	cmd.Flags().BoolVarP(&c.skipTests, "skip-tests", "t", false,
+		"Skip tests")
+	cmd.Flags().BoolVarP(&c.skipFrontend, "skip-frontend", "F", false,
+		"Skip frontend build")
+	cmd.Flags().BoolVarP(&c.skipCheckStyle, "skip-checkstyle", "c", false,
+		"Skip checkstyle")
 	cmd.Flags().BoolVarP(&c.productionBuild, "production-build", "B", false,
 		"Build versioned before deploy")
 
@@ -137,7 +146,7 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 				output.Printf(output.NORMAL, "%s\n", err)
 			}
 		case pom.Package:
-			resp, err := pkg.Upload(i, a.CompletePath(), true, true)
+			resp, htmlBody, err := pkg.Upload(i, a.CompletePath(), true, true)
 			if err != nil {
 				fmt.Printf("Status: \U0000274C\n")
 				output.Printf(output.NORMAL, "%s\n", err)
@@ -145,6 +154,9 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 			if resp != nil {
 				fmt.Printf("Status: \U00002705\n")
 				output.Printf(output.VERBOSE, "%s\n", resp.Response.Data.Log)
+				if len(htmlBody) > 0 {
+					output.Printf(output.VERBOSE, "%s\n", htmlBody)
+				}
 			}
 		default:
 			output.Printf(output.NORMAL, "Unknown package type. %s", a.Packaging)
@@ -167,7 +179,7 @@ func (c *commandDeploy) stringInSlice(a string, list []string) bool {
 }
 func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) bool {
 	if c.forceBuild {
-		err := aem.BuildProject(c.productionBuild) // nolint: errcheck
+		err := aem.BuildProject(c.productionBuild, c.skipTests, c.skipCheckStyle, c.skipFrontend) // nolint: errcheck
 		if err != nil {
 			output.Printf(output.NORMAL, "\U0000274C Build failed...")
 			os.Exit(1)
@@ -192,7 +204,7 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 			//aem.Cnf.PackagesExcluded
 			if !c.stringInSlice(artifact.PakageName(), aem.Cnf.PackagesExcluded) {
 				fmt.Printf("\r%s\n", artifact.Filename())
-				resp, err := pkg.Upload(i, artifact.CompletePath(), true, true)
+				resp, HtmlBody, err := pkg.Upload(i, artifact.CompletePath(), true, true)
 				if resp != nil {
 					success++
 					fmt.Printf("Status: \U00002705\n")
@@ -202,6 +214,9 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 					fmt.Printf("Status: \U0000274C\n")
 					failed++
 					output.Printf(output.NORMAL, "%s\n", err)
+					if len(HtmlBody) != 0 {
+						output.Printf(output.NORMAL, "%s\n", HtmlBody)
+					}
 				}
 			}
 		}

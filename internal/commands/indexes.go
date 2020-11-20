@@ -17,6 +17,7 @@ type commandIndexes struct {
 func (c *commandIndexes) setup() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:    "indexes",
+		Aliases: []string{"list"},
 		Short:  "Show indexes on instance",
 		PreRun: c.preRun,
 		Run:    c.run,

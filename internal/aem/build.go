@@ -2,11 +2,13 @@ package aem
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/jlentink/aem/internal/cli/project"
 	"os"
 	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 )
 
 func getGitHash(short bool) (string, error) {
@@ -24,7 +26,7 @@ func getGitHash(short bool) (string, error) {
 	return strings.TrimRight(outbuf.String(), "\n"), err
 }
 
-func replaceGitHash(suffix string) (string, error) {
+func replaceVersionPlaceholders(suffix string) (string, error) {
 	if m, _ := regexp.MatchString(`(.*)GIT_SHORT(.*)`, suffix); m {
 		str, err := getGitHash(true)
 		if err != nil {
@@ -39,6 +41,11 @@ func replaceGitHash(suffix string) (string, error) {
 			return ``, err
 		}
 	}
+	if m, _ := regexp.MatchString(`(.*)DATE(.*)`, suffix); m {
+		now := time.Now()
+		str := fmt.Sprintf("%s.%d", now.Format("20060102"), now.UnixNano())
+		suffix = strings.ReplaceAll(suffix, `DATE`, str)
+	}
 	return suffix, nil
 }
 
@@ -47,7 +54,7 @@ func SetBuildVersion(productionBuild bool) error {
 	versionSuffix := ""
 	if productionBuild {
 		var err error
-		versionSuffix, err = replaceGitHash(Cnf.VersionSuffix)
+		versionSuffix, err = replaceVersionPlaceholders(Cnf.VersionSuffix)
 		if err != nil {
 			return err
 		}
@@ -68,7 +75,7 @@ func SetBuildVersion(productionBuild bool) error {
 }
 
 // BuildProject kicks of the project build
-func BuildProject(productionBuild bool) error {
+func BuildProject(productionBuild, skipTests, skipCheckStyle, skipFrontend bool) error {
 	workPath, _ := project.GetWorkDir()
 
 	err := SetBuildVersion(productionBuild)
@@ -76,7 +83,21 @@ func BuildProject(productionBuild bool) error {
 		return err
 	}
 
-	cmd := exec.Command("mvn", strings.Split(Cnf.BuildCommands, " ")...)
+	buildOptions := strings.Split(Cnf.BuildCommands, " ")
+
+	if skipTests {
+		buildOptions = append(buildOptions, "-DskipTests")
+	}
+
+	if skipCheckStyle {
+		buildOptions = append(buildOptions, "-Dcheckstyle.skip")
+	}
+
+	if skipFrontend {
+		buildOptions = append(buildOptions, "-DskipFrontend=true")
+	}
+
+	cmd := exec.Command("mvn", buildOptions...)
 	cmd.Dir = workPath
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

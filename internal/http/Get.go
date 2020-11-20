@@ -49,6 +49,13 @@ func GetWithHeaders(uri *url.URL, header []Header) ([]byte, error) {
 	req.Header.Add(headers.UserAgent, "aemCLI - "+version.GetVersion())
 	req.URL = uri
 
+	for _, h := range header {
+		if h.Key == "Host" {
+			req.Host = h.Value
+		}
+	}
+	req.Host = "flush"
+
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {

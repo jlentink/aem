@@ -165,11 +165,11 @@ func TestGetInstancesDirLocation(t *testing.T) {
 			FilesystemError(tt.wantFsErr)
 			got, err := GetInstancesDirLocation()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Structure.getInstanceDirLocation() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Structure.GetInstanceDirLocation() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Structure.getInstanceDirLocation() = %v, want %v", got, tt.want)
+				t.Errorf("Structure.GetInstanceDirLocation() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -329,13 +329,13 @@ func Test_getInstanceDirLocation(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			setUpTest()
-			got, err := getInstanceDirLocation(tt.args.instance)
+			got, err := GetInstanceDirLocation(tt.args.instance)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Structure.getInstanceDirLocation() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Structure.GetInstanceDirLocation() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Structure.getInstanceDirLocation() = %v, want %v", got, tt.want)
+				t.Errorf("Structure.GetInstanceDirLocation() = %v, want %v", got, tt.want)
 			}
 		})
 	}

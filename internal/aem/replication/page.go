@@ -36,8 +36,10 @@ func pageAction(i *objects.Instance, path, command string) ([]byte, error) {
 		return nil, err
 	}
 
-	return http.PostPlainWithHeaders(i.URLString()+replicationURL, i.Username, pw, body,
+	bodyContent, _, err := http.PostPlainWithHeaders(i.URLString()+replicationURL, i.Username, pw, body,
 		[]http.Header{{Key: headers.ContentType, Value: writer.FormDataContentType()}})
+
+	return bodyContent, err
 }
 
 // ActivateTree on instance
@@ -54,6 +56,8 @@ func ActivateTree(i *objects.Instance, path string, ignoreDeactivated, onlyModif
 	if err != nil {
 		return nil, err
 	}
-	return http.PostPlainWithHeaders(i.URLString()+treeReplicationURL, i.Username, pw, body,
+	bodyContent, _, err := http.PostPlainWithHeaders(i.URLString()+treeReplicationURL, i.Username, pw, body,
 		[]http.Header{{Key: headers.ContentType, Value: writer.FormDataContentType()}})
+
+	return bodyContent, err
 }

@@ -32,6 +32,8 @@ var (
 		&commandProjects{},
 		&commandGenerate{},
 		&commandInvalidate{},
+		&commandDestroy{},
+		//&commandCloudManager{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}
 )

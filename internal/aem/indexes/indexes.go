@@ -1,13 +1,11 @@
 package indexes
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/http"
 	"github.com/tidwall/gjson"
-	"mime/multipart"
 )
 
 func getStringArrayValue(result gjson.Result, path string) []string {
@@ -77,12 +75,8 @@ func Reindex(instance *objects.Instance, index string) error {
 		http.DisableSSLValidation()
 	}
 
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)  // nolint: errcheck
-	writer.WriteField("reindex", "true") // nolint: errcheck
-	writer.Close()                       // nolint: errcheck
-
-	_, err = http.PostPlain(instance.URLString()+fmt.Sprintf(reindexUrl, index), instance.Username, pw, body)
+	_, _, err = http.PostMultiPart(instance.URLString()+fmt.Sprintf(reindexUrl, index), instance.Username, pw, map[string]string{"reindex" : "true"})
+	
 	if err != nil {
 		return err
 	}

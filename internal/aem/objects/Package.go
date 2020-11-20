@@ -49,6 +49,14 @@ type Package struct {
 	LastWrappedBy     string              `json:"lastWrappedBy,omitempty"`
 }
 
+// Equals check if packages are the same
+func (p *Package) Equals(comparePackage *Package) bool {
+	if p.Name == comparePackage.Name && p.Version == comparePackage.Version {
+		return true
+	}
+	return false
+}
+
 // PackageDependency description struct
 type PackageDependency struct {
 	Name string `json:"name"`
