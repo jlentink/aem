@@ -1,6 +1,6 @@
 .PHONY: all golint vet fmt test coverage scan build linux osx windows clean
 BUILT_HASH=$(shell git rev-parse --short HEAD)
-BUILT_VERSION=1.0.0rc13
+BUILT_VERSION=1.0.0rc15
 LDFLAGS=-ldflags "-X github.com/jlentink/aem/internal/version.Build=${BUILT_HASH} -X github.com/jlentink/aem/internal/version.Main=${BUILT_VERSION} -w -s"
 TRAVISBUILD?=off
 
