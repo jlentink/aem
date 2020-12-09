@@ -15,7 +15,6 @@ var (
 
 const (
 	configTemplate = `
-
 #
 # Example .aem config file.
 # Update based on your need
@@ -25,8 +24,7 @@ verbose = false
 #
 # Project name
 #
-project-name = "my-project"
-
+project-name = ""
 
 #
 # When set to true passwords will be stored in your local OS
@@ -38,6 +36,7 @@ use-keyring = true
 # What is the version used for this artifact build
 #
 version = "1.0.0"
+
 #
 # What to append as a suffix to the build version.
 #
@@ -45,9 +44,10 @@ version = "1.0.0"
 #
 # - GIT_LONG - will be replaced git commit hash long
 # - GIT_SHORT - will be replaced with git commit hash short
+# - DATE - ill be replaced with a time stamp
 # - Any other string - will used exactly
 #
-version-suffix="-GIT_SHORT"
+version-suffix=".DATE"
 
 #
 # What parameters to send to maven for this build
@@ -58,13 +58,12 @@ buildCommand = "clean install -P adobe-public"
 # Default AEM version to use for this project.
 # This version will be used when not defined with the instance
 #
-default-version = "6.4.0"
-
+default-version = "6.5.0"
 
 #
 # Validate SSL on server when https is used.
 #
-ssl-validate = true
+ssl-validate = false
 
 #
 # Project license information.
@@ -79,23 +78,42 @@ licenseDownloadID = ""
 # Default instance to use if not providing the detail in the command
 #
 defaultInstance = "local-author"
-
 #
 # paths to watch and sync during development.
 # aemsync needs to be installed to use this function
 # npm install aemsync -g
 #
 watchPath = [
-    "ui.apps/src/main/content/jcr_root",
-    "ui.content/src/main/content/jcr_root"
 ]
 
 #
 # Content packages to use for this project
 #
 contentPackages = [
-	"content",
-	"assets:1.0.0",
+]
+
+#
+# Content page paths
+#
+contentBackupPaths = [
+]
+
+#
+# Content page package name
+#
+contentBackupName = "content-download"
+
+#
+# Content page package group
+#
+contentBackupGroup = ""
+
+#
+# Exclude packages from deployment
+#
+packageExclude = [
+  "\\.apps$",
+  "\\.content$",
 ]
 
 #
@@ -114,8 +132,6 @@ vltSyncPaths = [
 # which paths should be send to a dispatcher to invalidate.
 #
 invalidatePaths = [
-    "/content",
-    "/etc.clientlibs",
 ]
 
 #
@@ -125,7 +141,6 @@ invalidatePaths = [
 # Example: https://username@password:somedomain.tld/....
 #
 additionalPackages = [
-    "http://aem:aem@aem.test/aem/acs-aem-commons-content-3.19.0.zip",
 ]
 
 #
@@ -135,7 +150,6 @@ oakOptions = [
     "-mx8G",
     "-Dtar.memoryMapped=true",
 ]
-
 oakDefaultVersion = "1.8.12"
 
 #
@@ -169,16 +183,10 @@ jvm-debug-options = [
 # Beware to not store the AEM jar in a public unprotected path!
 #
 [[aemJar]]
-version = "6.4.0"
-location = "http://url.tld/AEM-6.4.jar"
-username = "aem"
-password = "aem"
-
-[[aemJar]]
 version = "6.5.0"
-location = "http://url.tld/aem/AEM-6.5.jar"
-username = "aem"
-password = "aem"
+location = "https://someurl/AEM-6.5.jar"
+username = ""
+password = ""
 
 #
 # Instances for your project.
@@ -187,161 +195,69 @@ password = "aem"
 #
 #
 # Definitions:
-# type: author, publish, dispatch
-# proto: http, https
+#   name: instance name
+#   group: group name eg: local, dev, test, stage, prod
+#   aliases: Array of aliasses you want to use (not mandatory)
+#   debug:  true, false to enable the debug parameters
+#   proto: http, https
+#   hostname: hostname to use
+#   ip: ip address to use
+#   port: port to open
+#   username: for login
+#   password: for login if not using keychain
+#   type: author, publish, dispatch
+#   runmode: Runmodes to be appended when starting
+#   jvm-options: jvm extra options
+#   jvm-debug-options: jvm debug extra options
+#   secure-port
+#   author
+#   publisher
+#   dispatcher-version
+#   dispatcher-version
 #
 [[instance]]
 name = "local-author"
 group = "local"
+aliases = ["example-1", "example-2"]
 debug = true
 proto = "http"
 hostname = "127.0.0.1"
 port = 4502
 username = "admin"
-password = "admin"
+password = ""
 type = "author"
-runmode = "crx3,crx3tar"
+runmode = "crx3,crx3tar,dev"
 jvm-options = []
 jvm-debug-options = []
 
 [[instance]]
 name = "local-publish"
 group = "local"
+aliases = []
 debug = false
 proto = "http"
 hostname = "127.0.0.1"
 port = 4503
 username = "admin"
-password = "admin"
+password = ""
 type = "publish"
-runmode = "crx3,crx3tar"
+runmode = "crx3,crx3tar,dev"
 jvm-options = []
 jvm-debug-options = []
 
 [[instance]]
-name = "dev-author"
-group = "dev"
-debug = true
-proto = "https"
-hostname = "author.dev"
-port = 4502
-username = "admin"
-password = "admin"
-type = "author"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "dev-publish"
-group = "dev"
-debug = false
+name = "local-dispatcher"
+group = "local"
 proto = "http"
-hostname = "publish.dev"
-port = 4503
-username = "admin"
-password = "admin"
-type = "publish"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "dev-dispatcher"
-group = "dev"
-debug = false
-proto = "http"
-hostname = "dispatcher.dev"
-port = 80
+hostname = "127.0.0.1"
+port = 8888
+secure-port = 8443
+author = "local-author"
+publisher = "local-publish"
+dispatcher-endpoint=""
+dispatcher-version = "4.3.2"
 username = ""
 password = ""
 type = "dispatch"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "stage-author"
-group = "stage"
-debug = true
-proto = "https"
-hostname = "author.stage"
-port = 4502
-username = "admin"
-password = "admin"
-type = "author"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "dev-stage"
-group = "stage"
-debug = false
-proto = "http"
-hostname = "publish.stage"
-port = 4503
-username = "admin"
-password = "admin"
-type = "publish"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "stage-dispatcher"
-group = "dev"
-debug = false
-proto = "http"
-hostname = "dispatcher.stage"
-port = 80
-username = ""
-password = ""
-type = "dispatch"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "prod-author"
-group = "dev"
-debug = true
-proto = "https"
-hostname = "author.prod"
-port = 4502
-username = "admin"
-password = "admin"
-type = "author"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "prod-publish"
-group = "dev"
-debug = false
-proto = "http"
-hostname = "publish.prod"
-port = 4503
-username = "admin"
-password = "admin"
-type = "publish"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
-
-[[instance]]
-name = "prod-dispatcher"
-group = "prod"
-debug = false
-proto = "http"
-hostname = "dispatcher.prod"
-port = 80
-username = ""
-password = ""
-type = "dispatch"
-runmode = "crx3,crx3tar"
-jvm-options = []
-jvm-debug-options = []
 `
 )

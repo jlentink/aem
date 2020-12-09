@@ -30,6 +30,7 @@ func (c *commandProjects) preRun(cmd *cobra.Command, args []string) {
 
 func (c *commandProjects) run(cmd *cobra.Command, args []string) {
 	projects := cachedir.RegisteredProjects()
+	projects = cachedir.ProjectsSort(projects)
 	for _, project := range projects {
 		fmt.Printf(" * %s - %s\n", project.Name, project.Path)
 	}

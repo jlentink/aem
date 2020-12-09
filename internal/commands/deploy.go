@@ -129,7 +129,7 @@ func (c *commandDeploy) deployModule(is []objects.Instance, p *pom.Pom) bool {
 		return false
 	}
 
-	if c.forceBuild {
+	if c.forceBuild || c.productionBuild {
 		err = aem.BuildModuleProject(a.BasePath, c.productionBuild)
 		if err != nil {
 			output.Printf(output.NORMAL, "\U0000274C build failed: %s", err.Error())
@@ -178,7 +178,7 @@ func (c *commandDeploy) stringInSlice(a string, list []string) bool {
 	return false
 }
 func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) bool {
-	if c.forceBuild {
+	if c.forceBuild || c.productionBuild{
 		err := aem.BuildProject(c.productionBuild, c.skipTests, c.skipCheckStyle, c.skipFrontend) // nolint: errcheck
 		if err != nil {
 			output.Printf(output.NORMAL, "\U0000274C Build failed...")
