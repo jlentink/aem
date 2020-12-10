@@ -6,10 +6,17 @@ import (
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/output"
 	"io/ioutil"
+	"sort"
 	"strings"
 )
 
 const projectsFile = "projects.toml"
+
+type ProjectSorter []ProjectRegistered
+
+func (a ProjectSorter) Len() int           { return len(a) }
+func (a ProjectSorter) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ProjectSorter) Less(i, j int) bool { return a[i].Name < a[j].Name }
 
 // Projects Registered projects
 type Projects struct {
@@ -28,6 +35,11 @@ func RegisteredProjects() []ProjectRegistered {
 		toml.DecodeFile(getCacheRoot() + "/" + projectsFile, &projects) // nolint: errcheck
 	}
 	return projects.Project
+}
+
+func ProjectsSort(projects []ProjectRegistered) []ProjectRegistered {
+	sort.Sort(ProjectSorter(projects))
+	return projects
 }
 
 func RegisterProject(name, path string){
