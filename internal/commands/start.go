@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/dispatcher"
 	"github.com/jlentink/aem/internal/output"
@@ -66,6 +67,7 @@ func (c *commandStart) run(cmd *cobra.Command, args []string) {
  		} else if currentInstance.InstanceOf([]string{aem.RoleDispatcher}){
 			err := dispatcher.Start(currentInstance, cnf, c.foreground)
 			if err != nil {
+				fmt.Printf("%s", err.Error())
 				os.Exit(ExitError)
 			}
 		}

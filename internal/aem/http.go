@@ -30,6 +30,9 @@ func URL(i *objects.Instance, uri string) (*url.URL, error) {
 
 // URLString for instance
 func URLString(i *objects.Instance, ip bool) string {
+	if ip {
+		return fmt.Sprintf("%s://%s:%d", i.Protocol, i.IP, i.Port)
+	}
 	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.Hostname, i.Port)
 }
 

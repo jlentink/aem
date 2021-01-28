@@ -49,14 +49,18 @@ func (c *commandOpen) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitError)
 	}
 
+	if i.Hostname == "" {
+		c.useIp = false
+	}
+
 	if i.Type == "dispatch" || c.useSSH {
 		if i.SSHUsername != "" {
 			i.Username = i.SSHUsername
 		}
 		if c.useIp {
-			fmt.Printf("use: ssh %s@%s\n", i.Username, i.IP)
+			fmt.Printf("use:\n ssh %s@%s\n", i.SSHUsername, i.IP)
 		} else {
-			fmt.Printf("use: ssh %s@%s\n", i.Username, i.Hostname)
+			fmt.Printf("use:\n ssh %s@%s\n", i.SSHUsername, i.Hostname)
 		}
 
 		return
