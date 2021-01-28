@@ -2,6 +2,7 @@ package objects
 
 const (
 	serviceName = `aemCLI`
+	SchemaVersion = "1"
 )
 
 // Cnf Active config instance
@@ -9,6 +10,7 @@ var Cnf *Config
 
 // Config toml object to read config
 type Config struct {
+	Schema             string     `toml:"schema"`
 	ProjectName        string     `toml:"project-name"`
 	Verbose            bool       `toml:"verbose"`
 	Version            string     `toml:"version"`

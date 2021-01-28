@@ -53,6 +53,13 @@ func GetConfig() (*objects.Config, error) {
 
 	Cnf = &cnf
 	objects.Cnf = &cnf
+
+	if cnf.Schema != objects.SchemaVersion {
+		fmt.Println("Your toml schema does not match the this version.")
+		fmt.Printf("It should be \"%s\" but it is \"%s\". Please update.\n", objects.SchemaVersion, cnf.Schema)
+		os.Exit(2)
+	}
+
 	return &cnf, nil
 }
 
