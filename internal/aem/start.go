@@ -157,12 +157,10 @@ func Start(i objects.Instance, forGround bool) error {
 	javaOptions := cnf.JVMOpts
 	javaOptions = append(javaOptions, i.JVMOptions...)
 	if i.Debug {
-		if len(cnf.JVMDebugOptions) > 0 {
-			javaOptions = append(javaOptions, cnf.JVMDebugOptions...)
-		}
-
 		if len(i.JVMDebugOptions) > 0 {
 			javaOptions = append(javaOptions, i.JVMDebugOptions...)
+		} else {
+			javaOptions = append(javaOptions, cnf.JVMDebugOptions...)
 		}
 	}
 
