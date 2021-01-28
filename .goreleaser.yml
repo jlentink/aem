@@ -1,0 +1,60 @@
+before:
+  hooks:
+    - go mod download
+#    - go generate ./...
+    - make packr
+    - ./scripts/completions.sh
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - 386
+      - amd64
+    ldflags:
+      - -X github.com/jlentink/aem/internal/version.Build={{.Commit}} -X github.com/jlentink/aem/internal/version.Main={{.Version}} -w -s
+    mod_timestamp: '{{ .CommitTimestamp }}'
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE.md
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+brews:
+  - tap:
+      owner: aemcli
+      name: homebrew-tap
+    folder: Formula
+    homepage:  https://github.com/jlentink/aem
+    description: Command line tool for AEM
+    license: GPL-2.0 License
+    test: |
+      system "#{bin}/aem -v"
+    dependencies:
+      - name: go
+    install: |-
+      bin.install "aem"
+      bash_completion.install "completions/aem.bash" => "aem"
+      zsh_completion.install "completions/aem.zsh" => "_aem"
+      fish_completion.install "completions/aem.fish"

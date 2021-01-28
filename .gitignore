@@ -22,3 +22,5 @@
 /instances
 /test-report.out
 /templates
+/dist
+/completions
