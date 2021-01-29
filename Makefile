@@ -17,12 +17,17 @@ clean:
 	@-rm *.tgz
 	@-rm aem
 
+release:
+	goreleaser release
+
 testrelease:
 	goreleaser --skip-publish --skip-validate
 
 packr:
 	packr2
 
+lint:
+	golint -set_exit_status ./...
 
 
 #code-test: golintci
