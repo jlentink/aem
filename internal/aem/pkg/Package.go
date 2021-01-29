@@ -93,7 +93,7 @@ func GetPackageByNameAndVersion(i objects.Instance, name, version string) (*obje
 	return nil, fmt.Errorf("could not find package")
 }
 
-// GetPackageByNameAndVersion finds a package based on name and version
+// GetPackageByName finds a package based on name and version
 func GetPackageByName(i objects.Instance, name string) (*objects.Package, error) {
 	pkgList, err := list(i)
 	if err != nil {
@@ -217,6 +217,7 @@ func Create(i objects.Instance, name, group, version string, paths []string, bui
 	return pkg, nil
 }
 
+// AwaitBuild to be done
 func AwaitBuild(i *objects.Instance, pkg *objects.Package) error {
 	pkgs, err := list(*i)
 	if err != nil {
@@ -331,6 +332,7 @@ func RebuildbyName(i *objects.Instance, n string) (*objects.Package, error) {
 
 }
 
+// GetTimeVersion get version based on time
 func GetTimeVersion() string {
 	now := time.Now()
 	return fmt.Sprintf("%s.%d", now.Format("20060102"), now.UnixNano())

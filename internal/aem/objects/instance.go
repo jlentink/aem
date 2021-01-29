@@ -37,7 +37,7 @@ func (i *Instance) URLString() string {
 	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.Hostname, i.Port)
 }
 
-// URLString for instance
+// URLIPString for instance
 func (i *Instance) URLIPString() string {
 	return fmt.Sprintf("%s://%s:%d", i.Protocol, i.IP, i.Port)
 }

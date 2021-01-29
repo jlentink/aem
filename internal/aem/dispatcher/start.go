@@ -5,10 +5,12 @@ import (
 	"github.com/jlentink/aem/internal/aem"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/cli/project"
+	"github.com/jlentink/aem/internal/output"
 	"os"
 	"os/exec"
 )
 
+// Start instance
 func Start(i objects.Instance, cnf *objects.Config, forGround bool) error {
 	if !DaemonRunning() {
 		return fmt.Errorf("docker daemon is not running")
@@ -81,7 +83,7 @@ func Start(i objects.Instance, cnf *objects.Config, forGround bool) error {
 		fmt.Sprintf("DISP_ID=dispatcher-%s", processName(cnf)),
 		fmt.Sprintf("jlentink/aem-dispatcher:%s", i.DispatcherVersion),
 	}
-	fmt.Printf("%s", options)
+	output.Printf(output.VERBOSE, "%s\n", options)
 	cmd := exec.Command("docker", options...)
 
 	if !forGround {

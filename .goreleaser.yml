@@ -2,6 +2,7 @@ before:
   hooks:
     - go mod download
 #    - go generate ./...
+    - golint -set_exit_status ./...
     - make packr
     - ./scripts/completions.sh
 builds:

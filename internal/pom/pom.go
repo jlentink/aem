@@ -89,9 +89,9 @@ func (p *Pom) GetArtifact() Artifact {
 	if artifact.Packaging == "" {
 		plugins := xmlquery.Find(p.doc, "//project/build/plugins/plugin")
 		for _, plugin := range plugins {
-			artifactId := p.getInnerTextForPath(plugin, "/artifactId")
+			artifactID := p.getInnerTextForPath(plugin, "/artifactId")
 			bdn := p.getInnerTextForPath(plugin, "executions/execution/configuration/bnd")
-			if artifactId == "bnd-maven-plugin" && strings.Contains(bdn, "Import-Package") {
+			if artifactID == "bnd-maven-plugin" && strings.Contains(bdn, "Import-Package") {
 				artifact.Packaging = "bundle"
 			}
 		}

@@ -2,7 +2,7 @@ package indexes
 
 const (
 	indexes    = "/crx/server/crx.default/jcr:root/oak:index.1.json"
-	reindexUrl = "/oak:index/%s"
+	reindexURL = "/oak:index/%s"
 )
 
 // IndexList List of AEM indexes

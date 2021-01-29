@@ -204,7 +204,7 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 			//aem.Cnf.PackagesExcluded
 			if !c.stringInSlice(artifact.PakageName(), aem.Cnf.PackagesExcluded) {
 				fmt.Printf("\r%s\n", artifact.Filename())
-				resp, HtmlBody, err := pkg.Upload(i, artifact.CompletePath(), true, true)
+				resp, HTMLBody, err := pkg.Upload(i, artifact.CompletePath(), true, true)
 				if resp != nil {
 					success++
 					fmt.Printf("Status: \U00002705\n")
@@ -214,8 +214,8 @@ func (c *commandDeploy) deployAllPackages(is []objects.Instance, p *pom.Pom) boo
 					fmt.Printf("Status: \U0000274C\n")
 					failed++
 					output.Printf(output.NORMAL, "%s\n", err)
-					if len(HtmlBody) != 0 {
-						output.Printf(output.NORMAL, "%s\n", HtmlBody)
+					if len(HTMLBody) != 0 {
+						output.Printf(output.NORMAL, "%s\n", HTMLBody)
 					}
 				}
 			}

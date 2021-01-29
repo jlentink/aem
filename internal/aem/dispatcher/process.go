@@ -7,14 +7,14 @@ import (
 	"strings"
 )
 
+// DaemonRunning Is the Docker deamon running?
 func DaemonRunning() bool {
 	cmd := exec.Command("docker", "version")
 	if err := cmd.Run() ; err != nil {
 		if _, ok := err.(*exec.ExitError); ok {
 			return true
-		} else {
-			return false
 		}
+		return false
 	}
 	return true
 }

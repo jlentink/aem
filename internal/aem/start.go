@@ -194,6 +194,7 @@ func Start(i objects.Instance, forGround bool) error {
 	return ioutil.WriteFile(pidFile, []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
 }
 
+// FullStart starts the instance function
 func FullStart(i objects.Instance, ignorePid, forceDownload, foreground bool, cnf *objects.Config, extraPackages []*objects.Package) error{
 	if PidExists(i) && !ignorePid {
 		if !PidHandler(ignorePid, i) {
@@ -260,6 +261,7 @@ func FullStart(i objects.Instance, ignorePid, forceDownload, foreground bool, cn
 	return nil
 }
 
+// Destroy the instance.
 func Destroy(i objects.Instance, force bool, cnf objects.Config) error {
 	p, err := project.GetInstanceDirLocation(i)
 	if err != nil {

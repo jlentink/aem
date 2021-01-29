@@ -12,6 +12,7 @@ import (
 
 const projectsFile = "projects.toml"
 
+// ProjectSorter sorter object
 type ProjectSorter []ProjectRegistered
 
 func (a ProjectSorter) Len() int           { return len(a) }
@@ -29,6 +30,7 @@ type ProjectRegistered struct {
 	Path string
 }
 
+// RegisteredProjects registered projects
 func RegisteredProjects() []ProjectRegistered {
 	projects := Projects{}
 	if project.Exists(getCacheRoot() + "/" + projectsFile) {
@@ -37,11 +39,13 @@ func RegisteredProjects() []ProjectRegistered {
 	return projects.Project
 }
 
+// ProjectsSort sort projects on alphabet
 func ProjectsSort(projects []ProjectRegistered) []ProjectRegistered {
 	sort.Sort(ProjectSorter(projects))
 	return projects
 }
 
+// RegisterProject register project in register
 func RegisterProject(name, path string){
 	Init()
 	mutated := false
@@ -64,10 +68,12 @@ func RegisterProject(name, path string){
 	writeRegisterFile(projects)
 }
 
+// SetProjectMetaData set metadata for project
 func SetProjectMetaData(project ProjectRegistered, key, value string) {
 
 }
 
+// GetProjectMetaData Get metadata for project
 func GetProjectMetaData(project ProjectRegistered, keystring string) {
 
 }

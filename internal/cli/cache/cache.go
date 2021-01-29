@@ -10,6 +10,7 @@ const cacheDir = ".aem"
 const filesDir = "files"
 const filesCacheFile = "files.toml"
 
+// Cache system
 type Cache struct {
 	fs afero.Fs
 	root string

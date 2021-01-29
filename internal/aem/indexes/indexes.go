@@ -75,7 +75,7 @@ func Reindex(instance *objects.Instance, index string) error {
 		http.DisableSSLValidation()
 	}
 
-	_, _, err = http.PostMultiPart(instance.URLString()+fmt.Sprintf(reindexUrl, index), instance.Username, pw, map[string]string{"reindex" : "true"})
+	_, _, err = http.PostMultiPart(instance.URLString()+fmt.Sprintf(reindexURL, index), instance.Username, pw, map[string]string{"reindex" : "true"})
 	
 	if err != nil {
 		return err

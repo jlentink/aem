@@ -82,7 +82,7 @@ func CreateDirForPackage(aemPackage *objects.Package) (string, error) {
 	return path, nil
 }
 
-// CreateDirForPackage creates a dir for package struct
+// CreateDir creates a dir for package struct
 func CreateDir(path string) (string, error) {
 	if exists, _ := afero.Exists(fs, path); !exists {
 		err := fs.MkdirAll(path, 0755)

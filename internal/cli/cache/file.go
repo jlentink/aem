@@ -5,6 +5,7 @@ import (
 	"github.com/jlentink/aem/internal/cli/project"
 )
 
+// IsCached is URL cached
 func (c *Cache) IsCached(URI string) bool {
 	for _, f := range c.getCachedFiles() {
 		for _, u := range f.URI {

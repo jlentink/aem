@@ -2,6 +2,7 @@ package objects
 
 const (
 	serviceName = `aemCLI`
+	// SchemaVersion config schema version
 	SchemaVersion = "1"
 )
 

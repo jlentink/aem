@@ -6,6 +6,7 @@ import (
 	"os/exec"
 )
 
+// Stop instance
 func Stop(i objects.Instance, cnf *objects.Config) error {
 	if !DaemonRunning() {
 		return fmt.Errorf("docker daemon is not running")

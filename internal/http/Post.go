@@ -43,7 +43,7 @@ func PostMultiPart(uri string, username string, password string, data map[string
 	return PostMultiPartWithHeaders(uri, username, password, data, []Header{})
 }
 
-// PostMultiPart Post multipart form
+// PostMultiPartWithHeaders Post multipart form
 // With the ability to add headers
 func PostMultiPartWithHeaders(uri string, username string, password string, data map[string]string, header []Header) ([]byte, *http.Response, error) {
 	URL, err := setupPlainToURL(uri, username, password)

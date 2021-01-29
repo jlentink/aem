@@ -70,6 +70,7 @@ func GetUnpackDirLocation() (string, error) {
 	return appendSlash(path) + configAemRunDir, nil
 }
 
+// GetInstanceDirLocation Get's location for instance
 func GetInstanceDirLocation(instance objects.Instance) (string, error) {
 	path, err := GetInstancesDirLocation()
 	if err != nil {

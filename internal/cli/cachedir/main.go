@@ -11,11 +11,13 @@ const cacheDir = ".aem"
 const filesDir = "files"
 var initiated = false
 
+// Init Cache
 func Init() {
 	migrate()
 	createCacheDir()
 }
 
+// Disable cache
 func Disable(){
 	doCache = false
 }

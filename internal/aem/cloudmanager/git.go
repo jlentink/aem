@@ -10,6 +10,7 @@ import (
 	"os"
 )
 
+// AdobeCloudManagerRemote ...
 const AdobeCloudManagerRemote = "AdobeCloudManagerRemote"
 
 func setupGit() (*git.Repository, error){
@@ -48,6 +49,7 @@ func getGitAuth(){
 	//http.BasicAuth{Username: , Password: }
 }
 
+// GitPush ...
 func GitPush(cnf *objects.Config) error {
 
 	repo, err := setupGit()
@@ -69,6 +71,7 @@ func GitPush(cnf *objects.Config) error {
 	return err
 }
 
+// GitSetAuthentication ...
 func GitSetAuthentication(username, password string, cnf *objects.Config) error {
 	return keyring.Set(fmt.Sprintf("%s-%s", cnf.ProjectName,AdobeCloudManagerRemote), username, password)
 }
