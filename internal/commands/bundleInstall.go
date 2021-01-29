@@ -26,7 +26,7 @@ func (c *commandBundleInstall) setup() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&c.instanceName, "name", "n", aem.GetDefaultInstanceName(), "Instance to install bundle on")
 	cmd.Flags().StringVarP(&c.instanceGroup, "group", "g", ``, "Instance group to install bundle on")
-	cmd.Flags().StringVarP(&c.bundle, "bundle", "b", ``, "Instance group to install bundle on")
+	cmd.Flags().StringVarP(&c.bundle, "bundle", "b", ``, "Path to the bundle.")
 	cmd.Flags().StringVarP(&c.startLevel, "level", "l", "20", "Bundle start level")
 	return cmd
 }
