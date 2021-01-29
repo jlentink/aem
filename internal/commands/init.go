@@ -30,17 +30,13 @@ func (c *commandInit) preRun(cmd *cobra.Command, args []string) {
 }
 
 func (c *commandInit) run(cmd *cobra.Command, args []string) {
-	if aem.ConfigExists() && !c.force {
-		output.Print(output.NORMAL, "Instance file already exists. (use force to override)\n")
-		os.Exit(ExitError)
-	}
-
-	output.Printf(output.NORMAL, "Writing sample file.")
+	output.Printf(output.NORMAL, "Writing sample file...\n")
 	_, err := aem.WriteConfigFile()
 	if err != nil {
 		output.Printf(output.NORMAL, "Could not write config file. (%s)", err.Error())
 		os.Exit(ExitError)
 	}
+	output.Printf(output.NORMAL, "Please copy the \"aem.example.toml\" if new or compare with your existing \"aem.toml\" config.\n")
 	os.Exit(ExitNormal)
 
 }

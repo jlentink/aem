@@ -3,6 +3,7 @@ package aem
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/output"
@@ -25,16 +26,24 @@ func ConfigExists() bool {
 
 // Render 's the template to a string
 func Render() string {
-	return configTemplate
+	box := packr.New("templates", "../../_templates/")
+	b, err:= box.Find("aem.toml")
+
+	if err != nil {
+		return ""
+	}
+
+	return string(b)
 }
 
 // WriteConfigFile to disk
 func WriteConfigFile() (int, error) {
 	p, err := project.GetConfigFileLocation()
-
 	if err != nil {
 		return 0, err
 	}
+
+	p = p[0:len(p)-5] + ".example.toml"
 	return project.WriteTextFile(p, Render())
 }
 
