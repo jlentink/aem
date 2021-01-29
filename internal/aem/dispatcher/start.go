@@ -81,6 +81,7 @@ func Start(i objects.Instance, cnf *objects.Config, forGround bool) error {
 		fmt.Sprintf("DISP_ID=dispatcher-%s", processName(cnf)),
 		fmt.Sprintf("jlentink/aem-dispatcher:%s", i.DispatcherVersion),
 	}
+	fmt.Printf("%s", options)
 	cmd := exec.Command("docker", options...)
 
 	if !forGround {

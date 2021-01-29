@@ -58,3 +58,19 @@ brews:
       bash_completion.install "completions/aem.bash" => "aem"
       zsh_completion.install "completions/aem.zsh" => "_aem"
       fish_completion.install "completions/aem.fish"
+dockers:
+  -
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - "jlentink/aem-dispatcher:4.3.2"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - docker/assets
+    skip_push: false
+    dockerfile: Dockerfile
