@@ -31,6 +31,7 @@ archives:
     files:
       - README.md
       - LICENSE.md
+      - completions/*
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -43,9 +44,8 @@ changelog:
       - '^test:'
 brews:
   - tap:
-      owner: aemcli
-      name: homebrew-tap
-    folder: Formula
+      owner: jlentink
+      name: homebrew-aem
     homepage:  https://github.com/jlentink/aem
     description: Command line tool for AEM
     license: GPL-2.0 License
@@ -57,7 +57,6 @@ brews:
       bin.install "aem"
       bash_completion.install "completions/aem.bash" => "aem"
       zsh_completion.install "completions/aem.zsh" => "_aem"
-      fish_completion.install "completions/aem.fish"
 dockers:
   -
     goos: linux
