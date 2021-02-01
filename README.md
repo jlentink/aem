@@ -44,7 +44,7 @@ Check out the amazing [Homebrew](https://brew.sh/) and when you have homebrew in
 
 
 	brew tap jlentink/aem
-	brew install aem-cli
+	brew install aem
 
 ### Other methods
 
