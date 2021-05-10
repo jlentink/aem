@@ -23,7 +23,7 @@ fi
 if [ "$(uname -s)" == "Darwin" ]; then
   echo "Downloading OSX version..."
   cd /tmp
-  curl -sL https://github.com/jlentink/aem/releases/download/${VERSION}/osx-v${VERSION}.zip --output /tmp/osx-${VERSION}.zip
+  curl -sL https://github.com/jlentink/aem/releases/download/${VERSION}/aem_Darwin_x86_64.tar.gz --output /tmp/osx-${VERSION}.zip
   unzip -o /tmp/osx-${VERSION}.zip
   echo "Placing aemCLI bineary in ${BINDIR}"
   mv -f /tmp/aem ${BINDIR}
@@ -31,7 +31,7 @@ else
   echo "Downloading Linux version..."
   cd /tmp
   mkdir -p ${BINDIR}
-  curl -sL https://github.com/jlentink/aem/releases/download/${VERSION}/linux-v${VERSION}.tgz --output /tmp/linux-v${VERSION}.tgz
+  curl -sL https://github.com/jlentink/aem/releases/download/${VERSION}/aem_Linux_x86_64.tar.gz --output /tmp/linux-v${VERSION}.tgz
   tar -zxf /tmp/linux-v${VERSION}.tgz
   echo "Placing aemCLI bineary in ${BINDIR}"
   mv -f /tmp/aem ${BINDIR}
