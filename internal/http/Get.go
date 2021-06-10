@@ -54,7 +54,7 @@ func GetWithHeaders(uri *url.URL, header []Header) ([]byte, error) {
 			req.Host = h.Value
 		}
 	}
-	req.Host = "flush"
+//	req.Host = "flush"
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
