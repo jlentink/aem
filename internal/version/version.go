@@ -30,5 +30,5 @@ func DisplayVersion(v, m bool) string {
 							"Date: %s\n", version, commit, date)
 	}
 	return fmt.Sprintf("AEMcli\n" +
-		"					Version: %s\n", version)
+		"Version: %s\n", version)
 }
