@@ -81,29 +81,35 @@ func (c *commandSystemInformation) run(cmd *cobra.Command, args []string) {
 		output.PrintListing(key, value.(string), true)
 	}
 
-	warns := sysInfo.HealthChecks.(map[string]interface{})
+	if sysInfo.HealthChecks != nil {
+		warns := sysInfo.HealthChecks.(map[string]interface{})
 
-	fmt.Printf("Current health checks:\n")
-	if len(warns) > 0 {
-		for key, check := range warns {
-			output.PrintListing(key, check.(string), true)
-		}
-	} else {
-		fmt.Printf("No Warnings or errors.\n\n")
-	}
-
-	agents := sysInfo.ReplicationAgents.(map[string]interface{})
-	fmt.Printf("Replication Agents:\n")
-	if len(agents) > 0 {
-		for key, check := range agents {
-			output.PrintListing(key, check.(string), true)
+		fmt.Printf("Current health checks:\n")
+		if len(warns) > 0 {
+			for key, check := range warns {
+				output.PrintListing(key, check.(string), true)
+			}
+		} else {
+			fmt.Printf("No Warnings or errors.\n\n")
 		}
 	}
-	agents = sysInfo.DistributionAgents.(map[string]interface{})
-	fmt.Printf("Distribution Agents:\n")
-	if len(agents) > 0 {
-		for key, check := range agents {
-			output.PrintListing(key, check.(string), false)
+
+	if sysInfo.ReplicationAgents != nil {
+		agents := sysInfo.ReplicationAgents.(map[string]interface{})
+		fmt.Printf("Replication Agents:\n")
+		if len(agents) > 0 {
+			for key, check := range agents {
+				output.PrintListing(key, check.(string), true)
+			}
+		}
+	}
+	if sysInfo.DistributionAgents != nil {
+		distributionAgents := sysInfo.DistributionAgents.(map[string]interface{})
+		fmt.Printf("Distribution Agents:\n")
+		if len(distributionAgents) > 0 {
+			for key, check := range distributionAgents {
+				output.PrintListing(key, check.(string), false)
+			}
 		}
 	}
 

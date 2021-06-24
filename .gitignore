@@ -27,3 +27,7 @@
 /aem.example.toml
 /docker/assets/4.3.3
 /dispatcher
+/packrd
+/internal/commands/commands-packr.go
+/packrd/packed-packr.go
+/internal/aem/aem-packr.go
