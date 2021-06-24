@@ -25,6 +25,9 @@ release: clean lint
 testrelease:
 	goreleaser --skip-publish --skip-validate
 
+snapshot: clean lint
+	goreleaser --snapshot
+
 packr:
 	packr2
 

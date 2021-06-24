@@ -5,6 +5,8 @@ before:
     - golint -set_exit_status ./...
     - make packr
     - ./scripts/completions.sh
+env_files:
+  github_token: ~/GITHUB_TOKEN
 builds:
   - env:
       - CGO_ENABLED=0
@@ -16,12 +18,12 @@ builds:
       - 386
       - amd64
     ldflags:
-      - -X github.com/jlentink/aem/internal/version.Build={{.Commit}} -X github.com/jlentink/aem/internal/version.Main={{.Version}} -w -s
+      - -X github.com/jlentink/aem/internal/version.commit={{.Commit}} -X github.com/jlentink/aem/internal/version.date={{.Date}} -X github.com/jlentink/aem/internal/version.Main={{.Version}} -w -s
     mod_timestamp: '{{ .CommitTimestamp }}'
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     replacements:
-      darwin: Darwin
+      darwin: MacOS
       linux: Linux
       windows: Windows
       386: i386
@@ -35,14 +37,14 @@ archives:
       - completions/*
 checksum:
   name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
       - '^docs:'
       - '^test:'
+snapshot:
+  name_template: "{{ .Tag }}-SNAPSHOT-{{.ShortCommit}}"
 brews:
   - tap:
       owner: jlentink
