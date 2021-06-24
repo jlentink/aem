@@ -16,8 +16,10 @@ clean:
 	@-rm *.tbz2
 	@-rm *.tgz
 	@-rm aem
+	@-rm ./dist
 
-release:
+release: clean lint
+	./set-gh-key
 	goreleaser release
 
 testrelease:
