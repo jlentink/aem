@@ -13,6 +13,7 @@ import (
 	"github.com/jlentink/aem/internal/http"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/jlentink/aem/internal/packageproperties"
+	"github.com/jlentink/aem/internal/sliceutil"
 	"io/ioutil"
 	"mime/multipart"
 	"net/url"
@@ -27,6 +28,7 @@ import (
 const (
 	packageListURL      = "/crx/packmgr/list.jsp"
 	packageUploadURL    = "/crx/packmgr/service.jsp"
+	packageDeletedURL   = "/crx/packmgr/service/script.html/etc/packages/%s/%s"
 	packageRebuildURL   = "/crx/packmgr/service/.json%s?cmd=build"
 	packageInstallURL   = "/crx/packmgr/service/.json%s?cmd=install"
 	packageCreateURL    = "/crx/packmgr/service/exec.json?cmd=create"
@@ -93,6 +95,23 @@ func GetPackageByNameAndVersion(i objects.Instance, name, version string) (*obje
 	return nil, fmt.Errorf("could not find package")
 }
 
+// GetPackageByNameAndGroupAndVersion finds a package based on name,group and version
+func GetPackageByNameAndGroupAndVersion(i objects.Instance, name, version, group string) (*objects.Package, error) {
+	pkgList, err := list(i)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, pkg := range pkgList {
+		if  strings.EqualFold(pkg.Name, name) &&
+			strings.EqualFold(pkg.Version, version) &&
+			strings.EqualFold(pkg.Group, group) {
+			return &pkg, nil
+		}
+	}
+	return nil, fmt.Errorf("could not find package")
+}
+
 // GetPackageByName finds a package based on name and version
 func GetPackageByName(i objects.Instance, name string) (*objects.Package, error) {
 	pkgList, err := list(i)
@@ -112,6 +131,21 @@ func GetPackageByName(i objects.Instance, name string) (*objects.Package, error)
 // PackageList return list of packages on instance
 func PackageList(i objects.Instance) ([]objects.Package, error) {
 	return list(i)
+}
+
+func FilteredByGroupPackageList(i objects.Instance, group string) ([]objects.Package, error) {
+	filtered := make([]objects.Package, 0)
+	pkgs, err := list(i)
+	if err != nil || group == "" {
+		return pkgs, err
+	}
+	groups := strings.Split(group, ",")
+	for _, pkg := range pkgs {
+		if sliceutil.StringInSliceEqualFold(pkg.Group, groups) {
+			filtered = append(filtered, pkg)
+		}
+	}
+	return filtered, err
 }
 
 func constructInstallBody(pkgLocation string, install, force bool) (*bytes.Buffer, string, error) {
@@ -297,6 +331,25 @@ func Download(i *objects.Instance, pkg *objects.Package) (*objects.Package, erro
 	}
 
 	return pkg, nil
+}
+
+// Delete package from instance
+func Delete(i *objects.Instance, pkg *objects.Package) (*objects.Package, error) {
+	if !aem.Cnf.ValidateSSL {
+		http.DisableSSLValidation()
+	}
+
+
+	data := map[string]string{"cmd" : "delete",
+								"pid": "next-gen2913",
+								"callback": "window.parent.Ext.Ajax.Stream.callback"}
+
+	pw, err := i.GetPassword()
+	if err != nil {
+		return nil, err
+	}
+	_, _, err = http.PostMultiPart(i.URLString()+fmt.Sprintf(packageDeletedURL, pkg.Group, pkg.DownloadName), i.Username, pw, data)
+	return pkg, err
 }
 
 //DownloadWithName Download package based on name

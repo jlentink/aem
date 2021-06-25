@@ -26,6 +26,7 @@ func (c *commandPackage) setup() *cobra.Command {
 		&commandPackageUpload{},
 		&commandPackageRebuild{},
 		&commandPackageList{},
+		&commandPackageDelete{},
 	}
 	for _, cmd := range commands {
 		c.cmd.AddCommand(cmd.setup())

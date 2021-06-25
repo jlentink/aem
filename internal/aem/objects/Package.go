@@ -1,5 +1,9 @@
 package objects
 
+import (
+	"strings"
+)
+
 // PackageList description struct
 type PackageList struct {
 	Results []Package `json:"results"`
@@ -55,6 +59,19 @@ func (p *Package) Equals(comparePackage *Package) bool {
 		return true
 	}
 	return false
+}
+
+// FromString Get package from String
+func (p *Package) FromString(pkgStr string) bool {
+	parts := strings.Split(pkgStr, ",")
+	if len(parts) != 4 {
+		return false
+	}
+	p.Name = parts[0]
+	p.Version = parts[1]
+	p.Group = parts[2]
+	p.DownloadName = parts[3]
+	return true
 }
 
 // PackageDependency description struct
