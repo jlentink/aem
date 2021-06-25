@@ -133,6 +133,7 @@ func PackageList(i objects.Instance) ([]objects.Package, error) {
 	return list(i)
 }
 
+// FilteredByGroupPackageList Filter the packages based on group
 func FilteredByGroupPackageList(i objects.Instance, group string) ([]objects.Package, error) {
 	filtered := make([]objects.Package, 0)
 	pkgs, err := list(i)
