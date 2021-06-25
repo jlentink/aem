@@ -15,7 +15,6 @@ clean:
 	@-rm ./dist
 
 release: clean lint
-	./set-gh-key
 	goreleaser release
 
 testrelease:
