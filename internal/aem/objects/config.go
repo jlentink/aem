@@ -68,10 +68,12 @@ type CDN struct {
 	ServiceID string `toml:"serviceID"`
 }
 
+// SetAPIKey the api key
 func (c *CDN) SetAPIKey(apiKey string) error {
 	return keyring.Set(c.ServiceID, c.ServiceID, apiKey)
 }
 
+// GetAPIKey get the api Key
 func (c *CDN) GetAPIKey() (string, error){
 	return keyring.Get(c.ServiceID, c.ServiceID)
 }

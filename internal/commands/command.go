@@ -86,7 +86,7 @@ func getCdnConfig(name string) (*objects.CDN, error){
 		}
 	}
 
-	return nil, fmt.Errorf("Could not find cdn: %s.", name)
+	return nil, fmt.Errorf("could not find cdn: %s", name)
 }
 
 func getConfigAndGroup(i string) (*objects.Config, []objects.Instance, string, error) {
