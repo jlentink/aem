@@ -1,5 +1,7 @@
 package objects
 
+import "github.com/zalando/go-keyring"
+
 const (
 	serviceName = `aemCLI`
 	// SchemaVersion config schema version
@@ -22,6 +24,7 @@ type Config struct {
 	CommandArgs        []string   `toml:"command,omitempty"`
 	DefaultInstance    string     `toml:"defaultInstance"`
 	DefaultVersion     string     `toml:"default-version"`
+	CDNs               []CDN      `toml:"cdn"`
 	Instances          []Instance `toml:"instance"`
 	JVMOptions         []string   `toml:"jvm-options"`
 	JVMDebugOptions    []string   `toml:"jvm-debug-options"`
@@ -55,6 +58,22 @@ type AemJar struct {
 	Version  string `toml:"version"`
 	Username string `toml:"username"`
 	Password string `toml:"password"`
+}
+
+// CDN struct
+type CDN struct {
+	Name  string `toml:"name"`
+	Group string `toml:"group"`
+	CdnType string `toml:"type"`
+	ServiceID string `toml:"serviceID"`
+}
+
+func (c *CDN) SetAPIKey(apiKey string) error {
+	return keyring.Set(c.ServiceID, c.ServiceID, apiKey)
+}
+
+func (c *CDN) GetAPIKey() (string, error){
+	return keyring.Get(c.ServiceID, c.ServiceID)
 }
 
 //func joinStrings(s []string) string {

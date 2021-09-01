@@ -74,6 +74,21 @@ func getConfigAndInstanceOrGroupWithRoles(i, g string, r []string) (*objects.Con
 	return c, []objects.Instance{*in}, s, e
 }
 
+func getCdnConfig(name string) (*objects.CDN, error){
+	cnf, err := aem.GetConfig()
+	if err != nil {
+		return nil, fmt.Errorf("Could not load config file. (%s)", err)
+	}
+
+	for _, cdn := range cnf.CDNs {
+		if  strings.EqualFold(cdn.Name, name) {
+			return &cdn, nil
+		}
+	}
+
+	return nil, fmt.Errorf("Could not find cdn: %s.", name)
+}
+
 func getConfigAndGroup(i string) (*objects.Config, []objects.Instance, string, error) {
 	cnf, err := aem.GetConfig()
 	if err != nil {
