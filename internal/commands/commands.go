@@ -33,6 +33,7 @@ var (
 		&commandGenerate{},
 		&commandInvalidate{},
 		&commandDestroy{},
+		&commandCdn{},
 		//&commandCloudManager{},
 	}
 	rootCmd = &cobra.Command{Use: "aem"}

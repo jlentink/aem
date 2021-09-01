@@ -12,6 +12,7 @@ require (
 	github.com/danieljoos/wincred v1.0.2 // indirect
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920
 	github.com/dustin/go-humanize v1.0.0
+	github.com/fastly/go-fastly/v3 v3.9.3 // indirect
 	github.com/go-git/go-git/v5 v5.1.0
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 	github.com/go-openapi/strfmt v0.19.2 // indirect
@@ -37,7 +38,6 @@ require (
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
 	golang.org/x/sys v0.0.0-20200409092240-59c9f1ba88fa // indirect
-	golang.org/x/tools v0.0.0-20200408132156-9ee5ef7a2c0d // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect

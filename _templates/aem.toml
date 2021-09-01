@@ -7,7 +7,7 @@
 # Configuration schema.
 # Defines which version of the configuration schema is used
 #
-schema = "1"
+schema = "2"
 
 #
 # Enable verbose output
@@ -187,6 +187,19 @@ version = "6.5.0"
 location = "https://someurl/AEM-6.5.jar"
 username = ""
 password = ""
+
+
+#
+# CDN configuration
+#
+# group: which group does this cdn belong to.
+# type: fastly (other in the future)
+#
+[[cdn]]
+name = "dev"
+group = "dev"
+type = "fastly"
+serviceID = ""
 
 #
 # Instances for your project.
