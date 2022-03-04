@@ -28,7 +28,7 @@ Build the project from scratch (needs go >= v1.14.1) or download the prebuild bi
 
 Prebuild versions are:
 
-* OSX (64bit) 
+* OSX (Intel (64 bit), Apple Silicone) 
 * Linux (64bit)
 * Windows (64bit)
 

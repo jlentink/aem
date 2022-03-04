@@ -17,6 +17,10 @@ builds:
     goarch:
       - 386
       - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
     ldflags:
       - -X github.com/jlentink/aem/internal/version.commit={{.Commit}} -X github.com/jlentink/aem/internal/version.date={{.Date}} -X github.com/jlentink/aem/internal/version.Main={{.Version}} -w -s
     mod_timestamp: '{{ .CommitTimestamp }}'
