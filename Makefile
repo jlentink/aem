@@ -15,10 +15,10 @@ clean:
 	@-rm ./dist
 
 release: clean lint
-	goreleaser release
+	goreleaser release --rm-dist
 
 testrelease:
-	goreleaser --skip-publish --skip-validate
+	goreleaser --skip-publish --skip-validate --rm-dist
 
 snapshot: clean lint
 	goreleaser --snapshot

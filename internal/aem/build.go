@@ -46,6 +46,11 @@ func replaceVersionPlaceholders(suffix string) (string, error) {
 		str := fmt.Sprintf("%s.%d", now.Format("20060102"), now.UnixNano())
 		suffix = strings.ReplaceAll(suffix, `DATE`, str)
 	}
+	if m, _ := regexp.MatchString(`(.*)ADOBE(.*)`, suffix); m {
+		now := time.Now()
+		str := fmt.Sprintf("%s.%d.%d", now.Format("2006.12"), now.UnixNano(), now.UnixNano())
+		suffix = strings.ReplaceAll(suffix, `ADOBE`, str)
+	}
 	return suffix, nil
 }
 
@@ -62,8 +67,14 @@ func SetBuildVersion(productionBuild bool) error {
 		versionSuffix = "-SNAPSHOT"
 	}
 
+	version := Cnf.Version
+
+	if m, _ := regexp.MatchString(`(.*)ADOBE(.*)`, Cnf.VersionSuffix); m {
+		version = ""
+	}
+
 	workPath, _ := project.GetWorkDir()
-	cmd := exec.Command("mvn", "versions:set", "-DnewVersion="+Cnf.Version+versionSuffix, "-DallowSnapshots=true")
+	cmd := exec.Command("mvn", "versions:set", "-DnewVersion="+version+versionSuffix, "-DallowSnapshots=true")
 	cmd.Dir = workPath
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
