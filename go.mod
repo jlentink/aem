@@ -12,7 +12,7 @@ require (
 	github.com/danieljoos/wincred v1.0.2 // indirect
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920
 	github.com/dustin/go-humanize v1.0.0
-	github.com/fastly/go-fastly/v3 v3.9.3 // indirect
+	github.com/fastly/go-fastly/v3 v3.9.3
 	github.com/go-git/go-git/v5 v5.1.0
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 	github.com/go-openapi/strfmt v0.19.2 // indirect
@@ -32,7 +32,7 @@ require (
 	github.com/spf13/afero v1.1.2
 	github.com/spf13/cobra v0.0.7
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/tidwall/gjson v1.6.5
+	github.com/tidwall/gjson v1.9.3
 	github.com/zalando/go-keyring v0.0.0-20190531073407-f65c47520c89
 	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71 // indirect
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
