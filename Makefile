@@ -17,6 +17,8 @@ clean:
 release: clean lint
 	goreleaser release --rm-dist
 
+test-release: testrelease
+
 testrelease:
 	goreleaser --skip-publish --skip-validate --rm-dist
 

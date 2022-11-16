@@ -1,9 +1,8 @@
 before:
   hooks:
-    - go mod download
+    - go mod tidy
 #    - go generate ./...
-    - golint -set_exit_status ./...
-    - make packr
+#    - golint -set_exit_status ./...
     - ./scripts/completions.sh
 env_files:
   github_token: ~/GITHUB_TOKEN

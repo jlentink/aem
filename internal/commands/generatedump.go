@@ -1,14 +1,15 @@
 package commands
 
 import (
+	"embed"
 	"fmt"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/spf13/cobra"
-	"io/ioutil"
 	"os"
-	"path"
 )
+
+//go:embed _templates/*
+var templateFS embed.FS
 
 type commandGenerateDump struct {
 	verbose bool
@@ -40,30 +41,40 @@ func (c *commandGenerateDump) run(cmd *cobra.Command, args []string) {
 		os.Exit(ExitNormal)
 	}
 
-	box := packr.New("templates", "../../_templates/")
-	files := box.List()
+	entries, err := templateFS.ReadDir("_templates")
+	if err != nil {
+		output.Printf(output.NORMAL, "Unexpected error while reading templates: %s", err.Error())
+		os.Exit(ExitError)
+	}
 
-	for _, entry := range files {
-		f := path.Base(entry)
-		d := "templates/" + path.Dir(entry)
-		c, err := box.Find(entry)
-		if err != nil {
-			output.Printf(output.NORMAL, "Found a template dir. No need to run. exiting.")
-			os.Exit(ExitNormal)
+	for _, entry := range entries {
+		if entry.IsDir() {
+			d := "templates/" + entry.Name()
+			err = os.MkdirAll(d, 0777)
+			if err != nil {
+				output.Printf(output.NORMAL, "Error while writing directory to disk. %s\n", err.Error())
+				os.Exit(ExitNormal)
+			}
+			templateEntries, err := templateFS.ReadDir("_templates/" + entry.Name())
+			if err != nil {
+				output.Printf(output.NORMAL, "Unexpected error while reading templates: %s", err.Error())
+				os.Exit(ExitError)
+			}
+			for _, templateEntry := range templateEntries {
+				if !templateEntry.IsDir() {
+					content, err := templateFS.ReadFile("_templates/" + entry.Name() + "/" + templateEntry.Name())
+					if err != nil {
+						output.Printf(output.NORMAL, "Unexpected error while reading templates: %s", err.Error())
+						os.Exit(ExitError)
+					}
+					err = os.WriteFile("templates/"+entry.Name()+"/"+templateEntry.Name(), content, 0600)
+					if err != nil {
+						output.Printf(output.NORMAL, "Unexpected error while writing templates: %s", err.Error())
+						os.Exit(ExitError)
+					}
+				}
+			}
 		}
-		err = os.MkdirAll(d, 0777)
-		if err != nil {
-			output.Printf(output.NORMAL, "Error while writing directory to disk. %s\n", err.Error())
-			os.Exit(ExitNormal)
-		}
-
-		err = ioutil.WriteFile(d+"/"+f, c, 0666)
-		if err != nil {
-			output.Printf(output.NORMAL, "Error while writing file to disk. %s\n", err.Error())
-			os.Exit(ExitNormal)
-		}
-		output.Printf(output.VERBOSE, "Creating new template file: %s\n", entry)
-		fmt.Print(".")
 	}
 	fmt.Print("\n Files written to disk. You can now edit or start generating code.\n")
 }

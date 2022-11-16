@@ -1,14 +1,17 @@
 package aem
 
 import (
+	_ "embed"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/jlentink/aem/internal/aem/objects"
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/output"
 	"os"
 )
+
+//go:embed aem.example.toml
+var configTemplate string
 
 // Cnf active configuration
 var Cnf *objects.Config
@@ -24,18 +27,6 @@ func ConfigExists() bool {
 	return project.Exists(path)
 }
 
-// Render 's the template to a string
-func Render() string {
-	box := packr.New("templates", "../../_templates/")
-	b, err:= box.Find("aem.toml")
-
-	if err != nil {
-		return ""
-	}
-
-	return string(b)
-}
-
 // WriteConfigFile to disk
 func WriteConfigFile() (int, error) {
 	p, err := project.GetConfigFileLocation()
@@ -44,7 +35,7 @@ func WriteConfigFile() (int, error) {
 	}
 
 	p = p[0:len(p)-5] + ".example.toml"
-	return project.WriteTextFile(p, Render())
+	return project.WriteTextFile(p, configTemplate)
 }
 
 // GetConfig Read config page
