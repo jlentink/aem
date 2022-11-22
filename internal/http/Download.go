@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dustin/go-humanize"
 	"github.com/go-http-utils/headers"
+	"github.com/jlentink/aem/internal/cli/configvariables"
 	"github.com/jlentink/aem/internal/cli/project"
 	"github.com/jlentink/aem/internal/output"
 	"github.com/jlentink/aem/internal/version"
@@ -90,6 +91,7 @@ func DownloadFileWithURL(destination string, uri *url.URL, forceDownload bool) (
 
 // DownloadFile download file from string url
 func DownloadFile(destination string, uri string, username string, password string, forceDownload bool) (uint64, error) {
+	uri = configvariables.ReplaceVariables(uri)
 	URL, err := url.Parse(uri)
 	if err != nil {
 		return 0, err
